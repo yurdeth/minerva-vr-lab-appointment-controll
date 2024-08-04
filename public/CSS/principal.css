@@ -1,0 +1,30 @@
+*{
+    box-sizing: border-box;
+    font-family: "Raleway", sans-serif;
+}
+
+.video{
+    width: 36rem;
+}
+
+.card{
+    margin-top: 18px;
+    width: 40rem;
+    border: solid 2px grey;
+    border-radius: 4px;
+}
+
+.card-body> .card-title{
+    text-align: left;
+    color: rgb(126, 121, 121);
+}
+
+.card-body>  p{
+    text-align: justify;
+}
+
+.card-body{
+    background-color: white;
+    font-size: 16px;
+}
+

@@ -1,0 +1,320 @@
+*{
+    box-sizing: border-box;
+    font-family: "Raleway", sans-serif;
+}
+/*--------------------------------------------------------------
+Parte donde se trabaja el estilo del navbar*/
+/*--------------------------------------------------------------*/
+.navbar{
+    background-color: #660D04;
+}
+
+.logo_title{
+    margin-left: 10px;
+}
+
+.logo{
+    width: 4rem;
+    height: 5rem;
+}
+
+.navbar-brand{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+
+.collapse{
+    display: flex;
+    justify-content: right;
+}
+
+.navbar-nav > button{
+    margin-left: 20px;
+    margin-right: 16px;
+    background-color: transparent;
+    border-radius: 6px;
+    border: none;
+}
+
+button:hover{
+    cursor: pointer;
+    background-color: #76180D;
+    border: 1px solid white;
+}
+
+button > .nav-link{
+    color: white;
+}
+
+.nav-link:hover{
+    color: white;
+}
+
+.dropdown-menu > li > .dropdown-item{
+    font-weight: 600;
+}
+
+.dropdown-item:hover{
+    background-color: #76180D;
+    color: white;
+}
+/*--------------------------------------------------------------*/
+.container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.mensaje{
+    margin-top: 40px;
+    text-align: center;
+
+}
+
+.mensaje > h1{
+    font-size: 32px;
+}
+
+.info1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.robot{
+    margin-top: 2rem;
+    width: 500px;
+    margin-left: 80px;
+}
+
+.card{
+    border: 1px solid #6BFEFC;
+    background-color: #DEE2EA;
+    text-align: center;
+    box-shadow: -8px 1px 20px rgba(133, 131, 131, 0.336);
+}
+
+.mensaje2{
+    margin-top: 50px;
+    text-align: center;
+}
+
+.slide{
+    margin-top: 20px;
+    width: 60rem;
+    margin-left: 1rem;
+}
+
+.slide img{
+    height: 35rem;
+}
+
+/*Order Coiches js*/
+.choices.is-open {
+    z-index: 2000 !important;
+}
+
+footer{
+    color: azure;
+}
+
+footer > .foo {
+    width: 100%;
+    background-color: #660D04;
+    padding: 15px 20px;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 200px;
+}
+
+.mensaje3{
+    margin-top: 50px;
+    text-align: center;
+    font-size: 20px;
+}
+
+hr{
+    height: 3px;
+    background-color: azure;
+}
+
+.licencia{
+    font-size: 12px;
+}
+
+div > ul > li{
+    list-style: none;
+}
+
+
+/*--------------------------------------------------------------
+  Parte del Responsive
+  --------------------------------------------------------------*/
+  @media (max-width:932px){
+
+    .robot{
+        margin-top: 2rem;
+        width: 260px;
+        margin-left: 40px;
+    }
+
+    .slide{
+        margin-top: 20px;
+        width: 42rem;
+        margin-right: 2rem;
+        margin-left: 1rem;
+    }
+
+    .slide img{
+        height: 22rem;
+    }
+  }
+  @media (max-width:838px){
+
+    body{
+        width: 118vh;
+    }
+
+
+    .robot{
+        margin-top: 2rem;
+        width: 260px;
+        margin-left: 40px;
+    }
+
+    .slide{
+        margin-top: 20px;
+        width: 42rem;
+        margin-right: 2rem;
+        margin-left: 1rem;
+    }
+
+    .slide img{
+        height: 22rem;
+    }
+
+    footer > .foo {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 100px;
+    }
+
+    .foo > div > h4{
+        font-size: 16px;
+    }
+
+    div > ul > li{
+        font-size: 14px;
+    }
+
+    .licencia > p{
+        font-size: 10px;
+    }
+  }
+
+  @media(max-width:758px){
+    .collapse{
+        display: flex;
+        justify-content: center;
+    }
+
+  }
+
+  @media (max-width:450px){
+        body{
+            width: 100vh;
+        }
+
+
+        .mensaje > h1{
+            font-size: 20px;
+        }
+
+        .robot{
+            margin-top: 2rem;
+            width: 250px;
+            margin-left: 40px;
+        }
+
+        .mensaje2 > h3{
+            font-size: 18px;
+        }
+
+        .slide{
+            margin-top: 20px;
+            width: 42rem;
+            margin-right: 2rem;
+            margin-left: 1rem;
+        }
+
+        .slide img{
+            height: 22rem;
+        }
+
+        .mensaje3 > p{
+            font-size: 14PX;
+        }
+
+        footer > .foo {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 100px;
+        }
+
+        .foo > div > h4{
+            font-size: 16px;
+        }
+
+        div > ul > li{
+            font-size: 14px;
+        }
+
+        .licencia > p{
+            font-size: 10px;
+        }
+
+  }
+
+  @media(max-width:400px){
+    body{
+        width: 100vh;
+    }
+
+
+    .mensaje > h1{
+        font-size: 20px;
+    }
+
+    .robot{
+        margin-top: 2rem;
+        width: 250px;
+        margin-left: 40px;
+    }
+
+    .mensaje2 > h3{
+        font-size: 18px;
+    }
+
+    .slide{
+        margin-top: 20px;
+        width: 40rem;
+        margin-left: 1rem;
+    }
+
+    .slide img{
+        height: 20rem;
+    }
+
+    .mensaje3 > p{
+        font-size: 14PX;
+    }
+
+    footer > .foo {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 100px;
+    }
+}

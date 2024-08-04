@@ -1,0 +1,27 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const url = "http://127.0.0.1:8000/departments";
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            // console.log(data);
+
+            // Asignar los datos al select
+            let department = document.getElementById('department');
+            data.forEach(d => {
+                let option = document.createElement('option');
+                option.value = d.id;
+                option.text = d.department_name;
+                department.appendChild(option);
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+});

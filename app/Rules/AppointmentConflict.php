@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Rules;
+
+use App\Models\Appointments;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
+use DateTime;
+
+class AppointmentConflict implements ValidationRule {
+
+    protected $date;
+    protected $time;
+
+    public function __construct($date, $time) {
+        $this->date = $date;
+        $this->time = $time . ":00";
+    }
+
+    public function passes($attribute, $value): bool {
+        $exactMatchExists = Appointments::where('date', $this->date)
+            ->where('time', $this->time)
+            ->exists();
+
+        if ($exactMatchExists) {
+            return false;
+        }
+
+        $startTime = new DateTime("{$this->date} {$this->time}");
+        $startTime->modify('-59 minutes');
+        $endTime = new DateTime("{$this->date} {$this->time}");
+        $endTime->modify('+59 minutes');
+
+        $timeRangeConflictExists = Appointments::where('date', $this->date)
+            ->where(function ($query) use ($startTime, $endTime) {
+                $query->whereBetween('time', [$startTime->format('H:i:s'), $endTime->format('H:i:s')]);
+            })
+            ->exists();
+
+        return !$timeRangeConflictExists;
+    }
+
+    public function message() {
+        return 'Ya tienes una cita registrada en esta fecha y hora, o en el rango de una hora.';
+    }
+
+    public function validate(string $attribute, mixed $value, Closure $fail): void {
+        if (!$this->passes($attribute, $value)) {
+            $fail($this->message());
+        }
+    }
+}
