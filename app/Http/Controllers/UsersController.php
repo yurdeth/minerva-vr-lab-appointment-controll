@@ -63,6 +63,10 @@ class UsersController extends Controller {
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id) {
+        if (Auth::user()->id != $id && Auth::user()->roles_id != 1){
+            return redirect()->route('HomeVR');
+        }
+
         // Actualizar los datos del usuario
         $user = User::find($id);
 
@@ -107,6 +111,10 @@ class UsersController extends Controller {
      * Remove the specified resource from storage.
      */
     public function destroy(string $id) {
+        if (Auth::user()->id != $id && Auth::user()->roles_id != 1){
+            return redirect()->route('HomeVR');
+        }
+
         $user = User::find($id);
         if ($user){
             $user->delete();
