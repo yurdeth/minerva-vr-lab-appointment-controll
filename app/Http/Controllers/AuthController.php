@@ -88,24 +88,19 @@ class AuthController extends Controller {
                 $route = "HomeVR";
             }
 
-            // Array con los datos de la respuesta
-            $data = [
+            return response()->json([
                 "token" => $token,
                 "token_type" => "Bearer",
                 "redirect_to" => route($route),
                 "success" => true,
-            ];
-
-            return response()->json($data, 201);
+            ], 201);
 
         }
 
-        $data = [
+        return response()->json([
             "message" => "Credenciales erróneas",
             "success" => false,
-        ];
-
-        return response()->json($data, 401);
+        ], 401);
     }
 
     public function logout(Request $request) {

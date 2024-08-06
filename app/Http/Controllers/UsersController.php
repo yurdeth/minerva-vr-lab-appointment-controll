@@ -37,6 +37,10 @@ class UsersController extends Controller {
      * Display the specified resource.
      */
     public function show($id) {
+        if (Auth::user()->id != $id && Auth::user()->roles_id != 1){
+            return redirect()->route('HomeVR');
+        }
+
         $user = DB::table('users')
             ->where('users.id', $id)
             ->join('departments', 'users.department_id', '=', 'departments.id')
@@ -47,6 +51,8 @@ class UsersController extends Controller {
             ->get();
 
         if ($user) {
+//            var_dump($user[0]->id);
+//            var_dump(Auth::user()->id);
             return view('edit_user', compact('user'));
         } else {
             return redirect()->route('usuarios');
