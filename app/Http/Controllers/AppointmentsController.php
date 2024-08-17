@@ -3,21 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointments;
-use App\Http\Requests\StoreAppointmentsRequest;
-use App\Http\Requests\UpdateAppointmentsRequest;
 use App\Models\Participants;
-use App\Models\User;
 use App\Rules\AppointmentConflict;
-use App\Rules\OnlyUesMail;
-use App\Rules\PreviousRegisteredAppointment;
-use App\Rules\TimeRangeAppointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Spatie\FlareClient\Api;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class AppointmentsController extends Controller {

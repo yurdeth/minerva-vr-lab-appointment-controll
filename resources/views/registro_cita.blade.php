@@ -18,7 +18,7 @@
                     <div class="form-group position-relative p-2">
                         <p class="text-start">Numero de Asistentes</p>
                         <input type="number" class="form-control" id="" name="number_of_assistants"
-                               placeholder="n° de personas (Máx. 20)" style="padding-left: 15px;" min="1" required>
+                               placeholder="n° de personas (Máx. 20)" style="padding-left: 15px;" min="1" max="20" required>
                     </div>
 
                     <div class="form-group position-relative p-2">

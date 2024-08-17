@@ -30,7 +30,6 @@ class AuthController extends Controller {
                 new EmailUniqueIgnoreCase("users", "email"),
             ],
             "password" => "required|string|confirmed|min:8",
-            "department" => "required|exists:departments,id",
             "career" => "required|exists:careers,id",
         ]);
 
@@ -48,7 +47,6 @@ class AuthController extends Controller {
             "email" => $request->email,
             "roles_id" => '2',
             "password" => Hash::make($request->password),
-            "department_id" => $request->department,
             "career_id" => $request->career,
         ]);
 

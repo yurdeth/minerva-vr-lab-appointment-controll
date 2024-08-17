@@ -133,7 +133,6 @@ Route::get("init", function () {
     $user->name = "admin";
     $user->email = "admin@admin.com";
     $user->password = Hash::make(env("ADMIN_PASSWORD"));
-    $user->department_id = '1';
     $user->career_id = '3';
     $user->roles_id = '1';
     $user->save();

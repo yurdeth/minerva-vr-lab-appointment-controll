@@ -64,10 +64,6 @@ return new class extends Migration {
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->foreignId('department_id')
-                ->constrained('departments')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
             $table->foreignId('career_id')
                 ->constrained('careers')
                 ->cascadeOnUpdate()
@@ -101,6 +97,9 @@ return new class extends Migration {
      * Reverse the migrations.
      */
     public function down(): void {
+        Schema::dropIfExists('departments');
+        Schema::dropIfExists('careers');
+        Schema::dropIfExists('roles');
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');

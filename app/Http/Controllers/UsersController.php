@@ -18,9 +18,9 @@ class UsersController extends Controller {
     public function index() {
         $users = DB::table('users')
             ->where('users.id', '!=', 1)
-            ->join('departments', 'users.department_id', '=', 'departments.id')
             ->join('careers', 'users.career_id', '=', 'careers.id')
-            ->select('users.id', 'users.name', 'users.email', 'departments.department_name', 'careers.career_name')
+            ->join('departments', 'careers.department_id', '=', 'departments.id')
+            ->select('users.id', 'users.name', 'users.email', 'careers.career_name', 'departments.department_name')
             ->get();
 
         return view('usuarios', compact('users'));
@@ -43,11 +43,9 @@ class UsersController extends Controller {
 
         $user = DB::table('users')
             ->where('users.id', $id)
-            ->join('departments', 'users.department_id', '=', 'departments.id')
             ->join('careers', 'users.career_id', '=', 'careers.id')
-            ->select('users.id', 'users.name', 'users.email',
-                'users.department_id', 'users.career_id',
-                'departments.department_name', 'careers.career_name')
+            ->join('departments', 'careers.department_id', '=', 'departments.id')
+            ->select('users.id', 'users.name', 'users.email', 'users.career_id', 'careers.career_name', 'careers.department_id', 'departments.department_name')
             ->get();
 
         if ($user) {
@@ -115,9 +113,11 @@ class UsersController extends Controller {
             return redirect()->route('HomeVR');
         }
 
-        $user = User::find($id);
-        if ($user){
-            $user->delete();
+        if ($id != 1){
+            $user = User::find($id);
+            if ($user){
+                $user->delete();
+            }
         }
 
         if(Auth::user()->roles_id == 1){

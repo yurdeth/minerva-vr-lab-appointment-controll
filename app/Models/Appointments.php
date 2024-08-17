@@ -27,13 +27,13 @@ class Appointments extends Model {
             return DB::table('appointments')
                 ->join('participants', 'appointments.id', '=', 'participants.appointment_id')
                 ->join('users', 'appointments.user_id', '=', 'users.id')
-                ->join('departments', 'users.department_id', '=', 'departments.id')
                 ->join('careers', 'users.career_id', '=', 'careers.id')
+                ->join('departments', 'careers.department_id', '=', 'departments.id')
                 ->select(
                     'appointments.id',
                     'participants.number_of_participants',
                     'users.name',
-                    'users.department_id',
+                    'careers.department_id',
                     'departments.department_name',
                     'users.career_id',
                     'careers.career_name',
@@ -49,13 +49,13 @@ class Appointments extends Model {
                 ->where('appointments.user_id', $userId)
                 ->join('participants', 'appointments.id', '=', 'participants.appointment_id')
                 ->join('users', 'appointments.user_id', '=', 'users.id')
-                ->join('departments', 'users.department_id', '=', 'departments.id')
                 ->join('careers', 'users.career_id', '=', 'careers.id')
+                ->join('departments', 'careers.department_id', '=', 'departments.id')
                 ->select([
                     'appointments.id',
                     'participants.number_of_participants',
                     'users.name',
-                    'users.department_id',
+                    'careers.department_id',
                     'departments.department_name',
                     'users.career_id',
                     'careers.career_name',
@@ -84,13 +84,13 @@ class Appointments extends Model {
                 ->where('appointments.id', $id)
                 ->join('participants', 'appointments.id', '=', 'participants.appointment_id')
                 ->join('users', 'appointments.user_id', '=', 'users.id')
-                ->join('departments', 'users.department_id', '=', 'departments.id')
                 ->join('careers', 'users.career_id', '=', 'careers.id')
+                ->join('departments', 'careers.department_id', '=', 'departments.id')
                 ->select(
                     'appointments.id',
                     'participants.number_of_participants',
                     'users.name',
-                    'users.department_id',
+                    'careers.department_id',
                     'departments.department_name',
                     'users.career_id',
                     'careers.career_name',
