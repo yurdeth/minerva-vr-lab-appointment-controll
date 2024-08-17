@@ -64,6 +64,10 @@ return new class extends Migration {
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->foreignId('department_id')
+                ->constrained('departments')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->foreignId('career_id')
                 ->constrained('careers')
                 ->cascadeOnUpdate()
