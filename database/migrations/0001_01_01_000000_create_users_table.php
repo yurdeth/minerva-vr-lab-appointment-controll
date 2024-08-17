@@ -72,12 +72,12 @@ return new class extends Migration {
                 ->constrained('careers')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->timestamp('email_verified_at')->nullable();
+//            $table->timestamp('email_verified_at')->nullable();
             $table->foreignId('roles_id')
                 ->constrained('roles')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->rememberToken();
+//            $table->rememberToken();
             $table->timestamps();
         });
 

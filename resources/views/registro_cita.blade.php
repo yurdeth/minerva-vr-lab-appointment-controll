@@ -23,13 +23,13 @@
 
                     <div class="form-group position-relative p-2">
                         <p class="text-start">Fecha</p>
-                        <input type="date" class="form-control" id="" name="date" id="date"
+                        <input type="date" class="form-control" name="date" id="date"
                                style="padding-left: 30px;" required onchange="showAvailableShedules()">
                     </div>
 
                     <div class="form-group position-relative p-2">
                         <p class="text-start">Hora</p>
-                        <input type="time" class="form-control" id=""
+                        <input type="time" class="form-control" id="time"
                                name="time" placeholder="" style="padding-left: 30px;" required>
                     </div>
                     <div class="form-group position-relative p-2 text-center" id="loadAvailableSchedules"></div>

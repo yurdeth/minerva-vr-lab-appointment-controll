@@ -89,6 +89,7 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
     // Rutas API:
     Route::get('/citas', [AppointmentsController::class, 'index'])->name("citas");
+    Route::get('/citas/index', [AppointmentsController::class, 'index'])->name("citas");
     Route::post('/citas', [AppointmentsController::class, 'store'])->name("appointments");
     Route::get('/citas/ver/{id}', [AppointmentsController::class, 'show'])->name("appointments.show");
     Route::put('/citas/editar/{id}', [AppointmentsController::class, 'update'])->name('appointments.update');

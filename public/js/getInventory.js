@@ -26,8 +26,8 @@ document.addEventListener("DOMContentLoaded", event => {
 
                 cell1.innerHTML = index + 1;
                 cell2.innerHTML = resource.room.name;
-                cell3.innerHTML = resource.resource_type.resource_type_name;
-                cell4.innerHTML = resource.status.status_name;
+                cell3.innerHTML = resource.resource_type.resource_name;
+                cell4.innerHTML = resource.status.status;
             });
         });
 });

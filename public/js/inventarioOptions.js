@@ -13,7 +13,7 @@
             console.log(data);
             if (data !== null && Array.isArray(data.statuses)) {
                 // Asignar los datos al select
-                let statusElements = Array.from(document.getElementsByClassName('status_name'));
+                let statusElements = Array.from(document.getElementsByClassName('status'));
                 if (statusElements) {
                     console.log(statusElements);
                 }
@@ -21,7 +21,7 @@
                     data.statuses.forEach(d => {
                         let option = document.createElement('option');
                         option.value = d.id;
-                        option.text = d.status_name;
+                        option.text = d.status;
                         s.appendChild(option);
                     });
                 });
@@ -62,7 +62,7 @@
             data.resourceTypes.forEach(resourceType => {
                 let option = document.createElement('option');
                 option.value = resourceType.id;
-                option.text = resourceType.resource_type_name;
+                option.text = resourceType.resource_name;
                 selectResourceType.appendChild(option);
             });
     });

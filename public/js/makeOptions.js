@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             Token: "Bearer " + localStorage.getItem("token")
                         },
                         body: JSON.stringify({
-                            status_name: status,
+                            status: status,
                             id: index + 1
                         })
                     })
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             Token: "Bearer " + localStorage.getItem("token")
                         },
                         body: JSON.stringify({
-                            resource_type_name: resourceType,
+                            resource_name: resourceType,
                             id: index + 1
                         })
                     })
@@ -148,12 +148,12 @@ document.addEventListener("DOMContentLoaded", function () {
         })
             .then(response => response.json())
             .then(data => {
-                let selectStatues = document.getElementById('status_name');
+                let selectStatues = document.getElementById('status');
 
                 data.statuses.forEach(status => {
                     let option = document.createElement('option');
                     option.value = status.id;
-                    option.text = status.status_name;
+                    option.text = status.status;
                     selectStatues.appendChild(option);
                 });
             });
@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 data.resourceTypes.forEach(resourceType => {
                     let option = document.createElement('option');
                     option.value = resourceType.id;
-                    option.text = resourceType.resource_type_name;
+                    option.text = resourceType.resource_name;
                     selectResourceType.appendChild(option);
                 });
             });
@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
 
         const resourceTypeId = document.getElementById("resource_type").value;
-        const statusId = document.getElementById("status_name").value;
+        const statusId = document.getElementById("status").value;
         const roomId = document.getElementById("room").value;
 
         const data = {

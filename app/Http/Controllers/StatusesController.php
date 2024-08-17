@@ -46,7 +46,7 @@ class StatusesController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'status_name' => 'required',
+            'status' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -60,7 +60,7 @@ class StatusesController extends Controller
         }
 
         $status = Status::create([
-            'status_name' => $request->status_name,
+            'status' => $request->status,
             'id' => $request->id
         ]);
 

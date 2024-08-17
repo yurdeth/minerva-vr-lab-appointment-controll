@@ -56,14 +56,12 @@ class AppointmentsController extends Controller {
         $appointment = Appointments::create([
             'date' => $request->date,
             'time' => $request->time,
-            'status' => "Activa",
             'user_id' => Auth::id(),
         ]);
 
         $participants = Participants::create([
             'number_of_participants' => $request->number_of_assistants,
-            'appointment_id' => $appointment->id,
-            'user_id' => Auth::id(),
+            'appointment_id' => $appointment->id
         ]);
 
         if (!$appointment || !$participants) {
@@ -78,7 +76,7 @@ class AppointmentsController extends Controller {
 
         return response()->json([
             "message" => "Cita registrada",
-            "redirect_to" => route("citas"),
+            "redirect_to" => route("index"),
             "success" => true,
         ]);
     }

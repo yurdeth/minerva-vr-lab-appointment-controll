@@ -13,6 +13,6 @@ class ResourceType extends Model
 
     protected $fillable = [
         'id',
-        'resource_type_name'
+        'resource_name'
     ];
 }

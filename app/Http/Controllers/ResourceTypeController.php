@@ -46,7 +46,7 @@ class ResourceTypeController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'resource_type_name' => 'required',
+            'resource_name' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -60,7 +60,7 @@ class ResourceTypeController extends Controller
         }
 
         $resourceType = ResourceType::create([
-            'resource_type_name' => $request->resource_type_name,
+            'resource_name' => $request->resource_name,
             'id' => $request->id
         ]);
 

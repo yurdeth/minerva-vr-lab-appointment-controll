@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('resource_types', function (Blueprint $table) {
             $table->id();
-            $table->string('resource_type_name');
+            $table->string('resource_name');
             $table->timestamps();
         });
     }

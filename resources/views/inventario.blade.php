@@ -38,7 +38,7 @@
                             <div class="col-md-1 col-12"></div>
                             <div class="col-md-5 col-12">
                                 <p>Tipo de estado</p>
-                                <select name="status_name" class="form-select status_name" id="status_name">
+                                <select name="status" class="form-select status" id="status">
                                     <option value="0">Seleccionar estado</option>
                                     {{--<option value="1">Buen estado</option>
                                     <option value="1">Mal estado</option>
@@ -62,7 +62,7 @@
                             <div class="col-md-1 col-12"></div>
                             <div class="col-md-5 col-12">
                                 {{--<p>Tipo de estado</p>
-                                <select name="status_nam" class="form-select status_name">
+                                <select name="status_nam" class="form-select status">
                                     <option value="0">Seleccionar estado</option>
                                     --}}{{--<option value="1">Buen estado</option>
                                     <option value="1">Mal estado</option>

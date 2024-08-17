@@ -26,7 +26,7 @@ class Appointments extends Model {
         if (Auth::user()->roles_id == 1) {
             return DB::table('appointments')
                 ->join('participants', 'appointments.id', '=', 'participants.appointment_id')
-                ->join('users', 'participants.user_id', '=', 'users.id')
+                ->join('users', 'appointments.user_id', '=', 'users.id')
                 ->join('departments', 'users.department_id', '=', 'departments.id')
                 ->join('careers', 'users.career_id', '=', 'careers.id')
                 ->select(
@@ -37,9 +37,9 @@ class Appointments extends Model {
                     'departments.department_name',
                     'users.career_id',
                     'careers.career_name',
+                    'appointments.user_id',
                     'appointments.date',
-                    'appointments.time',
-                    'appointments.status'
+                    'appointments.time'
                 )
                 ->get();
         } else {
@@ -48,7 +48,7 @@ class Appointments extends Model {
             return DB::table('appointments')
                 ->where('appointments.user_id', $userId)
                 ->join('participants', 'appointments.id', '=', 'participants.appointment_id')
-                ->join('users', 'participants.user_id', '=', 'users.id')
+                ->join('users', 'appointments.user_id', '=', 'users.id')
                 ->join('departments', 'users.department_id', '=', 'departments.id')
                 ->join('careers', 'users.career_id', '=', 'careers.id')
                 ->select([
@@ -60,8 +60,7 @@ class Appointments extends Model {
                     'users.career_id',
                     'careers.career_name',
                     'appointments.date',
-                    'appointments.time',
-                    'appointments.status'
+                    'appointments.time'
                 ])
                 ->get();
         }
@@ -84,7 +83,7 @@ class Appointments extends Model {
             return DB::table('appointments')
                 ->where('appointments.id', $id)
                 ->join('participants', 'appointments.id', '=', 'participants.appointment_id')
-                ->join('users', 'participants.user_id', '=', 'users.id')
+                ->join('users', 'appointments.user_id', '=', 'users.id')
                 ->join('departments', 'users.department_id', '=', 'departments.id')
                 ->join('careers', 'users.career_id', '=', 'careers.id')
                 ->select(
@@ -96,8 +95,7 @@ class Appointments extends Model {
                     'users.career_id',
                     'careers.career_name',
                     'appointments.date',
-                    'appointments.time',
-                    'appointments.status'
+                    'appointments.time'
                 )
                 ->get();
         } else {
