@@ -76,7 +76,7 @@ class AppointmentsController extends Controller {
 
         return response()->json([
             "message" => "Cita registrada",
-            "redirect_to" => route("index"),
+            "redirect_to" => 'index',
             "success" => true,
         ]);
     }

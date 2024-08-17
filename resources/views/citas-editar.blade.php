@@ -34,7 +34,7 @@
 
                     @if(Auth::user()->roles_id == 1)
                         <div class="form-group position-relative p-2">
-                            <p class="text-start">Nombre del encargado</p>
+                            <p class="text-start">Responsable</p>
                             <input type="text" class="form-control" id="name"
                                    style="padding-left: 15px;" min="1" max="20"
                                    value="{{ $appointments[0]->name }}" readonly>
