@@ -43,16 +43,14 @@ class UsersController extends Controller {
 
         $user = DB::table('users')
             ->where('users.id', $id)
-            ->join('departments', 'users.department_id', '=', 'departments.id')
             ->join('careers', 'users.career_id', '=', 'careers.id')
+            ->join('departments', 'careers.department_id', '=', 'departments.id')
             ->select('users.id', 'users.name', 'users.email',
-                'users.department_id', 'users.career_id',
-                'departments.department_name', 'careers.career_name')
+                'departments.department_name', 'careers.career_name',
+                'departments.id as department_id', 'careers.id as career_id')
             ->get();
 
         if ($user) {
-//            var_dump($user[0]->id);
-//            var_dump(Auth::user()->id);
             return view('edit_user', compact('user'));
         } else {
             return redirect()->route('usuarios');
