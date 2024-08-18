@@ -6,13 +6,11 @@ use App\Models\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ResourcesController extends Controller
-{
+class ResourcesController extends Controller {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index() {
         $resources = Resources::with(['room', 'status', 'resourceType'])->get();
 
         if ($resources->isEmpty()) {
@@ -36,17 +34,16 @@ class ResourcesController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $validator = Validator::make($request->all(), [
+                "fixed_asset_code" => "required|unique", // Número de activo fijo
                 "resource_type_id" => "required|exists:resource_types,id",
                 "status_id" => "required|exists:statuses,id",
                 "room_id" => "required|exists:room,id",
@@ -63,9 +60,8 @@ class ResourcesController extends Controller
             return response()->json($data);
         }
 
-
-
         $resource = Resources::create([
+            "fixed_asset_code" => $request->fixed_asset_code, // Número de activo fijo
             "resource_type_id" => $request->resource_type_id,
             "status_id" => $request->status_id,
             "room_id" => $request->room_id,
@@ -88,32 +84,28 @@ class ResourcesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Resources $resources)
-    {
+    public function show(Resources $resources) {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Resources $resources)
-    {
+    public function edit(Resources $resources) {
         //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Resources $resources)
-    {
+    public function update(Request $request, Resources $resources) {
         //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Resources $resources)
-    {
+    public function destroy(Resources $resources) {
         //
     }
 }

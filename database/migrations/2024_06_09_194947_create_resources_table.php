@@ -11,6 +11,7 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('resources', function (Blueprint $table) {
             $table->id();
+            $table->String('fixed_asset_code'); // Número de activo fijo
             $table->foreignId('resource_type_id')
                 ->constrained()
                 ->cascadeOnUpdate()
