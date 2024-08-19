@@ -85,9 +85,10 @@
                             @csrf
 
                             @method("DELETE")
-                            @if(Auth::user()->roles_id != 1)
+                            <button type="submit" class="btn btn-danger" onclick="showDeleteConfirmationMessage(event)">Eliminar perfil</button>
+                            {{--@if(Auth::user()->roles_id != 1)
                                 <button type="submit" class="btn btn-danger" onclick="showDeleteConfirmationMessage(event)">Eliminar mi perfil</button>
-                            @endif
+                            @endif--}}
                         </form>
 
                     </div>
