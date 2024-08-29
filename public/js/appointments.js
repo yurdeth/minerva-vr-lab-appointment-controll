@@ -1,107 +1,91 @@
-document.addEventListener('DOMContentLoaded', function () {
+// Implementar una promesa:
+
+async function getAppointments(){
     const url = "http://127.0.0.1:8000/appointments";
 
-    fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
+    try{
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+
+        if(!response.ok){
+            throw new Error('Error al obtener las citas');
         }
-    })
-        .then(response => response.json())
-        .then(data => {
-            // console.log(data);
-            // Obtener la referencia a la tabla
-            const table = document.querySelector('table tbody');
 
-            // Recorrer los datos y crear filas
-            data.forEach((appointment, index) => {
-                const row = document.createElement('tr');
+        return await response.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-                // Crear celdas y asignar valores
-                const idCell = document.createElement('td');
-                idCell.textContent = index + 1;
-                row.appendChild(idCell);
+async function deleteAppointment(id){
+    const url = "http://127.0.0.1:8000/citas/eliminar/" + id;
 
-                const userIdCell = document.createElement('td');
-                userIdCell.textContent = appointment.name;
-                row.appendChild(userIdCell);
+    try{
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
 
-                const departmentCell = document.createElement('td');
-                departmentCell.textContent = appointment.department_name;
-                row.appendChild(departmentCell);
+        if(!response.ok){
+            throw new Error('Error al eliminar la cita');
+        }
 
-                const careerCell = document.createElement('td');
-                careerCell.textContent = appointment.career_name;
-                row.appendChild(careerCell);
+        return await response.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-                const dateCell = document.createElement('td');
-                dateCell.textContent = appointment.date;
-                row.appendChild(dateCell);
+document.addEventListener('DOMContentLoaded', function () {
 
-                const timeCell = document.createElement('td');
-                timeCell.textContent = appointment.time;
-                row.appendChild(timeCell);
+    getAppointments()
+        // .then(response => response.json())
+        .then(response => {
+            // console.log(response.data);
+            let appointments = response.data;
+            appointments.forEach(item => {
+                console.log(item.id);
+                console.log(item.name);
+                console.log(item.department_name);
+                console.log(item.career_name);
+                console.log(item.date);
+                console.log(item.time);
+                console.log(item.number_of_participants);
 
-                const participantsCell = document.createElement('td');
-                participantsCell.textContent = appointment.number_of_participants;
-                row.appendChild(participantsCell);
+                const table = document.getElementById('appointmentsTable');
+                const row = table.insertRow(-1);
 
-                const statusSelect = document.createElement('select');
-                statusSelect.classList.add('form-control', 'form-select');
-                const statusOptions = ['Activa', 'Pendiente', 'Cancelada', 'Completada'];
+                const code = row.insertCell(0);
+                const name = row.insertCell(1);
+                const department = row.insertCell(2);
+                const career = row.insertCell(3);
+                const date = row.insertCell(4);
+                const time = row.insertCell(5);
+                const number_of_participants = row.insertCell(6);
+                const actions = row.insertCell(7);
 
-                statusOptions.forEach(status => {
-                    const option = document.createElement('option');
-                    option.value = status.toLowerCase();
-                    option.textContent = status;
-
-                    if (status.toLowerCase() === appointment.status.toLowerCase()) {
-                        option.selected = true;
-                    }
-
-                    statusSelect.appendChild(option);
-                });
-
-                row.appendChild(statusSelect);
-
-                const actionsCell = document.createElement('td');
-
-                // Crear enlace de editar
-                const editLink = document.createElement('a');
-                editLink.href = '#';
-                editLink.classList.add('btn', 'btn-primary', 'btn-sm');
-
-                const editIcon = document.createElement('i');
-                editIcon.classList.add('fas', 'fa-edit');
-                editLink.appendChild(editIcon);
-
-                editLink.addEventListener('click', () => {
-                    // Lógica para editar la cita con el ID appointment.id
-                    alert('Editar cita: ' + appointment.id);
-                });
-                actionsCell.appendChild(editLink);
-
-                // Crear enlace de eliminar
-                const deleteLink = document.createElement('a');
-                deleteLink.href = '#';
-                deleteLink.classList.add('btn', 'btn-danger', 'btn-sm', 'mr-2');
-
-                const deleteIcon = document.createElement('i');
-                deleteIcon.classList.add('fas', 'fa-trash-alt');
-                deleteLink.appendChild(deleteIcon);
-
-                deleteLink.addEventListener('click', () => {
-                    alert('Eliminar cita: ' + appointment.id);
-                });
-                actionsCell.appendChild(deleteLink);
-
-                row.appendChild(actionsCell);
-
-                // Agregar la fila a la tabla
-                table.appendChild(row);
+                code.innerHTML = item.id;
+                name.innerHTML = item.name;
+                department.innerHTML = item.department_name;
+                career.innerHTML = item.career_name;
+                date.innerHTML = item.date;
+                time.innerHTML = item.time;
+                number_of_participants.innerHTML = item.number_of_participants;
+                actions.innerHTML = '' +
+                    '<a href="http://127.0.0.1:8000/appointments/ver/' + item.id + '" class="btn btn-primary">Editar</a> ' +
+                    '<a href="http://127.0.0.1:8000/citas/eliminar/' + item.id + '" class="btn btn-danger">Eliminar</a> ';
             });
+
         })
         .catch(error => {
             console.log(error);

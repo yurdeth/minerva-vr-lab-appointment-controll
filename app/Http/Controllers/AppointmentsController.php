@@ -16,7 +16,10 @@ class AppointmentsController extends Controller {
      */
     public function index() {
         $appointments = (new Appointments)->GetAppointments();
-        return view('citas', compact('appointments'));
+        return response()->json([
+            "data" => $appointments,
+            "success" => true,
+        ]);
     }
     //method to generate pdf
     public function pdf(){

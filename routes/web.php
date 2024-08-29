@@ -4,6 +4,9 @@ use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CareersController;
 use App\Http\Controllers\DepartmentsController;
+use App\Http\Controllers\ResourcesController;
+use App\Http\Controllers\ResourceTypeController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StatusesController;
 use App\Http\Controllers\UsersController;
 use App\Http\Middleware\NoBrowserCache;
@@ -82,18 +85,35 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
     Route::get('/statuses', [StatusesController::class, 'index'])->name("statuses");
     /*Código con la funcionalidad que no de error al abrir el informe de inventario*/
     Route::post('/insertar-inventario', [StatusesController::class, 'store'])->name("insertar-inventario");
+
+    Route::post('statuses/create', [StatusesController::class, 'store']);
+    Route::get('statuses', [StatusesController::class, 'index']);
+    Route::get('resourcesTypes', [ResourceTypeController::class, 'index']);
+    Route::post('resourcesTypes/create', [ResourceTypeController::class, 'store']);
+    Route::get('/room', [RoomController::class, 'index']);
+    Route::post('/room/create', [RoomController::class, 'store']);
+    Route::get('/resources', [ResourcesController::class, 'index']);
+    Route::post('/resources/create', [ResourcesController::class, 'store']);
 });
 
 // ***************************************Rutas para citas*********************************************
 Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
     // Rutas API:
-    Route::get('/citas', [AppointmentsController::class, 'index'])->name("citas");
-    Route::get('/citas/index', [AppointmentsController::class, 'index'])->name("citas");
+    Route::get('/appointments', [AppointmentsController::class, 'index'])->name("citas");
+    Route::get('/appointments/index', [AppointmentsController::class, 'index'])->name("citas");
     Route::post('/citas', [AppointmentsController::class, 'store'])->name("appointments");
-    Route::get('/citas/ver/{id}', [AppointmentsController::class, 'show'])->name("appointments.show");
+    Route::get('/appointments/ver/{id}', [AppointmentsController::class, 'show'])->name("appointments.show");
     Route::put('/citas/editar/{id}', [AppointmentsController::class, 'update'])->name('appointments.update');
     Route::delete('/citas/eliminar/{id}', [AppointmentsController::class, 'destroy'])->name("appointments.destroy");
+
+    Route::get('/citas', function () {
+        return view('appointments');
+    })->name('citas-ver');
+
+    Route::get('/citas/index', function () {
+        return view('appointments');
+    })->name('citas-ver-index');
 
     Route::get('/citas/nueva', function () {
         return view('registro_cita');
