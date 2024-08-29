@@ -6,13 +6,11 @@ use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class RoomController extends Controller
-{
+class RoomController extends Controller {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index() {
         $room = Room::all();
 
         if ($room->isEmpty()) {
@@ -36,16 +34,14 @@ class RoomController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:room',
         ]);
@@ -93,32 +89,28 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Room $room)
-    {
+    public function show(Room $room) {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Room $room)
-    {
+    public function edit(Room $room) {
         //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Room $room)
-    {
+    public function update(Request $request, Room $room) {
         //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Room $room)
-    {
+    public function destroy(Room $room) {
         //
     }
 }

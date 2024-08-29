@@ -85,7 +85,7 @@ class AppointmentsController extends Controller {
                 return redirect()->route('citas')->with('error', 'Cita no encontrada.');
             }
 
-            return view('citas-editar', compact('appointments'));
+            return response()->json($appointments);
         } catch (\Exception $e) {
             return redirect()->route('citas')->with('error', $e->getMessage());
         }
