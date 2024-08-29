@@ -23,29 +23,6 @@ async function getAppointments(){
     }
 }
 
-async function deleteAppointment(id){
-    const url = "http://127.0.0.1:8000/citas/eliminar/" + id;
-
-    try{
-        const response = await fetch(url, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
-        });
-
-        if(!response.ok){
-            throw new Error('Error al eliminar la cita');
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 document.addEventListener('DOMContentLoaded', function () {
 
     getAppointments()

@@ -59,9 +59,9 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
     Route::post("logout", [AuthController::class, "logout"])->name("logout");
     Route::get("logout", [AuthController::class, "logout"])->name("logout");
-    Route::get("/usuarios/ver/{id}", [UsersController::class, "show"])->name("users.show");
-    Route::put("/usuarios/editar/{id}", [UsersController::class, "update"])->name("users.update");
-    Route::delete("/usuarios/{id}", [UsersController::class, "destroy"])->name("users.destroy");
+    Route::get("/users/ver/{id}", [UsersController::class, "show"])->name("users.show");
+    Route::put("/users/editar/{id}", [UsersController::class, "update"])->name("users.update");
+    Route::delete("/users/{id}", [UsersController::class, "destroy"])->name("users.destroy");
 
     Route::get('/home', function () {
         return view('home');
@@ -120,7 +120,7 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
     })->name('agendar');
 
     Route::get('/citas/editar', function () {
-        return view('citas-editar');
+        return view('editAppointments');
     })->name('citas-editar');
 
     Route::get('/export',[ExportController::class, 'export'])->name('export');
@@ -130,11 +130,21 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
 // ***************************************Rutas para admin*********************************************
 Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])->group(function () {
-    Route::get('/usuarios', [UsersController::class, "index"])->name('usuarios');
+    // Retornar una respuesta del servidor:
+    Route::get('/users', [UsersController::class, "index"])->name('usuarios.index');
 
+    // Retornar una vista:
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/usuarios', function () {
+        return view('users');
+    })->name('usuarios');
+
+    Route::get('/usuarios/ver/{id}', function () {
+        return view('editUser');
+    })->name('usuarios-editar');
 });
 
 // ***************************************Iniciar credenciales admin*********************************************
