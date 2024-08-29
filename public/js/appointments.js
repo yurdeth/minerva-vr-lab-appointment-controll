@@ -82,8 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 time.innerHTML = item.time;
                 number_of_participants.innerHTML = item.number_of_participants;
                 actions.innerHTML = '' +
-                    '<a href="http://127.0.0.1:8000/appointments/ver/' + item.id + '" class="btn btn-primary">Editar</a> ' +
-                    '<a href="http://127.0.0.1:8000/citas/eliminar/' + item.id + '" class="btn btn-danger">Eliminar</a> ';
+                    '<a href="http://127.0.0.1:8000/appointments/ver/' + item.id + '" class="btn btn-primary">Editar</a> ';
             });
 
         })
