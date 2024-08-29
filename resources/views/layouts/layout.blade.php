@@ -64,7 +64,7 @@
                         @endif
                         <button><a class="nav-link" href="{{ route("logout") }}">Cerrar Sesión</a></button>
                         <button>
-                            <a class="nav-link" href="{{ route('users.show', ['id' => Auth::user()->id]) }}">
+                            <a class="nav-link" href="{{ route('usuarios-editar', ['id' => Auth::user()->id]) }}">
                                 <span class="navbar-text" style="color: white">{{ Auth::user()->name }}</span>
                             </a>
                         </button>

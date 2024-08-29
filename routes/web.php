@@ -104,7 +104,7 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
     Route::get('/appointments/index', [AppointmentsController::class, 'index'])->name("citas");
     Route::post('/citas', [AppointmentsController::class, 'store'])->name("appointments");
     Route::get('/appointments/ver/{id}', [AppointmentsController::class, 'show'])->name("appointments.show");
-    Route::put('/citas/editar/{id}', [AppointmentsController::class, 'update'])->name('appointments.update');
+    Route::put('/appointments/editar/{id}', [AppointmentsController::class, 'update'])->name('appointments.update');
     Route::delete('/citas/eliminar/{id}', [AppointmentsController::class, 'destroy'])->name("appointments.destroy");
 
     Route::get('/citas', function () {
@@ -119,7 +119,7 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
         return view('registro_cita');
     })->name('agendar');
 
-    Route::get('/citas/editar', function () {
+    Route::get('/citas/ver/{id}', function () {
         return view('editAppointments');
     })->name('citas-editar');
 
