@@ -1,5 +1,5 @@
 async function getAppointments(){
-    const id = 2;
+    const id = 0;
     const url = "http://127.0.0.1:8000/users/ver/" + id;
 
     try{

@@ -18,6 +18,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\ExportController;
 
+// ********************************Rutas para rutas no definidas*************************************
+Route::fallback(function () {
+    return redirect()->route('iniciar_sesion');
+});
+
 // ***************************************Rutas públicas*********************************************
 Route::get('/', function () {
     if (Auth::check()) {
@@ -68,7 +73,7 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
     })->name('HomeVR');
 
     Route::get('/profile', function () {
-        return view('edit_user');
+        return view('editUser');
     })->name('profile');
 });
 
