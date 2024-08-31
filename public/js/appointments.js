@@ -1,5 +1,3 @@
-// Implementar una promesa:
-
 async function getAppointments(){
     const url = "http://127.0.0.1:8000/appointments";
 
@@ -26,19 +24,11 @@ async function getAppointments(){
 document.addEventListener('DOMContentLoaded', function () {
 
     getAppointments()
-        // .then(response => response.json())
         .then(response => {
-            // console.log(response.data);
             let appointments = response.data;
-            appointments.forEach(item => {
-                console.log(item.id);
-                console.log(item.name);
-                console.log(item.department_name);
-                console.log(item.career_name);
-                console.log(item.date);
-                console.log(item.time);
-                console.log(item.number_of_participants);
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+            appointments.forEach(item => {
                 const table = document.getElementById('appointmentsTable');
                 const row = table.insertRow(-1);
 
@@ -58,8 +48,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 date.innerHTML = item.date;
                 time.innerHTML = item.time;
                 number_of_participants.innerHTML = item.number_of_participants;
-                actions.innerHTML = '' +
-                    '<a href="http://127.0.0.1:8000/appointments/ver/' + item.id + '" class="btn btn-primary">Editar</a> ';
+
+                actions.innerHTML = `
+                    <a href="http://127.0.0.1:8000/citas/ver/${item.id}" class="btn btn-primary">Editar</a>
+                    <form id="deleteForm-${item.id}" action="http://127.0.0.1:8000/appointments/eliminar/${item.id}" method="post" style="display: inline;">
+                        <input type="hidden" name="_token" value="${csrfToken}">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete(${item.id})">Eliminar</button>
+                    </form>
+                `;
             });
 
         })
@@ -67,3 +64,27 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(error);
         });
 });
+
+function confirmDelete(id) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById(`deleteForm-${id}`).submit();
+        }
+        else{
+            Swal.fire(
+                'Cancelado',
+                'La cita no ha sido eliminada.',
+                'success'
+            );
+        }
+    });
+}

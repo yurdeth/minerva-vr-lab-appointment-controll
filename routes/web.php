@@ -105,7 +105,7 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
     Route::post('/citas', [AppointmentsController::class, 'store'])->name("appointments");
     Route::get('/appointments/ver/{id}', [AppointmentsController::class, 'show'])->name("appointments.show");
     Route::put('/appointments/editar/{id}', [AppointmentsController::class, 'update'])->name('appointments.update');
-    Route::delete('/citas/eliminar/{id}', [AppointmentsController::class, 'destroy'])->name("appointments.destroy");
+    Route::delete('/appointments/eliminar/{id}', [AppointmentsController::class, 'destroy'])->name("appointments.destroy");
 
     Route::get('/citas', function () {
         return view('appointments');

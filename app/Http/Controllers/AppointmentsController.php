@@ -117,7 +117,7 @@ class AppointmentsController extends Controller {
             $appointment->delete();
         }
 
-        return redirect()->route('citas');
+        return redirect()->route('citas-ver');
     }
 
     /**
