@@ -105,7 +105,7 @@ class AppointmentsController extends Controller {
         $appointment->save();
         $participants->save();
 
-        return redirect()->route('citas');
+        return redirect()->route('citas-ver');
     }
 
     /**

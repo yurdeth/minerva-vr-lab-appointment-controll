@@ -35,25 +35,15 @@
                                    style="padding-left: 15px;" min="1" max="20" readonly>
                         </div>
                     @endif
-
-                    <button type="submit" class="btn btn-primary" onclick="showMessage(event)">Actualizar datos</button>
                 </form>
-
-                {{--<form id="deleteForm" action="{{ route('appointments.destroy', ['id' => $appointments[0]->id]) }}"
-                      method="POST" class="mt-3">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger" onclick="showDeleteConfirmationMessage(event)">Eliminar
-                        la cita
-                    </button>
-                </form>--}}
+                <div id="actionsButtons" class="row"></div>
             </div>
             <div class="col-2"></div>
         </div>
     </div>
 
     <script>
-        function showMessage(event) {
+        /*function showEditMessage(event) {
             event.preventDefault();
 
             const date = document.getElementById("date");
@@ -133,9 +123,9 @@
             }).then(() => {
                 document.getElementById('updateForm').submit();
             });
-        }
+        }*/
 
-        function showDeleteConfirmationMessage(event) {
+        /*function showDeleteConfirmationMessage(event) {
             event.preventDefault();
 
             Swal.fire({
@@ -162,7 +152,7 @@
                     });
                 }
             });
-        }
+        }*/
     </script>
     <script src="{{ asset('js/viewAppointment.js') }}"></script>
 
