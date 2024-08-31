@@ -24,46 +24,43 @@
 
                     <div class="card-body">
 
-                        <form id="updateForm" action="{{ route("users.update", ['id' => $user[0]->id]) }}"
-                              method="POST">
+                        <form id="updateForm" method="POST">
                             @csrf
                             @method("PUT")
 
                             <div class="mb-3">
                                 <label for="name" class="form-label">Nombre</label>
-                                <input type="text" class="form-control" id="name" name="name"
-                                       value="{{ $user[0]->name }}" required>
+                                <input type="text" class="form-control" id="name" name="name" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="email" class="form-label">Correo</label>
-                                <input type="email" class="form-control" id="email" name="email"
-                                       value="{{ $user[0]->email }}" readonly>
+                                <input type="email" class="form-control" id="email" name="email" readonly>
                             </div>
 
                             <div class="form-group position-relative">
                                 <label for="department" class="form-label">Departamento</label>
                                 <select name="department" id="department" class="form-control" required>
-                                    <option value="" disabled>Seleccione un departamento</option>
-                                    @foreach ($user as $department)
+                                    <option disabled>Seleccione un departamento</option>
+                                    {{--@foreach ($user as $department)
                                         <option
                                             value="{{ $department->department_id }}" {{ $user[0]->department_id == $department->id ? 'selected' : '' }}>
                                             {{ $department->department_name }}
                                         </option>
-                                    @endforeach
+                                    @endforeach--}}
                                 </select>
                             </div>
 
                             <div class="form-group position-relative">
                                 <label for="career" class="form-label">Carrera</label>
                                 <select name="career" id="career" class="form-control" required>
-                                    <option value="" disabled>Carrera</option>
-                                    @foreach ($user as $career)
+                                    <option disabled>Carrera</option>
+                                    {{--@foreach ($user as $career)
                                         <option
                                             value="{{ $career->career_id }}" {{ $user[0]->career_id == $career->id ? 'selected' : '' }}>
                                             {{ $career->career_name }}
                                         </option>
-                                    @endforeach
+                                    @endforeach--}}
                                 </select>
                             </div>
 
@@ -81,13 +78,14 @@
                             <button type="submit" class="btn btn-primary" onclick="showMessage(event)">Actualizar datos</button>
                         </form>
 
-                        <form id="deleteForm" action="{{ route("users.destroy", ['id' => $user[0]->id]) }}" method="POST" class="mt-3">
+                        <form id="deleteForm" method="POST" class="mt-3">
                             @csrf
 
                             @method("DELETE")
-                            @if(Auth::user()->roles_id != 1)
+                            <button type="submit" class="btn btn-danger" onclick="showDeleteConfirmationMessage(event)">Eliminar perfil</button>
+                            {{--@if(Auth::user()->roles_id != 1)
                                 <button type="submit" class="btn btn-danger" onclick="showDeleteConfirmationMessage(event)">Eliminar mi perfil</button>
-                            @endif
+                            @endif--}}
                         </form>
 
                     </div>
@@ -199,6 +197,7 @@
         }
     </script>
 
+    <script src="{{ asset('js/viewUser.js') }}"></script>
     <script src="{{ asset('js/departments.js') }}"></script>
     <script src="{{ asset('js/careers.js') }}"></script>
 

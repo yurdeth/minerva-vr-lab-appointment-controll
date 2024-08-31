@@ -46,10 +46,9 @@
                     <div class="card-body">
                         <div class="table-responsive" style="height: 100%; width: 100%;">
                             <table id="appointmentsTable" class="table table-bordered text-center" style="width: 100%; margin-bottom: 0;">
-                                <thead class="table-dark">
+                                <thead class="table-avatar">
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">ID</th>
                                     <th scope="col">Encargado</th>
                                     <th scope="col">Departamento</th>
                                     <th scope="col">Carrera</th>
@@ -59,35 +58,7 @@
                                     <th scope="col">Acciones</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                @foreach ($appointments as $appointment)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $appointment->id }}</td>
-                                        <td>{{ $appointment->name }}</td>
-                                        <td>{{ $appointment->department_name }}</td>
-                                        <td>{{ $appointment->career_name }}</td>
-                                        <td>{{ date('d/m/Y', strtotime($appointment->date)) }}</td>
-                                        <td>{{ $appointment->time }}</td>
-                                        <td>{{ $appointment->number_of_participants }}</td>
-                                        <td class="d-flex p-1">
-                                            <a href="{{ route('appointments.show', ['id' => $appointment->id]) }}" class="btn btn-primary m-3">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
-                                            <form id="deleteForm-{{ $appointment->id }}"
-                                                  action="{{ route("appointments.destroy", ['id' => $appointment->id]) }}"
-                                                  method="POST" class="mt-3">
-                                                @csrf
-                                                @method("DELETE")
-                                                <button type="submit" class="btn btn-danger"
-                                                        onclick="showDeleteConfirmationMessage(event, {{ $appointment->id }})">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -162,6 +133,7 @@
             });
         }
     </script>
+    <script src="{{ asset('js/appointments.js') }}"></script>
 
     <br><br>
 
