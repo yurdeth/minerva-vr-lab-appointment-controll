@@ -6,6 +6,28 @@ document.addEventListener('DOMContentLoaded', function() {
         let form = event.target;
         let formData = new FormData(form);
 
+        if (formData.get('email') === '') {
+            Swal.fire({
+                icon: 'error',
+                iconColor: '#660D04',
+                title: 'Oops...',
+                text: 'Por favor, ingrese su correo electrónico',
+                confirmButtonColor: '#660D04',
+            });
+            return;
+        }
+
+        if (formData.get('password') === '') {
+            Swal.fire({
+                icon: 'error',
+                iconColor: '#660D04',
+                title: 'Oops...',
+                text: 'Por favor, ingrese su contraseña',
+                confirmButtonColor: '#660D04',
+            });
+            return;
+        }
+
         fetch(form.action, {
             method: form.method,
             body: formData
