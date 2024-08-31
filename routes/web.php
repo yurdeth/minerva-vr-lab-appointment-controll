@@ -135,7 +135,7 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
 
     // Retornar una vista:
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('Administración.dashboard');
     })->name('dashboard');
 
     Route::get('/usuarios', function () {
