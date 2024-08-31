@@ -50,17 +50,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 actionsButtons.classList.add('row');
 
                 actionsButtons.innerHTML = `
-                    <form id="editForm-${item.id}">
-                        <input type="hidden" name="_token" value="${csrfToken}">
-                        <input type="hidden" name="_method" value="PUT">
-                        <button type="button" class="btn btn-primary" onclick="handleEdit(${item.id})">Actualizar</button>
-                    </form>
+                    <div class="d-flex justify-content-center gap-3 mt-3">
 
-                    <form id="deleteForm-${item.id}" action="/appointments/eliminar/${item.id}" method="post">
-                        <input type="hidden" name="_token" value="${csrfToken}">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button type="button" class="btn btn-danger" onclick="handleDelete(${item.id})">Eliminar</button>
-                    </form>
+                        <form id="editForm-${item.id}">
+                            <input type="hidden" name="_token" value="${csrfToken}">
+                            <input type="hidden" name="_method" value="PUT">
+                            <button type="button" class="btn btn-primary" onclick="handleEdit(${item.id})">Actualizar</button>
+                        </form>
+
+                        <form id="deleteForm-${item.id}" action="/appointments/eliminar/${item.id}" method="post">
+                            <input type="hidden" name="_token" value="${csrfToken}">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="button" class="btn btn-danger" onclick="handleDelete(${item.id})">Eliminar</button>
+                        </form>
+
+                    <div>
                 `;
             })
             .catch(error => {
