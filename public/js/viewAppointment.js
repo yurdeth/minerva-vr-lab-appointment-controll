@@ -1,5 +1,4 @@
-async function getAppointments(){
-    const id = 2;
+async function getAppointments(id){
     const url = "http://127.0.0.1:8000/appointments/ver/" + id;
 
     try{
@@ -23,13 +22,14 @@ async function getAppointments(){
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    const urlParts = window.location.pathname.split('/');
+    const id = urlParts[urlParts.length - 1];
 
-    getAppointments()
-        // .then(response => response.json())
-        .then(response => {
-            response.forEach(item => {
+    if (id) {
+        getAppointments(id)
+            .then(response => {
+                const item = response[0];
 
-                // console.log(item);
                 const name = document.getElementById('name');
                 const date = document.getElementById('date');
                 const time = document.getElementById('time');
@@ -42,10 +42,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if(name){
                     name.value = item.name;
                 }
+            })
+            .catch(error => {
+                console.log(error);
             });
-
-        })
-        .catch(error => {
-            console.log(error);
-        });
+    }
 });
