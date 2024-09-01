@@ -10,6 +10,8 @@ async function getResponse(url){
             }
         });
 
+        // console.log(response);
+
         if(!response.ok){
             throw new Error('Error al obtener los datos');
         }

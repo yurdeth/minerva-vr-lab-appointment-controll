@@ -130,6 +130,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/1.1.6/choices.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{asset("js/main.js")}}"></script>
-<script src="{{asset("js/main.js")}}"></script>
 </body>
 </html>

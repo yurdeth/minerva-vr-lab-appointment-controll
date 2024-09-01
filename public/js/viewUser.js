@@ -25,15 +25,23 @@ import {getResponse} from './getResponsePromise.js';
 }*/
 
 document.addEventListener('DOMContentLoaded', function () {
-    const urlParts = window.location.pathname.split('/');
-    const id = urlParts[urlParts.length - 1];
+    // Function to get query parameter by name
+    function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
 
+    // Extract id from query string or URL path
+    let id = getQueryParam('id');
+    if (!id) {
+        let urlParts = window.location.pathname.split('/');
+        id = urlParts[urlParts.length - 1];
+    }
+
+    // Fetch and display user data
     getResponse(`/users/ver/${id}`)
-        // .then(response => response.json())
         .then(response => {
             response.forEach(item => {
-
-                // console.log(item);
                 const name = document.getElementById('name');
                 const email = document.getElementById('email');
                 const department_name = document.getElementById('department');
@@ -46,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 department_name.selectedIndex = item.department_id;
                 career.selectedIndex = item.career_id;
             });
-
         })
         .catch(error => {
             console.log(error);
