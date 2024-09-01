@@ -112,9 +112,13 @@
             <div>
                 <h4>Enlaces Rapidos</h4>
                 <ul>
-                    <li><a class="text-white text-decoration-none" href="{{ route('profile', ['id' => Auth::user()->id]) }}">Mi cuenta</a></li>
+                    @auth
+                        <li><a class="text-white text-decoration-none" href="{{ route('profile', ['id' => Auth::user()->id]) }}">Mi cuenta</a></li>
+                    @endauth
                     <li>Ubicación</li>
-                    <li><a class="text-white text-decoration-none" href="{{ route('citas-ver') }}">Mis citas</a></li>
+                    @auth
+                        <li><a class="text-white text-decoration-none" href="{{ route('citas-ver') }}">Mis citas</a></li>
+                    @endauth
                 </ul>
                 <br>
                 <hr>
