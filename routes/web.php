@@ -4,6 +4,9 @@ use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CareersController;
 use App\Http\Controllers\DepartmentsController;
+use App\Http\Controllers\ResourcesController;
+use App\Http\Controllers\ResourceTypeController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StatusesController;
 use App\Http\Controllers\UsersController;
 use App\Http\Middleware\NoBrowserCache;
@@ -14,6 +17,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\ExportController;
+
+// ********************************Rutas para rutas no definidas*************************************
+Route::fallback(function () {
+    return redirect()->route('iniciar_sesion');
+});
 
 // ***************************************Rutas públicas*********************************************
 Route::get('/', function () {
@@ -56,16 +64,16 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
     Route::post("logout", [AuthController::class, "logout"])->name("logout");
     Route::get("logout", [AuthController::class, "logout"])->name("logout");
-    Route::get("/usuarios/ver/{id}", [UsersController::class, "show"])->name("users.show");
-    Route::put("/usuarios/editar/{id}", [UsersController::class, "update"])->name("users.update");
-    Route::delete("/usuarios/{id}", [UsersController::class, "destroy"])->name("users.destroy");
+    Route::get("/users/ver/{id}", [UsersController::class, "show"])->name("users.show");
+    Route::put("/users/editar/{id}", [UsersController::class, "update"])->name("users.update");
+    Route::delete("/users/{id}", [UsersController::class, "destroy"])->name("users.destroy");
 
     Route::get('/home', function () {
         return view('home');
     })->name('HomeVR');
 
     Route::get('/profile', function () {
-        return view('edit_user');
+        return view('editUser');
     })->name('profile');
 });
 
@@ -82,25 +90,42 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
     Route::get('/statuses', [StatusesController::class, 'index'])->name("statuses");
     /*Código con la funcionalidad que no de error al abrir el informe de inventario*/
     Route::post('/insertar-inventario', [StatusesController::class, 'store'])->name("insertar-inventario");
+
+    Route::post('statuses/create', [StatusesController::class, 'store']);
+    Route::get('statuses', [StatusesController::class, 'index']);
+    Route::get('resourcesTypes', [ResourceTypeController::class, 'index']);
+    Route::post('resourcesTypes/create', [ResourceTypeController::class, 'store']);
+    Route::get('/room', [RoomController::class, 'index']);
+    Route::post('/room/create', [RoomController::class, 'store']);
+    Route::get('/resources', [ResourcesController::class, 'index']);
+    Route::post('/resources/create', [ResourcesController::class, 'store']);
 });
 
 // ***************************************Rutas para citas*********************************************
 Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
     // Rutas API:
-    Route::get('/citas', [AppointmentsController::class, 'index'])->name("citas");
-    Route::get('/citas/index', [AppointmentsController::class, 'index'])->name("citas");
+    Route::get('/appointments', [AppointmentsController::class, 'index'])->name("citas");
+    Route::get('/appointments/index', [AppointmentsController::class, 'index'])->name("citas");
     Route::post('/citas', [AppointmentsController::class, 'store'])->name("appointments");
-    Route::get('/citas/ver/{id}', [AppointmentsController::class, 'show'])->name("appointments.show");
-    Route::put('/citas/editar/{id}', [AppointmentsController::class, 'update'])->name('appointments.update');
-    Route::delete('/citas/eliminar/{id}', [AppointmentsController::class, 'destroy'])->name("appointments.destroy");
+    Route::get('/appointments/ver/{id}', [AppointmentsController::class, 'show'])->name("appointments.show");
+    Route::put('/appointments/editar/{id}', [AppointmentsController::class, 'update'])->name('appointments.update');
+    Route::delete('/appointments/eliminar/{id}', [AppointmentsController::class, 'destroy'])->name("appointments.destroy");
+
+    Route::get('/citas', function () {
+        return view('appointments');
+    })->name('citas-ver');
+
+    Route::get('/citas/index', function () {
+        return view('appointments');
+    })->name('citas-ver-index');
 
     Route::get('/citas/nueva', function () {
         return view('registro_cita');
     })->name('agendar');
 
-    Route::get('/citas/editar', function () {
-        return view('citas-editar');
+    Route::get('/citas/ver/{id}', function () {
+        return view('editAppointments');
     })->name('citas-editar');
 
     Route::get('/export',[ExportController::class, 'export'])->name('export');
@@ -110,11 +135,21 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
 // ***************************************Rutas para admin*********************************************
 Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])->group(function () {
-    Route::get('/usuarios', [UsersController::class, "index"])->name('usuarios');
+    // Retornar una respuesta del servidor:
+    Route::get('/users', [UsersController::class, "index"])->name('usuarios.index');
 
+    // Retornar una vista:
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('Administración.dashboard');
     })->name('dashboard');
+
+    Route::get('/usuarios', function () {
+        return view('users');
+    })->name('usuarios');
+
+    Route::get('/usuarios/ver/{id}', function () {
+        return view('editUser');
+    })->name('usuarios-editar');
 });
 
 // ***************************************Iniciar credenciales admin*********************************************

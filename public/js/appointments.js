@@ -1,109 +1,92 @@
-document.addEventListener('DOMContentLoaded', function () {
+import {getResponse} from './getResponsePromise.js';
+
+/*async function getAppointments(){
     const url = "http://127.0.0.1:8000/appointments";
 
-    fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
+    try{
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+
+        if(!response.ok){
+            throw new Error('Error al obtener las citas');
         }
-    })
-        .then(response => response.json())
-        .then(data => {
-            // console.log(data);
-            // Obtener la referencia a la tabla
-            const table = document.querySelector('table tbody');
 
-            // Recorrer los datos y crear filas
-            data.forEach((appointment, index) => {
-                const row = document.createElement('tr');
+        return await response.json();
+    } catch (error) {
+        console.log(error);
+    }
+}*/
 
-                // Crear celdas y asignar valores
-                const idCell = document.createElement('td');
-                idCell.textContent = index + 1;
-                row.appendChild(idCell);
+document.addEventListener('DOMContentLoaded', function () {
 
-                const userIdCell = document.createElement('td');
-                userIdCell.textContent = appointment.name;
-                row.appendChild(userIdCell);
+    getResponse('/appointments')
+        .then(response => {
+            let appointments = response.data;
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                const departmentCell = document.createElement('td');
-                departmentCell.textContent = appointment.department_name;
-                row.appendChild(departmentCell);
+            appointments.forEach(item => {
+                const table = document.getElementById('appointmentsTable');
+                const row = table.insertRow(-1);
 
-                const careerCell = document.createElement('td');
-                careerCell.textContent = appointment.career_name;
-                row.appendChild(careerCell);
+                const code = row.insertCell(0);
+                const name = row.insertCell(1);
+                const department = row.insertCell(2);
+                const career = row.insertCell(3);
+                const date = row.insertCell(4);
+                const time = row.insertCell(5);
+                const number_of_participants = row.insertCell(6);
+                const actions = row.insertCell(7);
 
-                const dateCell = document.createElement('td');
-                dateCell.textContent = appointment.date;
-                row.appendChild(dateCell);
+                code.innerHTML = item.id;
+                name.innerHTML = item.name;
+                department.innerHTML = item.department_name;
+                career.innerHTML = item.career_name;
+                date.innerHTML = item.date;
+                time.innerHTML = item.time;
+                number_of_participants.innerHTML = item.number_of_participants;
 
-                const timeCell = document.createElement('td');
-                timeCell.textContent = appointment.time;
-                row.appendChild(timeCell);
-
-                const participantsCell = document.createElement('td');
-                participantsCell.textContent = appointment.number_of_participants;
-                row.appendChild(participantsCell);
-
-                const statusSelect = document.createElement('select');
-                statusSelect.classList.add('form-control', 'form-select');
-                const statusOptions = ['Activa', 'Pendiente', 'Cancelada', 'Completada'];
-
-                statusOptions.forEach(status => {
-                    const option = document.createElement('option');
-                    option.value = status.toLowerCase();
-                    option.textContent = status;
-
-                    if (status.toLowerCase() === appointment.status.toLowerCase()) {
-                        option.selected = true;
-                    }
-
-                    statusSelect.appendChild(option);
-                });
-
-                row.appendChild(statusSelect);
-
-                const actionsCell = document.createElement('td');
-
-                // Crear enlace de editar
-                const editLink = document.createElement('a');
-                editLink.href = '#';
-                editLink.classList.add('btn', 'btn-primary', 'btn-sm');
-
-                const editIcon = document.createElement('i');
-                editIcon.classList.add('fas', 'fa-edit');
-                editLink.appendChild(editIcon);
-
-                editLink.addEventListener('click', () => {
-                    // Lógica para editar la cita con el ID appointment.id
-                    alert('Editar cita: ' + appointment.id);
-                });
-                actionsCell.appendChild(editLink);
-
-                // Crear enlace de eliminar
-                const deleteLink = document.createElement('a');
-                deleteLink.href = '#';
-                deleteLink.classList.add('btn', 'btn-danger', 'btn-sm', 'mr-2');
-
-                const deleteIcon = document.createElement('i');
-                deleteIcon.classList.add('fas', 'fa-trash-alt');
-                deleteLink.appendChild(deleteIcon);
-
-                deleteLink.addEventListener('click', () => {
-                    alert('Eliminar cita: ' + appointment.id);
-                });
-                actionsCell.appendChild(deleteLink);
-
-                row.appendChild(actionsCell);
-
-                // Agregar la fila a la tabla
-                table.appendChild(row);
+                actions.innerHTML = `
+                    <a href="http://127.0.0.1:8000/citas/ver/${item.id}" class="btn btn-primary">Editar</a>
+                    <form id="deleteForm-${item.id}" action="http://127.0.0.1:8000/appointments/eliminar/${item.id}" method="post" style="display: inline;">
+                        <input type="hidden" name="_token" value="${csrfToken}">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete(${item.id})">Eliminar</button>
+                    </form>
+                `;
             });
+
         })
         .catch(error => {
             console.log(error);
         });
 });
+
+function confirmDelete(id) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById(`deleteForm-${id}`).submit();
+        }
+        else{
+            Swal.fire(
+                'Cancelado',
+                'La cita no ha sido eliminada.',
+                'success'
+            );
+        }
+    });
+}

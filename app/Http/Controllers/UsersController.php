@@ -23,7 +23,8 @@ class UsersController extends Controller {
             ->select('users.id', 'users.name', 'users.email', 'careers.career_name', 'departments.department_name')
             ->get();
 
-        return view('usuarios', compact('users'));
+//        return view('usuarios', compact('users'));
+        return response()->json($users);
     }
 
     /**
@@ -37,7 +38,7 @@ class UsersController extends Controller {
      * Display the specified resource.
      */
     public function show($id) {
-        if (Auth::user()->id != $id && Auth::user()->roles_id != 1){
+        if (Auth::user()->id != $id && Auth::user()->roles_id != 1) {
             return redirect()->route('HomeVR');
         }
 
@@ -51,7 +52,8 @@ class UsersController extends Controller {
         if ($user) {
 //            var_dump($user[0]->id);
 //            var_dump(Auth::user()->id);
-            return view('edit_user', compact('user'));
+//            return view('edit_user', compact('user'));
+            return response()->json($user);
         } else {
             return redirect()->route('usuarios');
         }
@@ -61,7 +63,7 @@ class UsersController extends Controller {
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id) {
-        if (Auth::user()->id != $id && Auth::user()->roles_id != 1){
+        if (Auth::user()->id != $id && Auth::user()->roles_id != 1) {
             return redirect()->route('HomeVR');
         }
 
@@ -109,18 +111,18 @@ class UsersController extends Controller {
      * Remove the specified resource from storage.
      */
     public function destroy(string $id) {
-        if (Auth::user()->id != $id && Auth::user()->roles_id != 1){
+        if (Auth::user()->id != $id && Auth::user()->roles_id != 1) {
             return redirect()->route('HomeVR');
         }
 
-        if ($id != 1){
+        if ($id != 1) {
             $user = User::find($id);
-            if ($user){
+            if ($user) {
                 $user->delete();
             }
         }
 
-        if(Auth::user()->roles_id == 1){
+        if (Auth::user()->roles_id == 1) {
             return $this->index();
         } else {
             return redirect()->route('inicio');

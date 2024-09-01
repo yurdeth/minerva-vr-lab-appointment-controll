@@ -95,6 +95,10 @@ class AuthController extends Controller {
 
         }
 
+        if(!$request->email || !$request->password) {
+            return redirect()->route('iniciar_sesion')->with('error', 'Por favor, ingrese sus credenciales.');
+        }
+
         return response()->json([
             "message" => "Credenciales erróneas",
             "success" => false,

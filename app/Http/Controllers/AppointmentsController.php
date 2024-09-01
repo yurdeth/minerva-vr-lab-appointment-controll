@@ -16,7 +16,10 @@ class AppointmentsController extends Controller {
      */
     public function index() {
         $appointments = (new Appointments)->GetAppointments();
-        return view('citas', compact('appointments'));
+        return response()->json([
+            "data" => $appointments,
+            "success" => true,
+        ]);
     }
     //method to generate pdf
     public function pdf(){
@@ -82,7 +85,7 @@ class AppointmentsController extends Controller {
                 return redirect()->route('citas')->with('error', 'Cita no encontrada.');
             }
 
-            return view('citas-editar', compact('appointments'));
+            return response()->json($appointments);
         } catch (\Exception $e) {
             return redirect()->route('citas')->with('error', $e->getMessage());
         }
@@ -102,7 +105,7 @@ class AppointmentsController extends Controller {
         $appointment->save();
         $participants->save();
 
-        return redirect()->route('citas');
+        return redirect()->route('citas-ver');
     }
 
     /**
@@ -114,7 +117,7 @@ class AppointmentsController extends Controller {
             $appointment->delete();
         }
 
-        return redirect()->route('citas');
+        return redirect()->route('citas-ver');
     }
 
     /**

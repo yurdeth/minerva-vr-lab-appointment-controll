@@ -32,9 +32,8 @@
                     <div class="card-body">
                         <div class="table-responsive" style="height: 100%; width: 100%;">
                             <table class="table table-bordered text-center" id="usersTable" style="width: 100%; margin-bottom: 0;">
-                                <thead class="table-dark">
+                                <thead class="table-avatar">
                                 <tr>
-                                    <th scope="col">#</th>
                                     <th scope="col">ID</th>
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Correo</th>
@@ -43,33 +42,7 @@
                                     <th scope="col">Acciones</th>
                                 </tr>
                                 </thead>
-                                <tbody id="users-table-body">
-                                @foreach ($users as $user)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $user->id }}</td>
-                                        <td>{{ $user->name }}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>{{ $user->department_name }}</td>
-                                        <td>{{ $user->career_name }}</td>
-                                        <td class="d-flex p-1">
-                                            <a href="{{ route('users.show', ['id' => $user->id]) }}" class="btn btn-primary m-3">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
-                                            <form id="deleteForm-{{ $user->id }}"
-                                                  action="{{ route("users.destroy", ['id' => $user->id]) }}"
-                                                  method="POST" class="mt-3">
-                                                @csrf
-                                                @method("DELETE")
-                                                <button type="submit" class="btn btn-danger"
-                                                        onclick="showDeleteConfirmationMessage(event, {{ $user->id }})">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
+                                <tbody id="users-table-body"></tbody>
                             </table>
                         </div>
                     </div>
@@ -140,6 +113,9 @@
             });
         });
     </script>
+
+    <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
+    <script type="module" src="{{ asset('js/users.js') }}"></script>
 @stop
 
 @section('css')
