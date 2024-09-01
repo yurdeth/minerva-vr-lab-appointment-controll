@@ -11,7 +11,7 @@ async function getResponse(url){
         });
 
         if(!response.ok){
-            throw new Error('Error al obtener las citas');
+            throw new Error('Error al obtener los datos');
         }
 
         return await response.json();
