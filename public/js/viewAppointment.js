@@ -1,62 +1,5 @@
 import {getResponse} from './getResponsePromise.js';
 
-document.addEventListener('DOMContentLoaded', function () {
-    const urlParts = window.location.pathname.split('/');
-    const id = urlParts[urlParts.length - 1];
-
-    if (id) {
-        getResponse(`/appointments/ver/${id}`)
-            .then(response => {
-                if (!response || response.length === 0) {
-                    console.error('No appointment data found.');
-                    return;
-                }
-
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                const item = response[0];
-
-                const name = document.getElementById('name');
-                const date = document.getElementById('date');
-                const time = document.getElementById('time');
-                const number_of_participants = document.getElementById('number_of_assistants');
-
-                if (!item){
-                    showAlert('error', 'No se encontraron datos de la cita.');
-                    return;
-                }
-
-                if (name) name.value = item.name;
-                date.value = item.date;
-                time.value = item.time;
-                number_of_participants.value = item.number_of_participants;
-
-                const actionsButtons = document.getElementById('actionsButtons');
-                actionsButtons.classList.add('row');
-
-                actionsButtons.innerHTML = `
-                    <div class="d-flex justify-content-center gap-3 mt-3">
-
-                        <form id="editForm-${item.id}">
-                            <input type="hidden" name="_token" value="${csrfToken}">
-                            <input type="hidden" name="_method" value="PUT">
-                            <button type="button" id="btnUpdate" class="btn btn-primary" onclick="handleEdit(${item.id})">Actualizar</button>
-                        </form>
-
-                        <form id="deleteForm-${item.id}" action="/appointments/eliminar/${item.id}" method="post">
-                            <input type="hidden" name="_token" value="${csrfToken}">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button type="button" id="btnDestroy" class="btn btn-danger" onclick="handleDelete(${item.id})">Eliminar</button>
-                        </form>
-
-                    <div>
-                `;
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
-});
-
 function handleEdit(id) {
     const date = document.getElementById("date");
     const time = document.getElementById("time");
@@ -78,7 +21,7 @@ function handleEdit(id) {
         return;
     }
 
-    if (selectedDate <= today) {
+    if (selectedDate < today) {
         showAlert('error', 'La fecha debe ser posterior a hoy.');
         return;
     }
@@ -109,7 +52,7 @@ function handleEdit(id) {
         .then(response => {
             // Esta mierda dice que da error, pero en realidad sí actualiza la data de la cita ;-;
 
-            console.log(response);
+            // console.log(response);
 
             Swal.fire({
                 icon: 'success',
@@ -159,3 +102,71 @@ function showAlert(icon, text) {
         }
     });
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const urlParts = window.location.pathname.split('/');
+    const id = urlParts[urlParts.length - 1];
+
+    if (id) {
+        getResponse(`/appointments/ver/${id}`)
+            .then(response => {
+                if (!response || response.length === 0) {
+                    console.error('No appointment data found.');
+                    return;
+                }
+
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                const item = response[0];
+
+                const name = document.getElementById('name');
+                const date = document.getElementById('date');
+                const time = document.getElementById('time');
+                const number_of_participants = document.getElementById('number_of_assistants');
+
+                if (!item){
+                    showAlert('error', 'No se encontraron datos de la cita.');
+                    return;
+                }
+
+                if (name) name.value = item.name;
+                date.value = item.date;
+                time.value = item.time;
+                number_of_participants.value = item.number_of_participants;
+
+                const actionsButtons = document.getElementById('actionsButtons');
+                actionsButtons.classList.add('row');
+
+                actionsButtons.innerHTML = `
+                    <div class="d-flex justify-content-center gap-3 mt-3">
+
+                        <form id="editForm-${item.id}">
+                            <input type="hidden" name="_token" value="${csrfToken}">
+                            <input type="hidden" name="_method" value="PUT">
+                            <input type="hidden" name="_id" id="id-${item.id}" value="${item.id}">
+                            <button type="button" id="btnUpdate-${item.id}" class="btn btn-primary">Actualizar</button>
+                        </form>
+
+                        <form id="deleteForm-${item.id}" action="/appointments/eliminar/${item.id}" method="post">
+                            <input type="hidden" name="_token" value="${csrfToken}">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_id" id="id-${item.id}" value="${item.id}">
+                            <button type="button" id="btnDestroy-${item.id}" class="btn btn-danger">Eliminar</button>
+                        </form>
+
+                    <div>
+                `;
+
+                document.getElementById(`btnUpdate-${item.id}`).addEventListener('click', function() {
+                    handleEdit(item.id);
+                });
+
+                document.getElementById(`btnDestroy-${item.id}`).addEventListener('click', function() {
+                    handleDelete(item.id);
+                });
+
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+});

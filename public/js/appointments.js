@@ -77,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     </form>
                 `;
 
-                // Add event listener to the delete button
                 document.getElementById(`btnDelete-${item.id}`).addEventListener('click', function() {
                     confirmDelete(item.id);
                 });
