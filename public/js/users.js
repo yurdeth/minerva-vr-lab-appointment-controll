@@ -1,27 +1,40 @@
 import {getResponse} from './getResponsePromise.js';
 
-/*async function getAppointments(){
-    const url = "http://127.0.0.1:8000/users";
-
-    try{
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
-        });
-
-        if(!response.ok){
-            throw new Error('Error al obtener las citas');
+/**
+ * Muestra un mensaje de confirmación para eliminar una cita.
+ *
+ * @param {number} id - El ID de la cita a eliminar.
+ */
+function confirmDelete(id) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire(
+                'Eliminando...',
+                'El usuario será eliminado.',
+                'success'
+            );
+            setTimeout(() => {
+                document.getElementById(`deleteForm-${id}`).submit();
+            }, 1000);
+        } else {
+            Swal.fire(
+                'Cancelado',
+                'El usuario no ha podido eliminarse.',
+                'success'
+            );
         }
+    });
+}
 
-        return await response.json();
-    } catch (error) {
-        console.log(error);
-    }
-}*/
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -30,6 +43,8 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => {
             // console.log(response);
             response.forEach(item => {
+
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
                 const table = document.getElementById('usersTable');
                 const row = table.insertRow(-1);
@@ -46,8 +61,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 email.innerHTML = item.email;
                 department_name.innerHTML = item.department_name;
                 career_name.innerHTML = item.career_name;
-                actions.innerHTML = '' +
-                    '<a href="http://127.0.0.1:8000/usuarios/ver/' + item.id + '" class="btn btn-primary">Editar</a> ';
+                /*actions.innerHTML = '' +
+                    '<a href="http://127.0.0.1:8000/usuarios/ver/' + item.id + '" class="btn btn-primary">Editar</a> ';*/
+
+                actions.innerHTML = `
+                    <a href="/usuarios/ver/${item.id}" class="btn btn-primary">Editar</a>
+                    <form id="deleteForm-${item.id}" action="/users/eliminar/${item.id}" method="post" style="display: inline;">
+                        <input type="hidden" name="_token" value="${csrfToken}">
+                        <input type="hidden" name="_id" id="id-${item.id}" value="${item.id}">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="button" id="btnDelete-${item.id}" class="btn btn-danger">Eliminar</button>
+                    </form>
+                `;
+
+                document.getElementById(`btnDelete-${item.id}`).addEventListener('click', function() {
+                    confirmDelete(item.id);
+                });
             });
 
         })

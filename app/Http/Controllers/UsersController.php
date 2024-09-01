@@ -123,7 +123,7 @@ class UsersController extends Controller {
         }
 
         if (Auth::user()->roles_id == 1) {
-            return $this->index();
+            return redirect()->route('usuarios');
         } else {
             return redirect()->route('inicio');
         }
