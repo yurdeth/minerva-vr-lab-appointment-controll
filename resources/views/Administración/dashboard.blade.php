@@ -28,8 +28,8 @@
                 </li>
                 <li>
                     <a href="#">
-                        <span><i class="fa-solid fa-table"></i></span>
-                        <span class="Opciones">Dashboard</span>
+                        <i class="fa-solid fa-school"></i>
+                        <span class="Opciones">Carreras</span>
                     </a>
                 </li>
                 <li>
