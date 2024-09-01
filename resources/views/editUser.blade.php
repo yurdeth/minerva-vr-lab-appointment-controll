@@ -42,12 +42,6 @@
                                 <label for="department" class="form-label">Departamento</label>
                                 <select name="department" id="department" class="form-control" required>
                                     <option disabled>Seleccione un departamento</option>
-                                    {{--@foreach ($user as $department)
-                                        <option
-                                            value="{{ $department->department_id }}" {{ $user[0]->department_id == $department->id ? 'selected' : '' }}>
-                                            {{ $department->department_name }}
-                                        </option>
-                                    @endforeach--}}
                                 </select>
                             </div>
 
@@ -55,38 +49,30 @@
                                 <label for="career" class="form-label">Carrera</label>
                                 <select name="career" id="career" class="form-control" required>
                                     <option disabled>Carrera</option>
-                                    {{--@foreach ($user as $career)
-                                        <option
-                                            value="{{ $career->career_id }}" {{ $user[0]->career_id == $career->id ? 'selected' : '' }}>
-                                            {{ $career->career_name }}
-                                        </option>
-                                    @endforeach--}}
                                 </select>
                             </div>
 
                             <div class="mb-3">
-                                <label for="password" class="form-label">Nueva contraseña: </label>
-                                <input type="password" class="form-control" id="password" name="password">
+                                <label for="password" class="form-label">Contraseña: </label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Ingrese la nueva o la anterior">
                             </div>
 
                             <div class="mb-3">
                                 <label for="password_confirmation" class="form-label">Repita su nueva contraseña: </label>
                                 <input type="password" class="form-control" id="password_confirmation"
-                                       name="password_confirmation">
+                                       name="password_confirmation" placeholder="Confirmar">
                             </div>
 
-                            <button type="submit" class="btn btn-primary" onclick="showMessage(event)">Actualizar datos</button>
+{{--                            <button type="submit" class="btn btn-primary" onclick="showMessage(event)">Actualizar datos</button>--}}
                         </form>
+                        <div id="actionsButtons" class="row"></div>
 
-                        <form id="deleteForm" method="POST" class="mt-3">
+                        {{--<form id="deleteForm" method="POST" class="mt-3">
                             @csrf
 
                             @method("DELETE")
                             <button type="submit" class="btn btn-danger" onclick="showDeleteConfirmationMessage(event)">Eliminar perfil</button>
-                            {{--@if(Auth::user()->roles_id != 1)
-                                <button type="submit" class="btn btn-danger" onclick="showDeleteConfirmationMessage(event)">Eliminar mi perfil</button>
-                            @endif--}}
-                        </form>
+                        </form>--}}
 
                     </div>
 
@@ -205,5 +191,5 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('CSS/administracion.css')}}">
+    <link rel="stylesheet" href="{{ asset('CSS/administracion.css')}} ">
 @stop

@@ -70,6 +70,13 @@ class UsersController extends Controller {
         // Actualizar los datos del usuario
         $user = User::find($id);
 
+        if (!$user) {
+            return response()->json([
+                "message" => "Usuario no encontrado",
+                "success" => false,
+            ], 500);
+        }
+
         $validate = Validator::make($request->all(), [
             "name" => "required|string",
             "email" => [
@@ -92,15 +99,14 @@ class UsersController extends Controller {
 
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->department_id = $request->department;
         $user->career_id = $request->career;
-        if ($request->password) {
-            $user->password = Hash::make($request->password);
-        }
+        $user->password = Hash::make($request->password);
+        $user->roles_id = 2;
+
         $user->save();
 
         if (Auth::user()->roles_id == 1) {
-            return $this->index();
+            return redirect('usuarios');
         } else {
             $authController = new AuthController();
             return $authController->logout($request);
