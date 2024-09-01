@@ -1,44 +1,25 @@
 import {getResponse} from './getResponsePromise.js';
 
-/*async function getAppointments(){
-    const id = 0;
-    const url = "http://127.0.0.1:8000/users/ver/" + id;
-
-    try{
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
-        });
-
-        if(!response.ok){
-            throw new Error('Error al obtener las citas');
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.log(error);
-    }
-}*/
-
 document.addEventListener('DOMContentLoaded', function () {
-    // Function to get query parameter by name
+    /**
+     * Función para obtener el valor de un parámetro de consulta por su nombre.
+     *
+     * @param {string} name - El nombre del parámetro de consulta.
+     * @returns {string|null} - El valor del parámetro de consulta o null si no se encuentra.
+     */
     function getQueryParam(name) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(name);
     }
 
-    // Extract id from query string or URL path
+    // Extraer el id de la cadena de consulta o de la ruta URL
     let id = getQueryParam('id');
     if (!id) {
         let urlParts = window.location.pathname.split('/');
         id = urlParts[urlParts.length - 1];
     }
 
-    // Fetch and display user data
+    // Obtener y mostrar los datos del usuario
     getResponse(`/users/ver/${id}`)
         .then(response => {
             response.forEach(item => {

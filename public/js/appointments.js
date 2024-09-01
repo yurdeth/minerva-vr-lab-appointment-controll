@@ -1,30 +1,10 @@
 import {getResponse} from './getResponsePromise.js';
 
-/*async function getAppointments(){
-    const url = "http://127.0.0.1:8000/appointments";
-
-    try{
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
-        });
-
-        if(!response.ok){
-            throw new Error('Error al obtener las citas');
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.log(error);
-    }
-}*/
-
 document.addEventListener('DOMContentLoaded', function () {
 
+    /**
+     * Realiza una solicitud para obtener las citas y las muestra en una tabla.
+     */
     getResponse('/appointments')
         .then(response => {
             let appointments = response.data;
@@ -51,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 time.innerHTML = item.time;
                 number_of_participants.innerHTML = item.number_of_participants;
 
+                // Agregar botones de acciones
                 actions.innerHTML = `
                     <a href="http://127.0.0.1:8000/citas/ver/${item.id}" class="btn btn-primary">Editar</a>
                     <form id="deleteForm-${item.id}" action="http://127.0.0.1:8000/appointments/eliminar/${item.id}" method="post" style="display: inline;">
@@ -67,6 +48,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 });
 
+/**
+ * Muestra un mensaje de confirmación para eliminar una cita.
+ *
+ * @param {number} id - El ID de la cita a eliminar.
+ */
 function confirmDelete(id) {
     Swal.fire({
         title: '¿Estás seguro?',

@@ -1,6 +1,12 @@
-async function getResponse(url){
-
-    try{
+/**
+ * Realiza una solicitud HTTP GET a la URL especificada y devuelve la respuesta en formato JSON.
+ *
+ * @param {string} url - La URL a la que se realizará la solicitud GET.
+ * @returns {Promise<Object>} - Una promesa que se resuelve con la respuesta en formato JSON.
+ * @throws {Error} - Lanza un error si la respuesta no es exitosa.
+ */
+async function getResponse(url) {
+    try {
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -12,7 +18,7 @@ async function getResponse(url){
 
         // console.log(response);
 
-        if(!response.ok){
+        if (!response.ok) {
             throw new Error('Error al obtener los datos');
         }
 
