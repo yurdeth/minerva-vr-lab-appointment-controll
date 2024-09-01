@@ -133,7 +133,8 @@
             });
         }
     </script>
-    <script src="{{ asset('js/appointments.js') }}"></script>
+    <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
+    <script type="module" src="{{ asset('js/appointments.js') }}"></script>
 
     <br><br>
 

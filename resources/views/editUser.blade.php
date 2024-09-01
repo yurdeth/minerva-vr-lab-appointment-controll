@@ -197,7 +197,8 @@
         }
     </script>
 
-    <script src="{{ asset('js/viewUser.js') }}"></script>
+    <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
+    <script type="module" src="{{ asset('js/viewUser.js') }}"></script>
     <script src="{{ asset('js/departments.js') }}"></script>
     <script src="{{ asset('js/careers.js') }}"></script>
 

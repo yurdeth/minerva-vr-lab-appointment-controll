@@ -1,4 +1,6 @@
-async function getAppointments(){
+import {getResponse} from './getResponsePromise.js';
+
+/*async function getAppointments(){
     const id = 0;
     const url = "http://127.0.0.1:8000/users/ver/" + id;
 
@@ -20,16 +22,18 @@ async function getAppointments(){
     } catch (error) {
         console.log(error);
     }
-}
+}*/
 
 document.addEventListener('DOMContentLoaded', function () {
+    const urlParts = window.location.pathname.split('/');
+    const id = urlParts[urlParts.length - 1];
 
-    getAppointments()
+    getResponse(`/users/ver/${id}`)
         // .then(response => response.json())
         .then(response => {
             response.forEach(item => {
 
-                console.log(item);
+                // console.log(item);
                 const name = document.getElementById('name');
                 const email = document.getElementById('email');
                 const department_name = document.getElementById('department');

@@ -1,4 +1,6 @@
-async function getAppointments(){
+import {getResponse} from './getResponsePromise.js';
+
+/*async function getAppointments(){
     const url = "http://127.0.0.1:8000/appointments";
 
     try{
@@ -19,11 +21,11 @@ async function getAppointments(){
     } catch (error) {
         console.log(error);
     }
-}
+}*/
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    getAppointments()
+    getResponse('/appointments')
         .then(response => {
             let appointments = response.data;
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

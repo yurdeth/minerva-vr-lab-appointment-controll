@@ -114,7 +114,8 @@
         });
     </script>
 
-    <script src="{{ asset('js/users.js') }}"></script>
+    <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
+    <script type="module" src="{{ asset('js/users.js') }}"></script>
 @stop
 
 @section('css')

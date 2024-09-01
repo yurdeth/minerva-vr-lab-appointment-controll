@@ -1,4 +1,6 @@
-async function getAppointments(id) {
+import {getResponse} from './getResponsePromise.js';
+
+/*async function getAppointments(id) {
     const url = `/appointments/ver/${id}`;
 
     try {
@@ -19,14 +21,14 @@ async function getAppointments(id) {
     } catch (error) {
         console.error(error);
     }
-}
+}*/
 
 document.addEventListener('DOMContentLoaded', function () {
     const urlParts = window.location.pathname.split('/');
     const id = urlParts[urlParts.length - 1];
 
     if (id) {
-        getAppointments(id)
+        getResponse(`/appointments/ver/${id}`)
             .then(response => {
                 if (!response || response.length === 0) {
                     console.error('No appointment data found.');
