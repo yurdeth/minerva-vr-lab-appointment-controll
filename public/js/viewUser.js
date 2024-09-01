@@ -1,5 +1,9 @@
 import {getResponse} from './getResponsePromise.js';
 
+/**
+ * Maneja la edición de un usuario.
+ * @param {number} id - El ID del usuario a editar.
+ */
 function handleEdit(id) {
     const name = document.getElementById("name");
     const email = document.getElementById("email");
@@ -13,12 +17,10 @@ function handleEdit(id) {
         return;
     }
 
-
     if (!email.value) {
         showAlert('error', 'Por favor, ingrese su correo electrónico.');
         return;
     }
-
 
     if (password.value === '' || password_confirmation.value === '') {
         showAlert('error', 'Por favor, ingrese la contraseña.');
@@ -81,6 +83,10 @@ function handleEdit(id) {
         });
 }
 
+/**
+ * Maneja la eliminación de un usuario.
+ * @param {number} id - El ID del usuario a eliminar.
+ */
 function handleDelete(id) {
     Swal.fire({
         title: '¿Estás seguro?',
@@ -98,6 +104,11 @@ function handleDelete(id) {
     });
 }
 
+/**
+ * Muestra una alerta utilizando SweetAlert2.
+ * @param {string} icon - El icono de la alerta.
+ * @param {string} text - El texto de la alerta.
+ */
 function showAlert(icon, text) {
     Swal.fire({
         icon,
@@ -113,6 +124,11 @@ function showAlert(icon, text) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    /**
+     * Obtiene el valor de un parámetro de la URL.
+     * @param {string} name - El nombre del parámetro.
+     * @returns {string|null} - El valor del parámetro o null si no se encuentra.
+     */
     function getQueryParam(name) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(name);

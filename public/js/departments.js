@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const url = "http://127.0.0.1:8000/departments";
+    const url = "/departments";
     fetch(url, {
         method: 'GET',
         headers: {

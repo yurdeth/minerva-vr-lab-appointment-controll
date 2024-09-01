@@ -1,4 +1,4 @@
-const url = "http://127.0.0.1:8000/careers";
+const url = "/careers";
 const selectDepartment = document.getElementById('department');
 
 document.addEventListener('DOMContentLoaded', function () {

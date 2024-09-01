@@ -1,5 +1,9 @@
 import {getResponse} from './getResponsePromise.js';
 
+/**
+ * Maneja la edición de una cita.
+ * @param {number} id - El ID de la cita a editar.
+ */
 function handleEdit(id) {
     const date = document.getElementById("date");
     const time = document.getElementById("time");
@@ -72,6 +76,10 @@ function handleEdit(id) {
         });
 }
 
+/**
+ * Maneja la eliminación de una cita.
+ * @param {number} id - El ID de la cita a eliminar.
+ */
 function handleDelete(id) {
     Swal.fire({
         title: '¿Estás seguro?',
@@ -89,6 +97,11 @@ function handleDelete(id) {
     });
 }
 
+/**
+ * Muestra una alerta utilizando SweetAlert2.
+ * @param {string} icon - El icono de la alerta.
+ * @param {string} text - El texto de la alerta.
+ */
 function showAlert(icon, text) {
     Swal.fire({
         icon,

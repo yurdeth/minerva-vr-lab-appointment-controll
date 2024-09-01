@@ -62,17 +62,8 @@
                                 <input type="password" class="form-control" id="password_confirmation"
                                        name="password_confirmation" placeholder="Confirmar">
                             </div>
-
-{{--                            <button type="submit" class="btn btn-primary" onclick="showMessage(event)">Actualizar datos</button>--}}
                         </form>
                         <div id="actionsButtons" class="row"></div>
-
-                        {{--<form id="deleteForm" method="POST" class="mt-3">
-                            @csrf
-
-                            @method("DELETE")
-                            <button type="submit" class="btn btn-danger" onclick="showDeleteConfirmationMessage(event)">Eliminar perfil</button>
-                        </form>--}}
 
                     </div>
 
@@ -83,7 +74,7 @@
 
     </div>
 
-    <script>
+    {{--<script>
         function showMessage(event) {
             event.preventDefault();
 
@@ -181,7 +172,7 @@
                 }
             });
         }
-    </script>
+    </script>--}}
 
     <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
     <script type="module" src="{{ asset('js/viewUser.js') }}"></script>

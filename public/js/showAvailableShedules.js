@@ -1,4 +1,4 @@
-const url = "http://127.0.0.1:8000/citas/horarios-disponibles";
+const url = "/citas/horarios-disponibles";
 let loadAvailableSchedulesDiv = document.getElementById('loadAvailableSchedules');
 
 // Eliminar todos los elementos del div
