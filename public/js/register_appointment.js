@@ -83,11 +83,8 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 if (data.error) {
                     let errorMessages = [];
-
-                    console.log(data.error);
 
                     if (data.error.time) {
                         data.error.time.forEach(message => {
@@ -119,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Redirigir a la página de inicio después de 2 segundos
                 setTimeout(() => {
                     window.location.href = data.redirect_to;
-                }, 2000);
+                }, 1000);
 
 
             })

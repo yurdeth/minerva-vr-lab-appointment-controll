@@ -1,28 +1,5 @@
 import {getResponse} from './getResponsePromise.js';
 
-/*async function getAppointments(id) {
-    const url = `/appointments/ver/${id}`;
-
-    try {
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Error al obtener las citas');
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error(error);
-    }
-}*/
-
 document.addEventListener('DOMContentLoaded', function () {
     const urlParts = window.location.pathname.split('/');
     const id = urlParts[urlParts.length - 1];
@@ -43,6 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 const time = document.getElementById('time');
                 const number_of_participants = document.getElementById('number_of_assistants');
 
+                if (!item){
+                    showAlert('error', 'No se encontraron datos de la cita.');
+                    return;
+                }
+
                 if (name) name.value = item.name;
                 date.value = item.date;
                 time.value = item.time;
@@ -57,13 +39,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         <form id="editForm-${item.id}">
                             <input type="hidden" name="_token" value="${csrfToken}">
                             <input type="hidden" name="_method" value="PUT">
-                            <button type="button" class="btn btn-primary" onclick="handleEdit(${item.id})">Actualizar</button>
+                            <button type="button" id="btnUpdate" class="btn btn-primary" onclick="handleEdit(${item.id})">Actualizar</button>
                         </form>
 
                         <form id="deleteForm-${item.id}" action="/appointments/eliminar/${item.id}" method="post">
                             <input type="hidden" name="_token" value="${csrfToken}">
                             <input type="hidden" name="_method" value="DELETE">
-                            <button type="button" class="btn btn-danger" onclick="handleDelete(${item.id})">Eliminar</button>
+                            <button type="button" id="btnDestroy" class="btn btn-danger" onclick="handleDelete(${item.id})">Eliminar</button>
                         </form>
 
                     <div>
@@ -171,5 +153,9 @@ function showAlert(icon, text) {
         title: 'Oops...',
         text,
         confirmButtonColor: '#660D04'
+    }).then(() => {
+        if(text.includes('cita')){
+            window.location.href = '/citas';
+        }
     });
 }

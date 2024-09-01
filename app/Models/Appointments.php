@@ -75,7 +75,7 @@ class Appointments extends Model {
 
         // Verificar si la cita existe
         if (!$appointment) {
-            throw new \Exception("La cita no existe");
+            return redirect()->route('citas')->with('error', 'Cita no encontrada.');
         }
 
         if (Auth::user()->roles_id == 1 || $appointment->user_id == $userId) {

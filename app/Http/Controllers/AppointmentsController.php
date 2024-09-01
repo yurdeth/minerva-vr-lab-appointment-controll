@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointments;
 use App\Models\Participants;
 use App\Rules\AppointmentConflict;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -82,11 +83,14 @@ class AppointmentsController extends Controller {
             $appointments = (new Appointments)->GetSpecificAppointment($id);
 
             if ($appointments->isEmpty()) {
-                return redirect()->route('citas')->with('error', 'Cita no encontrada.');
+                return response()->json([
+                    "message" => "Cita no encontrada",
+                    "success" => false,
+                ]);
             }
 
             return response()->json($appointments);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->route('citas')->with('error', $e->getMessage());
         }
     }
@@ -121,7 +125,7 @@ class AppointmentsController extends Controller {
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function AvailableSchedules(Request $request){
         $date = $request->date;

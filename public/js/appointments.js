@@ -1,5 +1,40 @@
 import {getResponse} from './getResponsePromise.js';
 
+/**
+ * Muestra un mensaje de confirmación para eliminar una cita.
+ *
+ * @param {number} id - El ID de la cita a eliminar.
+ */
+function confirmDelete(id) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire(
+                'Eliminando...',
+                'La cita será eliminada.',
+                'success'
+            );
+            setTimeout(() => {
+                document.getElementById(`deleteForm-${id}`).submit();
+            }, 1000);
+        } else {
+            Swal.fire(
+                'Cancelado',
+                'La cita no ha sido eliminada.',
+                'success'
+            );
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 
     /**
@@ -33,13 +68,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Agregar botones de acciones
                 actions.innerHTML = `
-                    <a href="http://127.0.0.1:8000/citas/ver/${item.id}" class="btn btn-primary">Editar</a>
-                    <form id="deleteForm-${item.id}" action="http://127.0.0.1:8000/appointments/eliminar/${item.id}" method="post" style="display: inline;">
+                    <a href="/citas/ver/${item.id}" class="btn btn-primary">Editar</a>
+                    <form id="deleteForm-${item.id}" action="/appointments/eliminar/${item.id}" method="post" style="display: inline;">
                         <input type="hidden" name="_token" value="${csrfToken}">
+                        <input type="hidden" name="_id" id="id-${item.id}" value="${item.id}">
                         <input type="hidden" name="_method" value="DELETE">
-                        <button type="button" class="btn btn-danger" onclick="confirmDelete(${item.id})">Eliminar</button>
+                        <button type="button" id="btnDelete-${item.id}" class="btn btn-danger">Eliminar</button>
                     </form>
                 `;
+
+                // Add event listener to the delete button
+                document.getElementById(`btnDelete-${item.id}`).addEventListener('click', function() {
+                    confirmDelete(item.id);
+                });
             });
 
         })
@@ -47,32 +88,3 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(error);
         });
 });
-
-/**
- * Muestra un mensaje de confirmación para eliminar una cita.
- *
- * @param {number} id - El ID de la cita a eliminar.
- */
-function confirmDelete(id) {
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "¡No podrás revertir esto!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.getElementById(`deleteForm-${id}`).submit();
-        }
-        else{
-            Swal.fire(
-                'Cancelado',
-                'La cita no ha sido eliminada.',
-                'success'
-            );
-        }
-    });
-}
