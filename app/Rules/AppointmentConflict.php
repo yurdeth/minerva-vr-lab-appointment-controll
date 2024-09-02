@@ -14,7 +14,13 @@ class AppointmentConflict implements ValidationRule {
 
     public function __construct($date, $time) {
         $this->date = $date;
-        $this->time = $time . ":00";
+
+        //Dividir time por ":"
+        if (count(explode(":", $time)) == 2) {
+            $this->time = $time . ":00";
+        } else {
+            $this->time = $time;
+        }
     }
 
     public function passes($attribute, $value): bool {
