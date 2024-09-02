@@ -58,11 +58,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 const number_of_participants = row.insertCell(6);
                 const actions = row.insertCell(7);
 
+                const formatedDate = new Date(item.date);
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+
                 code.innerHTML = item.id;
                 name.innerHTML = item.name;
                 department.innerHTML = item.department_name;
                 career.innerHTML = item.career_name;
-                date.innerHTML = item.date;
+                date.innerHTML = formatedDate.toLocaleDateString('es-ES', options);
                 time.innerHTML = item.time;
                 number_of_participants.innerHTML = item.number_of_participants;
 
