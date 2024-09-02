@@ -10,35 +10,17 @@ document.addEventListener('DOMContentLoaded', function () {
         let number_of_assistants = formData.get('number_of_assistants');
 
         if (department === 'Seleccionar departamento' || career === 'Seleccionar carrera') {
-            Swal.fire({
-                icon: 'error',
-                iconColor: '#660D04',
-                title: 'Oops...',
-                text: 'Por favor selecciona un departamento y una carrera.',
-                confirmButtonColor: '#660D04',
-            });
+            showSwal('error', '#660D04', 'Oops...', 'Por favor selecciona un departamento y una carrera.', '#660D04');
             return;
         }
 
         if (number_of_assistants < 1) {
-            Swal.fire({
-                icon: 'error',
-                iconColor: '#660D04',
-                title: 'Oops...',
-                text: 'El número de asistentes no puede ser menor a 1.',
-                confirmButtonColor: '#660D04',
-            });
+            showSwal('error', '#660D04', 'Oops...', 'El número de asistentes no puede ser menor a 1.', '#660D04');
             return;
         }
 
         if (number_of_assistants > 20) {
-            Swal.fire({
-                icon: 'error',
-                iconColor: '#660D04',
-                title: 'Oops...',
-                text: 'El número de asistentes no puede ser mayor a 20.',
-                confirmButtonColor: '#660D04',
-            });
+            showSwal('error', '#660D04', 'Oops...', 'El número de asistentes no puede ser mayor a 20.', '#660D04');
             return;
         }
 
@@ -49,27 +31,14 @@ document.addEventListener('DOMContentLoaded', function () {
         today.setHours(0, 0, 0, 0);
 
         if (selectedDate <= today) {
-            Swal.fire({
-                icon: 'error',
-                iconColor: '#660D04',
-                title: 'Oops...',
-                text: 'La fecha debe ser posterior a hoy.',
-                confirmButtonColor: '#660D04',
-            });
+            showSwal('error', '#660D04', 'Oops...', 'La fecha debe ser posterior a hoy.', '#660D04');
             return;
         }
 
         // Validar que el periodo de horas sea entre las 8:00 y las 16:00
         let selectedTime = formData.get('time');
-        let selectedHour = parseInt(selectedTime.split(':')[0]);
-        if (selectedHour < 8 || selectedHour > 16) {
-            Swal.fire({
-                icon: 'error',
-                iconColor: '#660D04',
-                title: 'Oops...',
-                text: 'El horario de atención es de 8:00 AM a 04:00 PM',
-                confirmButtonColor: '#660D04',
-            });
+        if (selectedTime < '08:00' || selectedTime > '15:30') {
+            showSwal('error', '#660D04', 'Oops...', 'Solo puedes agendar citas entre las 8:00 AM y las 3:30 PM', '#660D04');
             return;
         }
 
@@ -94,24 +63,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         });
                     }
 
-                    Swal.fire({
-                        icon: 'error',
-                        iconColor: '#660D04',
-                        title: 'Oops...',
-                        text: errorMessages.join(', '),
-                        confirmButtonColor: '#660D04',
-                    });
+                    showSwal('error', '#660D04', 'Oops...', errorMessages.join(', '), '#660D04');
 
                     return;
                 }
 
-                Swal.fire({
-                    icon: 'success',
-                    iconColor: '#046620',
-                    title: '¡Registro exitoso!',
-                    text: 'Tu cita ha sido registrada exitosamente.',
-                    confirmButtonColor: '#046620',
-                });
+                showSwal('success', '#660D04', '¡Listo!', 'Tu cita ha sido registrada exitosamente.', '#660D04');
 
                 // Redirigir a la página de inicio después de 2 segundos
                 setTimeout(() => {
@@ -122,13 +79,18 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => {
                 console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    iconColor: '#660D04',
-                    title: 'Oops...',
-                    text: 'Ocurrió un error al registrar tu cita. Por favor intenta de nuevo.',
-                    confirmButtonColor: '#660D04',
-                });
+                showSwal('error', '#660D04', 'Oops...', 'Ocurrió un error al registrar tu cita. Por favor intenta de nuevo.', '#660D04');
             })
     });
 });
+
+// Función para mostrar swal dinamicamente
+function showSwal(icon, iconColor, title, text, confirmButtonColor) {
+    Swal.fire({
+        icon: icon,
+        iconColor: iconColor,
+        title: title,
+        text: text,
+        confirmButtonColor: confirmButtonColor,
+    });
+}

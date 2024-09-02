@@ -16,24 +16,23 @@ function handleEdit(id) {
     today.setHours(0, 0, 0, 0);
 
     if (isNaN(numAssistants) || numAssistants < 1) {
-        showAlert('error', 'El número de asistentes no puede ser menor a 1.');
+        showSwal('error', '#660D04', 'Oops...', 'El número de asistentes no puede ser menor a 1.', '#660D04');
         return;
     }
 
     if (numAssistants > 20) {
-        showAlert('error', 'El número de asistentes no puede ser mayor a 20.');
+        showSwal('error', '#660D04', 'Oops...', 'El número de asistentes no puede ser mayor a 20.', '#660D04');
         return;
     }
 
     if (selectedDate < today) {
-        showAlert('error', 'La fecha debe ser posterior a hoy.');
+        showSwal('error', '#660D04', 'Oops...', 'La fecha debe ser posterior a hoy.', '#660D04');
         return;
     }
 
-    const selectedTime = time.value;
-    const selectedHour = parseInt(selectedTime.split(':')[0], 10);
-    if (selectedHour < 8 || selectedHour > 16) {
-        showAlert('error', 'El horario de atención es de 8:00 AM a 04:00 PM');
+    // Validar que el periodo de horas sea entre las 8:00 y las 16:00
+    if (time.value < '08:00' || time.value > '15:30') {
+        showSwal('error', '#660D04', 'Oops...', 'Solo puedes agendar citas entre las 8:00 AM y las 3:30 PM', '#660D04');
         return;
     }
 
@@ -97,25 +96,6 @@ function handleDelete(id) {
     });
 }
 
-/**
- * Muestra una alerta utilizando SweetAlert2.
- * @param {string} icon - El icono de la alerta.
- * @param {string} text - El texto de la alerta.
- */
-function showAlert(icon, text) {
-    Swal.fire({
-        icon,
-        iconColor: '#660D04',
-        title: 'Oops...',
-        text,
-        confirmButtonColor: '#660D04'
-    }).then(() => {
-        if(text.includes('cita')){
-            window.location.href = '/citas';
-        }
-    });
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     const urlParts = window.location.pathname.split('/');
     const id = urlParts[urlParts.length - 1];
@@ -137,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const number_of_participants = document.getElementById('number_of_assistants');
 
                 if (!item){
-                    showAlert('error', 'No se encontraron datos de la cita.');
+                    showSwal('error', '#660D04', 'Oops...', 'No se encontraron datos de la cita.', '#660D04');
                     return;
                 }
 
@@ -183,3 +163,14 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 });
+
+// Función para mostrar swal dinamicamente
+function showSwal(icon, iconColor, title, text, confirmButtonColor) {
+    Swal.fire({
+        icon: icon,
+        iconColor: iconColor,
+        title: title,
+        text: text,
+        confirmButtonColor: confirmButtonColor,
+    });
+}
