@@ -21,7 +21,7 @@
                     </div>
                 </li>
                 <li>
-                    <a href="{{ route("inicio") }}">
+                    <a href="{{ route("inicio") }}" id=1>
                         <span><i class="fa-solid fa-house"></i></span>
                         <span class="Opciones">Home</span>
                     </a>
@@ -33,9 +33,10 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="#" onclick="loadView('{{ route('usuarios') }}', 'usuarios')">
                         <span><i class="fa-solid fa-user-group"></i></span>
                         <span class="Opciones">Usuarios</span>
+
                     </a>
                 </li>
                 <li>
@@ -81,13 +82,67 @@
          <!-- Contenidos del Dashboard -->
         <div class="contenido">
             <div class="datos">
-                <h1>Bienvenido</h1>
-                <hr>
+                <!-- Definimos una variable para el mensaje a mostrar -->
+                @php
+                    $mensaje = '';
+                @endphp
 
-            </div>
+                <!-- Verificamos si la variable mensaje no está vacía -->
+                @if(!empty($mensaje))
+                <!-- Si mensaje tiene contenido, se mostramos un encabezado con dicho mensaje -->
+                    <h1>{{ $mensaje }}</h1>
+                    <hr>
+                @else
+                 <!-- Si mensaje está vacío mostramos un mensaje de bienvenida por defecto -->
+                    <h1>Bienvenido</h1>
+                    <hr>
+                @endif
+
+                <br>
+                <!-- Este div se usa para cargar las vistas que traemos al dashboard -->
+                <div id="content"></div>
+                </div>
+
         </div>
 
+        <script>
+            // Función para mostrar un mensaje basado en la opción seleccionada
+            function mostrarMensaje(opcion) {
+                let mensaje = '';
+                switch(opcion) {
+                    case 'carreras':
+                        mensaje = 'Bienvenido a Carreras';
+                        break;
+                    case 'usuarios':
+                        mensaje = 'Usuarios Minerva VR Web';
+                        break;
+                    case 'citas':
+                        mensaje = 'Bienvenido a Citas';
+                        break;
+                    case 'inventario':
+                        mensaje = 'Bienvenido a Inventario';
+                        break;
+                    default:
+                        mensaje = 'Bienvenido';
+                }
+                // Actualizamos el texto del encabezado h1 dentro del div  con la clase datos
+                document.querySelector('.datos h1').innerText = mensaje;
+                }
 
+                //Esta Función se encarga de traer una vista y mostrar un mensaje basado en la opción
+                function loadView(url, opcion) {
+                    fetch(url)
+                        .then(response => response.text())
+                        .then(html => {
+                            // Inserta el contenido HTML recibido en el div con id 'content'
+                            document.getElementById('content').innerHTML = html;
+                            // Muestra el mensaje correspondiente a la opción seleccionada
+                            mostrarMensaje(opcion);
+                        })
+                        //Manejamos posibles excepciones que puedan ocurrir durante la ejecución de la función
+                        .catch(error => console.error('Error loading view:', error));
+                    }
+        </script>
 
     </section>
 

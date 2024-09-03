@@ -1,4 +1,3 @@
-{{--@extends('adminlte::page')--}}
 @extends('layouts.layout')
 
 @section('title', 'Usuarios')
