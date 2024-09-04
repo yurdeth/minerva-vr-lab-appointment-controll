@@ -65,7 +65,6 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
     Route::post("logout", [AuthController::class, "logout"])->name("logout");
     Route::get("logout", [AuthController::class, "logout"])->name("logout");
     Route::put("/users/editar/{id}", [UsersController::class, "update"])->name("users.update");
-    Route::delete("/users/eliminar/{id}", [UsersController::class, "destroy"])->name("users.destroy");
 
     Route::get('/home', function () {
         return view('home');

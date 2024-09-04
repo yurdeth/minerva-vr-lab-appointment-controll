@@ -37,6 +37,9 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     Route::get('/users', [UsersController::class, "index"])->name('usuarios.index');
     Route::get("/users/ver/{id}", [UsersController::class, "show"])->name("users.show");
 
+
+    Route::delete("/users/eliminar/{id}", [UsersController::class, "destroy"]);
+
     // **************************************** GET Inventarios ******************************************************
     Route::get('/statuses', [StatusesController::class, 'index']);
     Route::get('/resourcesTypes', [ResourceTypeController::class, 'index']);

@@ -99,7 +99,17 @@ function handleDelete(id) {
         cancelButtonText: 'Cancelar'
     }).then(result => {
         if (result.isConfirmed) {
-            document.getElementById(`deleteForm-${id}`).submit();
+            fetch(`/api/users/eliminar/${id}`, {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            }).then(() => {
+                window.location.href = '/usuarios';
+            }).catch(error => console.error(error));
         }
     });
 }
@@ -168,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <input type="hidden" name="_id" id="id-${item.id}" value="${item.id}">
                             <button type="button" id="btnUpdate-${item.id}" class="btn btn-primary">Actualizar</button>
                         </form>
-                        <form id="deleteForm-${item.id}" action="/users/eliminar/${item.id}" method="post">
+                        <form id="deleteForm-${item.id}" method="post">
                             <input type="hidden" name="_token" value="${csrfToken}">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_id" id="id-${item.id}" value="${item.id}">
