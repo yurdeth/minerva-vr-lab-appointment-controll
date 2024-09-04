@@ -61,14 +61,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 const number_of_participants = row.insertCell(6);
                 const actions = row.insertCell(7);
 
+                /*const formatedDate = new Date(item.date);
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };*/
+                // Obtener la fecha en formato local y sumar 1 al dia
                 const formatedDate = new Date(item.date);
+                formatedDate.setDate(formatedDate.getDate() + 1);
                 const options = { year: 'numeric', month: 'long', day: 'numeric' };
 
                 code.innerHTML = item.id;
                 name.innerHTML = item.name;
                 department.innerHTML = item.department_name;
                 career.innerHTML = item.career_name;
-                date.innerHTML = formatedDate.toLocaleDateString('es-ES', options);
+                date.innerHTML = formatedDate.toLocaleDateString('es-SV', options);
                 time.innerHTML = item.time;
                 number_of_participants.innerHTML = item.number_of_participants;
 

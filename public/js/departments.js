@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const url = "/departments";
-    fetch(url, {
+    fetch('/api/departments', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

@@ -1,11 +1,10 @@
-const url = "/careers";
 const selectDepartment = document.getElementById('department');
 
 document.addEventListener('DOMContentLoaded', function () {
     setTimeout(() => {
         let departmentId = selectDepartment.value;
 
-        fetch(`${url}/${departmentId}`, {
+        fetch(`/api/careers/${departmentId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 selectDepartment.addEventListener('change', function () {
     let departmentId = selectDepartment.value;
 
-    fetch(`${url}/${departmentId}`, {
+    fetch(`/api/careers/${departmentId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

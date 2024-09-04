@@ -37,7 +37,7 @@ function handleEdit(id) {
         return;
     }
 
-    fetch(`/appointments/editar/${id}`, {
+    fetch(`/api/appointments/editar/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

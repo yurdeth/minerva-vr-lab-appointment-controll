@@ -42,7 +42,7 @@ function handleEdit(id) {
         return;
     }
 
-    fetch(`/users/editar/${id}`, {
+    fetch(`/api/users/editar/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

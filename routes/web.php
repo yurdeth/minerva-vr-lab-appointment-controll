@@ -55,16 +55,15 @@ Route::get('/iniciar_sesion', function () {
 Route::post('/signin', [AuthController::class, 'login'])->name("signin");
 Route::post('/signup', [AuthController::class, 'register'])->name("signup");
 
-Route::get('/departments', [DepartmentsController::class, 'index'])->name("departments");
+/*Route::get('/departments', [DepartmentsController::class, 'index'])->name("departments");
 Route::get('/careers/{id}', [CareersController::class, 'show'])->name("careers");
-Route::get('/careers/', [CareersController::class, 'index'])->name("careers");
+Route::get('/careers/', [CareersController::class, 'index'])->name("careers");*/
 
 // ***************************************Rutas para usuarios*********************************************
 Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
     Route::post("logout", [AuthController::class, "logout"])->name("logout");
     Route::get("logout", [AuthController::class, "logout"])->name("logout");
-    Route::put("/users/editar/{id}", [UsersController::class, "update"])->name("users.update");
 
     Route::get('/home', function () {
         return view('home');
@@ -98,7 +97,6 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
     // Rutas API:
     Route::post('/citas', [AppointmentsController::class, 'store'])->name("appointments");
-    Route::put('/appointments/editar/{id}', [AppointmentsController::class, 'update'])->name('appointments.update');
 
     Route::get('/citas', function () {
         return view('appointments');
