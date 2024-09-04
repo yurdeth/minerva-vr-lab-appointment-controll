@@ -22,9 +22,17 @@ function confirmDelete(id) {
                 'La cita será eliminada.',
                 'success'
             );
-            setTimeout(() => {
-                document.getElementById(`deleteForm-${id}`).submit();
-            }, 1000);
+            fetch(`/api/appointments/eliminar/${id}`, {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            }).then(() => {
+                window.location.reload();
+            }).catch(error => console.error(error));
         } else {
             Swal.fire(
                 'Cancelado',
@@ -72,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Agregar botones de acciones
                 actions.innerHTML = `
                     <a href="/citas/ver/${item.id}" class="btn btn-primary">Editar</a>
-                    <form id="deleteForm-${item.id}" action="/appointments/eliminar/${item.id}" method="post" style="display: inline;">
+                    <form id="deleteForm-${item.id}" method="post" style="display: inline;">
                         <input type="hidden" name="_token" value="${csrfToken}">
                         <input type="hidden" name="_id" id="id-${item.id}" value="${item.id}">
                         <input type="hidden" name="_method" value="DELETE">

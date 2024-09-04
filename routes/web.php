@@ -100,7 +100,6 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
     // Rutas API:
     Route::post('/citas', [AppointmentsController::class, 'store'])->name("appointments");
     Route::put('/appointments/editar/{id}', [AppointmentsController::class, 'update'])->name('appointments.update');
-    Route::delete('/appointments/eliminar/{id}', [AppointmentsController::class, 'destroy'])->name("appointments.destroy");
 
     Route::get('/citas', function () {
         return view('appointments');
