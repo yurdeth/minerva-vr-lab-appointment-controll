@@ -1,3 +1,4 @@
+import {showSuccessAlert, showErrorAlert} from './utils/alert.js'
 import {getResponse} from './getResponsePromise.js';
 
 /**
@@ -17,28 +18,22 @@ function confirmDelete(id) {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            Swal.fire(
-                'Eliminando...',
-                'La cita será eliminada.',
-                'success'
-            );
-            fetch(`/api/appointments/eliminar/${id}`, {
-                method: "DELETE",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            }).then(() => {
-                window.location.reload();
-            }).catch(error => console.error(error));
+            showSuccessAlert('Eliminando...', 'La cita será eliminada.');
+            setTimeout(() => {
+                fetch(`/api/appointments/eliminar/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                }).then(() => {
+                    window.location.reload();
+                }).catch(error => console.error(error));
+            }, 1000);
         } else {
-            Swal.fire(
-                'Cancelado',
-                'La cita no ha sido eliminada.',
-                'success'
-            );
+            showErrorAlert('Cancelado', 'La cita no ha sido eliminada.');
         }
     });
 }
