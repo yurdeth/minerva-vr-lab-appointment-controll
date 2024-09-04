@@ -25,43 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             id: index + 1
                         })
                     })
-                        .then(() => {
-                            console.log('Ok');
-                        })
-                        .catch(error => {
-                            console.error("Error:", error);
-                        });
-                });
-            }
-        }).catch((error) => {
-        console.error("Error:", error);
-    });
-
-    //Room process
-    getResponse('/api/room')
-        .then((response) => {
-
-            if (response.total === 0) {
-                roomList.forEach((room, index) => {
-                    fetch("/room/create", {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({
-                            name: room,
-                            id: index + 1
-                        })
-                    })
-                        .then(() => {
-                            console.log('Ok');
-                        })
-                        .catch(error => {
-                            console.error("Error:", error);
-                        });
+                        .then(() => console.log('Ok'))
+                        .catch(error => console.error("Error:", error));
                 });
             }
         }).catch((error) => {
@@ -71,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
     //Status process
     getResponse("/api/statuses")
         .then(response => {
-            console.log(response);
             if (response.total === 0) {
                 console.log("No hay estados");
                 statusList.forEach((status, index) => {
@@ -88,10 +52,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             id: index + 1
                         })
                     })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
-                        });
+                        .then(() => console.log('Ok'))
+                        .catch(error => console.error("Error:", error));
                 });
             }
         })
@@ -101,10 +63,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //Resource Type process
     getResponse("/api/resourcesTypes")
-        .then(response => response.json())
-        .then(data => {
-            console.log("Esta dentro");
-            if (data.total === 0) {
+        .then(response => {
+            if (response.total === 0) {
                 console.log("No hay tipos de recursos");
                 resourceTypelist.forEach((resourceType, index) => {
                     fetch("/resourcesTypes/create", {
@@ -120,14 +80,13 @@ document.addEventListener("DOMContentLoaded", function () {
                             id: index + 1
                         })
                     })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
-                        });
+                        .then(() => console.log('Ok'))
+                        .catch(error => console.error("Error: " + error));
                 });
-            } else {
-                console.log("Hola");
             }
+        })
+        .then(data => {
+
         }).catch((error) => {
         console.error("Error:", error);
     });
@@ -151,30 +110,34 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         getResponse('/api/statuses')
-            .then(response => response.json())
-            .then(data => {
-                let selectStatues = document.getElementById('status');
-
-                data.statuses.forEach(status => {
+            .then(response => {
+                response.statuses.forEach(status => {
+                    let selectStatus = document.getElementById('status');
                     let option = document.createElement('option');
                     option.value = status.id;
                     option.text = status.status;
-                    selectStatues.appendChild(option);
+                    selectStatus.appendChild(option);
                 });
+            })
+            .catch((error) => {
+                console.error("Error:", error);
             });
 
-        getResponse('/api/resourcesTypes').then(response => response.json())
-            .then(data => {
+        getResponse('/api/resourcesTypes')
+            .then(response => {
                 let selectResourceType = document.getElementById('resource_type');
 
-                data.resourceTypes.forEach(resourceType => {
+                response.resourceTypes.forEach(resourceType => {
                     let option = document.createElement('option');
                     option.value = resourceType.id;
                     option.text = resourceType.resource_name;
                     selectResourceType.appendChild(option);
                 });
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
-    }, 300);
+    }, 100);
 
 
     let formulario = document.getElementById("form_inventario");
@@ -189,7 +152,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const data = {
             resource_type_id: resourceTypeId,
             status_id: statusId,
-            room_id: roomId
+            room_id: roomId,
+            fixed_asset_code: 'ghefgriuweruif'
         };
 
         fetch("/resources/create", {
@@ -197,12 +161,19 @@ document.addEventListener("DOMContentLoaded", function () {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({
+                fixed_asset_code: 'ghefgriuweruif',
+                resource_type_id: resourceTypeId,
+                status_id: statusId,
+                room_id: roomId,
+            })
         })
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 if (data.status === 201) {
 
                     Swal.fire({
@@ -221,7 +192,5 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.error('Error:', error);
                 alert('An error occurred while creating the resource');
             });
-
     });
-
 });

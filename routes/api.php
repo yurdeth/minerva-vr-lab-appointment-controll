@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\ResourceTypeController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StatusesController;
@@ -33,8 +34,9 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     Route::get("/users/ver/{id}", [UsersController::class, "show"])->name("users.show");
 
     // **************************************** GET Inventarios ******************************************************
-    Route::get('statuses', [StatusesController::class, 'index']);
-    Route::get('resourcesTypes', [ResourceTypeController::class, 'index']);
+    Route::get('/statuses', [StatusesController::class, 'index']);
+    Route::get('/resourcesTypes', [ResourceTypeController::class, 'index']);
     Route::get('/room', [RoomController::class, 'index']);
-    Route::get('/statuses', [StatusesController::class, 'index'])->name("statuses");
+    Route::get('/statuses', [StatusesController::class, 'index']);
+    Route::get('/resources', [ResourcesController::class, 'index']);
 });

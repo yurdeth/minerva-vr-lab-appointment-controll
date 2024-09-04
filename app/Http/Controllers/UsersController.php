@@ -50,9 +50,6 @@ class UsersController extends Controller {
             ->get();
 
         if ($user) {
-//            var_dump($user[0]->id);
-//            var_dump(Auth::user()->id);
-//            return view('edit_user', compact('user'));
             return response()->json($user);
         } else {
             return redirect()->route('usuarios');

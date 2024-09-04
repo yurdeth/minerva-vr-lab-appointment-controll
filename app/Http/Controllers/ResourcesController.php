@@ -43,7 +43,7 @@ class ResourcesController extends Controller {
      */
     public function store(Request $request) {
         $validator = Validator::make($request->all(), [
-                "fixed_asset_code" => "required|unique", // Número de activo fijo
+//                "fixed_asset_code" => "required|unique", // Número de activo fijo
                 "resource_type_id" => "required|exists:resource_types,id",
                 "status_id" => "required|exists:statuses,id",
                 "room_id" => "required|exists:room,id",
@@ -61,7 +61,7 @@ class ResourcesController extends Controller {
         }
 
         $resource = Resources::create([
-            "fixed_asset_code" => $request->fixed_asset_code, // Número de activo fijo
+            "fixed_asset_code" => random_int(10000, 99999), // Número de activo fijo
             "resource_type_id" => $request->resource_type_id,
             "status_id" => $request->status_id,
             "room_id" => $request->room_id,

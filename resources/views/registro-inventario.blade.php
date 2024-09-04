@@ -34,6 +34,7 @@
                                         <th scope="col">Número de sala</th>
                                         <th scope="col">Tipo de recurso</th>
                                         <th scope="col">Estado</th>
+                                        <th scope="col">Número de activo fijo</th>
                                         {{--<th scope="col">Número de activo fijo</th>--}}
                                         {{--<th scope="col">Computadora</th>--}}
                                     </tr>
@@ -49,7 +50,7 @@
         </div>
     </div>
     <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
-    <script src="{{ asset("js/getInventory.js") }}"></script>
+    <script type="module" src="{{ asset("js/getInventory.js") }}"></script>
 @stop
 
 @section('css')

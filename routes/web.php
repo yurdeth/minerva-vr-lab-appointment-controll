@@ -88,8 +88,8 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
 
     /*Código con la funcionalidad que no de error al abrir el informe de inventario*/
     Route::post('/insertar-inventario', [StatusesController::class, 'store'])->name("insertar-inventario");
-    Route::post('statuses/create', [StatusesController::class, 'store']);
-    Route::post('resourcesTypes/create', [ResourceTypeController::class, 'store']);
+    Route::post('/statuses/create', [StatusesController::class, 'store']);
+    Route::post('/resourcesTypes/create', [ResourceTypeController::class, 'store']);
     Route::post('/room/create', [RoomController::class, 'store']);
     Route::post('/resources/create', [ResourcesController::class, 'store']);
 });

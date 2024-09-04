@@ -1,12 +1,11 @@
 import {getResponse} from './getResponsePromise.js';
 
 document.addEventListener("DOMContentLoaded", event => {
-    let url = "http://127.0.0.1:8000/";
-
     getResponse('/api/resources')
-        .then(response => response.json())
+        .then(response => response) // Parse the JSON response
         .then(data => {
-            console.log(data);
+            console.log("Response: ", data);
+
             if (data.total === 0) {
                 return;
             }
@@ -19,11 +18,16 @@ document.addEventListener("DOMContentLoaded", event => {
                 let cell2 = row.insertCell(1);
                 let cell3 = row.insertCell(2);
                 let cell4 = row.insertCell(3);
+                let cell5 = row.insertCell(4);
 
                 cell1.innerHTML = index + 1;
                 cell2.innerHTML = resource.room.name;
                 cell3.innerHTML = resource.resource_type.resource_name;
                 cell4.innerHTML = resource.status.status;
+                cell5.innerHTML = resource.fixed_asset_code;
             });
+        })
+        .catch(error => {
+            console.error("Error fetching resources: ", error);
         });
 });
