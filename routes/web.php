@@ -55,10 +55,6 @@ Route::get('/iniciar_sesion', function () {
 Route::post('/signin', [AuthController::class, 'login'])->name("signin");
 Route::post('/signup', [AuthController::class, 'register'])->name("signup");
 
-/*Route::get('/departments', [DepartmentsController::class, 'index'])->name("departments");
-Route::get('/careers/{id}', [CareersController::class, 'show'])->name("careers");
-Route::get('/careers/', [CareersController::class, 'index'])->name("careers");*/
-
 // ***************************************Rutas para usuarios*********************************************
 Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 

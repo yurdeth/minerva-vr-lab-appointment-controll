@@ -28,7 +28,6 @@ Route::post("login", [AuthController::class, "login"])->name("login");
 Route::get("login", [AuthController::class, "login"])->name("login");
 
 Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
-//    Route::post("logout", [AuthController::class, "logout"])->name("endsession");
 
     // *********************************************** Citas ******************************************************
     Route::get('/appointments', [AppointmentsController::class, 'index'])->name("citas");
