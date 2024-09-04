@@ -82,7 +82,6 @@ class UsersController extends Controller {
                 new OnlyUesMail(),
             ],
             "password" => "confirmed|min:8",
-            "department" => "required",
             "career" => "required",
         ]);
 

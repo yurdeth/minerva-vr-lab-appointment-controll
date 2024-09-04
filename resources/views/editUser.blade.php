@@ -54,11 +54,13 @@
 
                             <div class="mb-3">
                                 <label for="password" class="form-label">Contraseña: </label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Ingrese la nueva o la anterior">
+                                <input type="password" class="form-control" id="password" name="password"
+                                       placeholder="Ingrese la nueva o la anterior">
                             </div>
 
                             <div class="mb-3">
-                                <label for="password_confirmation" class="form-label">Repita su nueva contraseña: </label>
+                                <label for="password_confirmation" class="form-label">Repita su nueva
+                                    contraseña: </label>
                                 <input type="password" class="form-control" id="password_confirmation"
                                        name="password_confirmation" placeholder="Confirmar">
                             </div>
@@ -75,6 +77,7 @@
     </div>
 
     <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
+    <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
     <script type="module" src="{{ asset('js/viewUser.js') }}"></script>
     <script src="{{ asset('js/departments.js') }}"></script>
     <script src="{{ asset('js/careers.js') }}"></script>

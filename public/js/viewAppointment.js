@@ -37,7 +37,7 @@ function handleEdit(id) {
         return;
     }
 
-    fetch('/appointments/editar/' + id, {
+    fetch(`/appointments/editar/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -79,17 +79,22 @@ function handleDelete(id) {
         'Cancelar')
         .then(result => {
             if (result.isConfirmed) {
-                fetch(`/api/appointments/eliminar/${id}`, {
-                    method: "DELETE",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                }).then(() => {
-                    window.location.href = '/citas';
-                }).catch(error => console.error(error));
+                showSuccessAlert('Eliminando...', 'La cita será eliminada.')
+                    .then(() => {
+                        fetch(`/api/appointments/eliminar/${id}`, {
+                            method: "DELETE",
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            }
+                        }).then(() => {
+                            window.location.href = '/citas';
+                        }).catch(error => console.error(error));
+                    });
+            }else{
+                showErrorAlert('Cancelado', 'Operación cancelada');
             }
         });
 }
@@ -115,7 +120,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 const number_of_participants = document.getElementById('number_of_assistants');
 
                 if (!item) {
-                    showErrorAlert('Oops...', 'No se encontraron datos de la cita.');
+                    showErrorAlert('Oops...', 'No se encontraron datos de la cita.')
+                        .then(() => {
+                            window.location.href = '/citas';
+                        })
                     return;
                 }
 
