@@ -1,13 +1,9 @@
-document.addEventListener("DOMContentLoaded", event => {
-    let url = "http://127.0.0.1:8000/api/";
+import {getResponse} from './getResponsePromise.js';
 
-    fetch(url + "resources",{
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            Token: "Bearer " + localStorage.getItem("token")
-        }
-    })
+document.addEventListener("DOMContentLoaded", event => {
+    let url = "http://127.0.0.1:8000/";
+
+    getResponse('/api/resources')
         .then(response => response.json())
         .then(data => {
             console.log(data);

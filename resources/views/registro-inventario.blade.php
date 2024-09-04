@@ -48,6 +48,7 @@
             </div>
         </div>
     </div>
+    <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
     <script src="{{ asset("js/getInventory.js") }}"></script>
 @stop
 

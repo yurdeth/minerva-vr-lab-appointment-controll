@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /**
      * Realiza una solicitud para obtener las citas y las muestra en una tabla.
      */
-    getResponse('/appointments')
+    getResponse('/api/appointments')
         .then(response => {
             let appointments = response.data;
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

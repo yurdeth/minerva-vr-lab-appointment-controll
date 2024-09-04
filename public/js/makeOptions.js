@@ -1,65 +1,87 @@
+import {getResponse} from './getResponsePromise.js';
+
 let roomList = ["Sala 1", "Sala 2"];
 let resourceTypelist = ["Lente", "Computadora"];
 let statusList = ["Buen estado", "Mal estado", "En reparación"];
 
 document.addEventListener("DOMContentLoaded", function () {
-    const url = "http://127.0.0.1:8000/api/";
-
 
     //Room process
-    fetch(url + "room", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            Token: "Bearer " + localStorage.getItem("token")
-        }
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.total === 0) {
+    getResponse('/api/room')
+        .then((response) => {
+
+            if (response.total === 0) {
                 roomList.forEach((room, index) => {
-                    fetch(url + "room/create", {
+                    fetch("/room/create", {
                         method: "POST",
                         headers: {
-                            "Content-Type": "application/json",
-                            Token: "Bearer " + localStorage.getItem("token")
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
                         body: JSON.stringify({
                             name: room,
                             id: index + 1
                         })
                     })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
+                        .then(() => {
+                            console.log('Ok');
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
                         });
                 });
-            } else {
-                console.log(data);
+            }
+        }).catch((error) => {
+        console.error("Error:", error);
+    });
+
+    //Room process
+    getResponse('/api/room')
+        .then((response) => {
+
+            if (response.total === 0) {
+                roomList.forEach((room, index) => {
+                    fetch("/room/create", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            name: room,
+                            id: index + 1
+                        })
+                    })
+                        .then(() => {
+                            console.log('Ok');
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                        });
+                });
             }
         }).catch((error) => {
         console.error("Error:", error);
     });
 
     //Status process
-    fetch(url + "statuses", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            Token: "Bearer " + localStorage.getItem("token")
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Esta dentro");
-            if (data.total === 0) {
+    getResponse("/api/statuses")
+        .then(response => {
+            console.log(response);
+            if (response.total === 0) {
                 console.log("No hay estados");
                 statusList.forEach((status, index) => {
-                    fetch(url + "statuses/create", {
+                    fetch("/statuses/create", {
                         method: "POST",
                         headers: {
-                            "Content-Type": "application/json",
-                            Token: "Bearer " + localStorage.getItem("token")
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
                         body: JSON.stringify({
                             status: status,
@@ -71,32 +93,27 @@ document.addEventListener("DOMContentLoaded", function () {
                             console.log(data);
                         });
                 });
-            } else {
-                console.log("Hola");
             }
-        }).catch((error) => {
-        console.error("Error:", error);
-    });
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
 
     //Resource Type process
-    fetch(url + "resourcesTypes", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            Token: "Bearer " + localStorage.getItem("token")
-        }
-    })
+    getResponse("/api/resourcesTypes")
         .then(response => response.json())
         .then(data => {
             console.log("Esta dentro");
             if (data.total === 0) {
                 console.log("No hay tipos de recursos");
                 resourceTypelist.forEach((resourceType, index) => {
-                    fetch(url + "resourcesTypes/create", {
+                    fetch("/resourcesTypes/create", {
                         method: "POST",
                         headers: {
-                            "Content-Type": "application/json",
-                            Token: "Bearer " + localStorage.getItem("token")
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
                         body: JSON.stringify({
                             resource_name: resourceType,
@@ -118,34 +135,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //Dar un tiempo para que se cree la sala
     setTimeout(function () {
-        // Código a ejecutar después del retraso
-        console.log("Este mensaje se mostrará después de 2 segundos");
 
-        fetch(url + "room", {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        }).then(response => response.json())
-            .then(data => {
-                let selectRoom = document.getElementById('room');
-
-                data.rooms.forEach(room => {
+        getResponse('/api/room')
+            .then(response => {
+                response.rooms.forEach(room => {
+                    let selectRoom = document.getElementById('room');
                     let option = document.createElement('option');
                     option.value = room.id;
                     option.text = room.name;
                     selectRoom.appendChild(option);
                 });
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
 
-        fetch(url + "statuses", {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-        })
+        getResponse('/api/statuses')
             .then(response => response.json())
             .then(data => {
                 let selectStatues = document.getElementById('status');
@@ -158,13 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             });
 
-        fetch(url + "resourcesTypes", {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        }).then(response => response.json())
+        getResponse('/api/resourcesTypes').then(response => response.json())
             .then(data => {
                 let selectResourceType = document.getElementById('resource_type');
 
@@ -193,7 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
             room_id: roomId
         };
 
-        fetch(url + "resources/create", {
+        fetch("/resources/create", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

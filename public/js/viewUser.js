@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
         id = urlParts[urlParts.length - 1];
     }
 
-    getResponse(`/users/ver/${id}`)
+    getResponse(`/api/users/ver/${id}`)
         .then(response => {
             response.forEach(item => {
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

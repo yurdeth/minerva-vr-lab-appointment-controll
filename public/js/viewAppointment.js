@@ -36,7 +36,7 @@ function handleEdit(id) {
         return;
     }
 
-    const editUrl = `/appointments/editar/${id}`;
+    const editUrl = `/api/appointments/editar/${id}`;
 
     fetch(editUrl, {
         method: 'PUT',
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const id = urlParts[urlParts.length - 1];
 
     if (id) {
-        getResponse(`/appointments/ver/${id}`)
+        getResponse(`/api/appointments/ver/${id}`)
             .then(response => {
                 if (!response || response.length === 0) {
                     console.error('No appointment data found.');
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <button type="button" id="btnUpdate-${item.id}" class="btn btn-primary">Actualizar</button>
                         </form>
 
-                        <form id="deleteForm-${item.id}" action="/appointments/eliminar/${item.id}" method="post">
+                        <form id="deleteForm-${item.id}" action="/api/appointments/eliminar/${item.id}" method="post">
                             <input type="hidden" name="_token" value="${csrfToken}">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_id" id="id-${item.id}" value="${item.id}">

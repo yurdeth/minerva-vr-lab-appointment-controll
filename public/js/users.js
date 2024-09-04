@@ -38,7 +38,7 @@ function confirmDelete(id) {
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    getResponse('/users')
+    getResponse('/api/users')
         // .then(response => response.json())
         .then(response => {
             // console.log(response);
@@ -61,8 +61,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 email.innerHTML = item.email;
                 department_name.innerHTML = item.department_name;
                 career_name.innerHTML = item.career_name;
-                /*actions.innerHTML = '' +
-                    '<a href="http://127.0.0.1:8000/usuarios/ver/' + item.id + '" class="btn btn-primary">Editar</a> ';*/
 
                 actions.innerHTML = `
                     <a href="/usuarios/ver/${item.id}" class="btn btn-primary">Editar</a>
