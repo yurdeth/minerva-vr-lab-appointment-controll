@@ -43,6 +43,7 @@
     </div>
 
     <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
+    <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
     <script type="module" src="{{ asset('js/viewAppointment.js') }}"></script>
 
 @endsection

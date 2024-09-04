@@ -1,3 +1,4 @@
+import {showAlert, showSuccessAlert, showErrorAlert, showWarningAlert} from './utils/alert.js'
 import {getResponse} from './getResponsePromise.js';
 
 /**
@@ -16,29 +17,27 @@ function handleEdit(id) {
     today.setHours(0, 0, 0, 0);
 
     if (isNaN(numAssistants) || numAssistants < 1) {
-        showSwal('error', '#660D04', 'Oops...', 'El número de asistentes no puede ser menor a 1.', '#660D04');
+        showWarningAlert('Oops...', 'El número de asistentes no puede ser menor a 1.');
         return;
     }
 
     if (numAssistants > 20) {
-        showSwal('error', '#660D04', 'Oops...', 'El número de asistentes no puede ser mayor a 20.', '#660D04');
+        showWarningAlert('Oops...', 'El número de asistentes no puede ser mayor a 20.');
         return;
     }
 
     if (selectedDate < today) {
-        showSwal('error', '#660D04', 'Oops...', 'La fecha debe ser posterior a hoy.', '#660D04');
+        showWarningAlert('Oops...', 'La fecha debe ser posterior a hoy.');
         return;
     }
 
     // Validar que el periodo de horas sea entre las 8:00 y las 16:00
     if (time.value < '08:00' || time.value > '15:30') {
-        showSwal('error', '#660D04', 'Oops...', 'Solo puedes agendar citas entre las 8:00 AM y las 3:30 PM', '#660D04');
+        showWarningAlert('Oops...', 'Solo puedes agendar citas entre las 8:00 AM y las 3:30 PM');
         return;
     }
 
-    const editUrl = `/api/appointments/editar/${id}`;
-
-    fetch(editUrl, {
+    fetch('/appointments/editar/' + id, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -52,22 +51,13 @@ function handleEdit(id) {
             number_of_assistants: number_of_assistants.value
         })
     })
-        .then(response => {
-            // Esta mierda dice que da error, pero en realidad sí actualiza la data de la cita ;-;
-
-            // console.log(response);
-
-            Swal.fire({
-                icon: 'success',
-                iconColor: '#046620',
-                title: '¡Cita actualizada exitosamente!',
-                text: 'Tu cita ha sido actualizada exitosamente.',
-                confirmButtonColor: '#046620',
-                timer: 2000,
-                showConfirmButton: false
-            }).then(() => {
-                window.location.href = '/citas';
-            });
+        .then(() => {
+            showSuccessAlert(
+                'Éxito',
+                '¡Cita actualizada exitosamente!')
+                .then(() => {
+                    window.location.href = '/citas';
+                });
 
         })
         .catch(error => {
@@ -80,30 +70,28 @@ function handleEdit(id) {
  * @param {number} id - El ID de la cita a eliminar.
  */
 function handleDelete(id) {
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: '¡No podrás deshacer esta acción!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then(result => {
-        if (result.isConfirmed) {
-            fetch(`/api/appointments/eliminar/${id}`, {
-                method: "DELETE",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            }).then(() => {
-                window.location.href = '/citas';
-            }).catch(error => console.error(error));
-        }
-    });
+    showAlert(
+        'warning',
+        '¡Cuidado!',
+        '¿Estás seguro de que deseas eliminar esta cita?',
+        true,
+        'Sí, eliminar',
+        'Cancelar')
+        .then(result => {
+            if (result.isConfirmed) {
+                fetch(`/api/appointments/eliminar/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                }).then(() => {
+                    window.location.href = '/citas';
+                }).catch(error => console.error(error));
+            }
+        });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -126,8 +114,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const time = document.getElementById('time');
                 const number_of_participants = document.getElementById('number_of_assistants');
 
-                if (!item){
-                    showSwal('error', '#660D04', 'Oops...', 'No se encontraron datos de la cita.', '#660D04');
+                if (!item) {
+                    showErrorAlert('Oops...', 'No se encontraron datos de la cita.');
                     return;
                 }
 
@@ -159,11 +147,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div>
                 `;
 
-                document.getElementById(`btnUpdate-${item.id}`).addEventListener('click', function() {
+                document.getElementById(`btnUpdate-${item.id}`).addEventListener('click', function () {
                     handleEdit(item.id);
                 });
 
-                document.getElementById(`btnDestroy-${item.id}`).addEventListener('click', function() {
+                document.getElementById(`btnDestroy-${item.id}`).addEventListener('click', function () {
                     handleDelete(item.id);
                 });
 
@@ -173,14 +161,3 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 });
-
-// Función para mostrar swal dinamicamente
-function showSwal(icon, iconColor, title, text, confirmButtonColor) {
-    Swal.fire({
-        icon: icon,
-        iconColor: iconColor,
-        title: title,
-        text: text,
-        confirmButtonColor: confirmButtonColor,
-    });
-}
