@@ -2,13 +2,7 @@
 
 use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CareersController;
-use App\Http\Controllers\DepartmentsController;
-use App\Http\Controllers\ResourcesController;
-use App\Http\Controllers\ResourceTypeController;
-use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StatusesController;
-use App\Http\Controllers\UsersController;
 use App\Http\Middleware\NoBrowserCache;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -82,18 +76,10 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
 
     /*Código con la funcionalidad que no de error al abrir el informe de inventario*/
     Route::post('/insertar-inventario', [StatusesController::class, 'store'])->name("insertar-inventario");
-    Route::post('/statuses/create', [StatusesController::class, 'store']);
-    Route::post('/resourcesTypes/create', [ResourceTypeController::class, 'store']);
-    Route::post('/room/create', [RoomController::class, 'store']);
-    Route::post('/resources/create', [ResourcesController::class, 'store']);
 });
 
 // ***************************************Rutas para citas*********************************************
 Route::middleware(['auth', NoBrowserCache::class])->group(function () {
-
-    // Rutas API:
-    Route::post('/citas', [AppointmentsController::class, 'store'])->name("appointments");
-
     Route::get('/citas', function () {
         return view('appointments');
     })->name('citas-ver');
@@ -112,7 +98,6 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
     Route::get('/export',[ExportController::class, 'export'])->name('export');
     Route::get('/citas/pdf', [AppointmentsController::class, 'pdf'])->name("pdf");
-    Route::get('/citas/horarios-disponibles', [AppointmentsController::class, 'AvailableSchedules'])->name("AvailableSchedules");
 });
 
 // ***************************************Rutas para admin*********************************************

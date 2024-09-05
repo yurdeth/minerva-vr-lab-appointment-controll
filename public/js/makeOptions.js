@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (response.total === 0) {
                 roomList.forEach((room, index) => {
-                    fetch("/room/create", {
+                    fetch("/api/room/create", {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.total === 0) {
                 console.log("No hay estados");
                 statusList.forEach((status, index) => {
-                    fetch("/statuses/create", {
+                    fetch("/api/statuses/create", {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.total === 0) {
                 console.log("No hay tipos de recursos");
                 resourceTypelist.forEach((resourceType, index) => {
-                    fetch("/resourcesTypes/create", {
+                    fetch("/api/resourcesTypes/create", {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/json',
@@ -153,10 +153,10 @@ document.addEventListener("DOMContentLoaded", function () {
             resource_type_id: resourceTypeId,
             status_id: statusId,
             room_id: roomId,
-            fixed_asset_code: 'ghefgriuweruif'
+            fixed_asset_code: ''
         };
 
-        fetch("/resources/create", {
+        fetch("/api/resources/create", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -164,12 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            body: JSON.stringify({
-                fixed_asset_code: 'ghefgriuweruif',
-                resource_type_id: resourceTypeId,
-                status_id: statusId,
-                room_id: roomId,
-            })
+            body: JSON.stringify(data)
         })
             .then(response => response.json())
             .then(data => {

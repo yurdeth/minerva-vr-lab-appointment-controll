@@ -12,12 +12,12 @@
 
             <div class="col-8 bg-white p-5 text-center">
                 <h2>Formulario de Solicitud de Cita</h2>
-                <form class="" method="post" action="{{ route("appointments") }}">
+                <form class="" method="post">
                     @csrf
 
                     <div class="form-group position-relative p-2">
                         <p class="text-start">Numero de Asistentes</p>
-                        <input type="number" class="form-control" id="" name="number_of_assistants"
+                        <input type="number" class="form-control" id="number_of_assistants" name="number_of_assistants"
                                placeholder="n° de personas (Máx. 20)" style="padding-left: 15px;" min="1" max="20" required>
                     </div>
 
@@ -46,6 +46,7 @@
 
     </div>
 
-    <script src="{{ asset('js/register_appointment.js') }}"></script>
+    <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
+    <script type="module" src="{{ asset('js/register_appointment.js') }}"></script>
     <script src="{{ asset('js/showAvailableShedules.js') }}"></script>
 @endsection

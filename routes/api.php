@@ -30,21 +30,29 @@ Route::get("login", [AuthController::class, "login"])->name("login");
 Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
 
     // *********************************************** Citas ******************************************************
-    Route::get('/appointments', [AppointmentsController::class, 'index'])->name("citas");
+    Route::get('/appointments', [AppointmentsController::class, 'index'])->name("appointments.index");
     Route::get('/appointments/ver/{id}', [AppointmentsController::class, 'show'])->name("appointments.show");
+    Route::post('/appointments', [AppointmentsController::class, 'store'])->name("appointments.create");
     Route::put('/appointments/editar/{id}', [AppointmentsController::class, 'update'])->name('appointments.update');
     Route::delete('/appointments/eliminar/{id}', [AppointmentsController::class, 'destroy'])->name("appointments.destroy");
+    Route::get('/appointments/available', [AppointmentsController::class, 'AvailableSchedules'])->name("appointments.available");
 
     // **************************************** GET Usuarios ******************************************************
     Route::get('/users', [UsersController::class, "index"])->name('usuarios.index');
     Route::get("/users/ver/{id}", [UsersController::class, "show"])->name("users.show");
     Route::put("/users/editar/{id}", [UsersController::class, "update"])->name("users.update");
-    Route::delete("/users/eliminar/{id}", [UsersController::class, "destroy"]);
+    Route::delete("/users/eliminar/{id}", [UsersController::class, "users.destroy"]);
 
     // **************************************** GET Inventarios ******************************************************
     Route::get('/statuses', [StatusesController::class, 'index']);
+    Route::post('/statuses/create', [StatusesController::class, 'store']);
+
     Route::get('/resourcesTypes', [ResourceTypeController::class, 'index']);
+    Route::post('/resourcesTypes/create', [ResourceTypeController::class, 'store']);
+
     Route::get('/room', [RoomController::class, 'index']);
-    Route::get('/statuses', [StatusesController::class, 'index']);
+    Route::post('/room/create', [RoomController::class, 'store']);
+
     Route::get('/resources', [ResourcesController::class, 'index']);
+    Route::post('/resources/create', [ResourcesController::class, 'store']);
 });
