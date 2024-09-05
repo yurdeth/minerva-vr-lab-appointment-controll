@@ -1,4 +1,4 @@
-const url = "/citas/horarios-disponibles";
+const url = "/api/appointments/available/";
 let loadAvailableSchedulesDiv = document.getElementById('loadAvailableSchedules');
 
 // Eliminar todos los elementos del div
@@ -7,10 +7,6 @@ function removeAllChildNodes(parent) {
         parent.removeChild(parent.firstChild);
     }
 }
-
-/*dateInput.addEventListener('change', function() {
-    showAvailableShedules(this.value);
-});*/
 
 function showAvailableShedules() {
     const dateInput = document.querySelector('input[name="date"]').value;
@@ -21,15 +17,12 @@ function showAvailableShedules() {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         }
     })
         .then(response => response.json())
         .then(data => {
-            /*console.log("Time: " + data[0].time);
-            console.log("Date: " + data[0].date);
-            console.log("ID: " + data[0].id);*/
-            // console.log(data);
 
             if (data.length > 0) {
                 let p = document.createElement('p');

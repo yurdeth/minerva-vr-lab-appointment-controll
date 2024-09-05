@@ -1,3 +1,4 @@
+import {showAlert, showSuccessAlert, showErrorAlert, showWarningAlert} from './utils/alert.js'
 import {getResponse} from './getResponsePromise.js';
 
 /**
@@ -7,44 +8,41 @@ import {getResponse} from './getResponsePromise.js';
 function handleEdit(id) {
     const name = document.getElementById("name");
     const email = document.getElementById("email");
-    const department = document.getElementById("department");
     const career = document.getElementById("career");
     const password = document.getElementById("password");
     const password_confirmation = document.getElementById("password_confirmation");
 
     if (!name.value) {
-        showAlert('error', 'Por favor, ingrese su nombre.');
+        showWarningAlert('error', 'Por favor, ingrese su nombre.');
         return;
     }
 
     if (!email.value) {
-        showAlert('error', 'Por favor, ingrese su correo electrónico.');
+        showWarningAlert('error', 'Por favor, ingrese su correo electrónico.');
         return;
     }
 
     if (password.value === '' || password_confirmation.value === '') {
-        showAlert('error', 'Por favor, ingrese la contraseña.');
+        showWarningAlert('error', 'Por favor, ingrese la contraseña.');
         return;
     }
 
     if (password.value !== password_confirmation.value) {
-        showAlert('error', 'Las contraseñas no coinciden.');
+        showWarningAlert('error', 'Las contraseñas no coinciden.');
         return;
     }
 
     if (password.value.length < 8) {
-        showAlert('error', 'La contraseña debe tener al menos 8 caracteres.');
+        showWarningAlert('error', 'La contraseña debe tener al menos 8 caracteres.');
         return;
     }
 
     if (password_confirmation.value.length < 8) {
-        showAlert('error', 'La confirmación de la contraseña debe tener al menos 8 caracteres.');
+        showWarningAlert('error', 'La confirmación de la contraseña debe tener al menos 8 caracteres.');
         return;
     }
 
-    const editUrl = `/users/editar/${id}`;
-
-    fetch(editUrl, {
+    fetch(`/api/users/editar/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -55,28 +53,19 @@ function handleEdit(id) {
         body: JSON.stringify({
             name: name.value,
             email: email.value,
-            department: department.value,
             career: career.value,
             password: password.value,
             password_confirmation: password_confirmation.value
         })
     })
-        .then(response => {
-            // Dice que da error, pero actualiza. Mierda más rancia ;-;
+        .then(() => {
+            showSuccessAlert(
+                '¡Perfil actualizado!',
+                'El perfil se ha sido actualizado.')
+                .then(() => {
+                    window.location.href = '/usuarios';
+                });
 
-            // console.log(response.json());
-
-            Swal.fire({
-                icon: 'success',
-                iconColor: '#046620',
-                title: '¡Perfil actualizado!',
-                text: 'El perfil se ha sido actualizado.',
-                confirmButtonColor: '#046620',
-                timer: 2000,
-                showConfirmButton: false
-            }).then(() => {
-                window.location.href = '/usuarios';
-            });
         })
         .catch(error => {
             console.error(error);
@@ -88,39 +77,33 @@ function handleEdit(id) {
  * @param {number} id - El ID del usuario a eliminar.
  */
 function handleDelete(id) {
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: '¡No podrás deshacer esta acción!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then(result => {
-        if (result.isConfirmed) {
-            document.getElementById(`deleteForm-${id}`).submit();
-        }
-    });
-}
-
-/**
- * Muestra una alerta utilizando SweetAlert2.
- * @param {string} icon - El icono de la alerta.
- * @param {string} text - El texto de la alerta.
- */
-function showAlert(icon, text) {
-    Swal.fire({
-        icon,
-        iconColor: '#660D04',
-        title: 'Oops...',
-        text,
-        confirmButtonColor: '#660D04'
-    }).then(() => {
-        if (text.includes('cita')) {
-            window.location.href = '/citas';
-        }
-    });
+    showAlert(
+        'warning',
+        '¿Estás seguro?',
+        '¡No podrás deshacer esta acción!',
+        true,
+        'Sí, eliminar',
+        'Cancelar')
+        .then(result => {
+            if (result.isConfirmed) {
+                showSuccessAlert('Eliminando', 'El usuario será eliminado del sistema')
+                    .then(() => {
+                        fetch(`/api/users/eliminar/${id}`, {
+                            method: "DELETE",
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            }
+                        }).then(() => {
+                            window.location.href = '/usuarios';
+                        }).catch(error => console.error(error));
+                    });
+            } else {
+                showErrorAlert('Cancelado', 'Operación cancelada');
+            }
+        });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -140,9 +123,18 @@ document.addEventListener('DOMContentLoaded', function () {
         id = urlParts[urlParts.length - 1];
     }
 
-    getResponse(`/users/ver/${id}`)
+    getResponse(`/api/users/ver/${id}`)
         .then(response => {
+            if (response.length === 0) {
+                showErrorAlert('Oops...', 'No se encontraron datos del usuario.')
+                    .then(() => {
+                        window.location.href = '/usuarios';
+                    })
+                return;
+            }
+
             response.forEach(item => {
+
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
                 const name = document.getElementById('name');
@@ -168,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <input type="hidden" name="_id" id="id-${item.id}" value="${item.id}">
                             <button type="button" id="btnUpdate-${item.id}" class="btn btn-primary">Actualizar</button>
                         </form>
-                        <form id="deleteForm-${item.id}" action="/users/eliminar/${item.id}" method="post">
+                        <form id="deleteForm-${item.id}" method="post">
                             <input type="hidden" name="_token" value="${csrfToken}">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_id" id="id-${item.id}" value="${item.id}">

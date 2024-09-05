@@ -2,13 +2,7 @@
 
 use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CareersController;
-use App\Http\Controllers\DepartmentsController;
-use App\Http\Controllers\ResourcesController;
-use App\Http\Controllers\ResourceTypeController;
-use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StatusesController;
-use App\Http\Controllers\UsersController;
 use App\Http\Middleware\NoBrowserCache;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -55,18 +49,11 @@ Route::get('/iniciar_sesion', function () {
 Route::post('/signin', [AuthController::class, 'login'])->name("signin");
 Route::post('/signup', [AuthController::class, 'register'])->name("signup");
 
-Route::get('/departments', [DepartmentsController::class, 'index'])->name("departments");
-Route::get('/careers/{id}', [CareersController::class, 'show'])->name("careers");
-Route::get('/careers/', [CareersController::class, 'index'])->name("careers");
-
 // ***************************************Rutas para usuarios*********************************************
 Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
     Route::post("logout", [AuthController::class, "logout"])->name("logout");
     Route::get("logout", [AuthController::class, "logout"])->name("logout");
-    Route::get("/users/ver/{id}", [UsersController::class, "show"])->name("users.show");
-    Route::put("/users/editar/{id}", [UsersController::class, "update"])->name("users.update");
-    Route::delete("/users/eliminar/{id}", [UsersController::class, "destroy"])->name("users.destroy");
 
     Route::get('/home', function () {
         return view('home');
@@ -87,31 +74,12 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
         return view('registro-inventario');
     })->name('registro-inventario');
 
-    Route::get('/statuses', [StatusesController::class, 'index'])->name("statuses");
     /*Código con la funcionalidad que no de error al abrir el informe de inventario*/
     Route::post('/insertar-inventario', [StatusesController::class, 'store'])->name("insertar-inventario");
-
-    Route::post('statuses/create', [StatusesController::class, 'store']);
-    Route::get('statuses', [StatusesController::class, 'index']);
-    Route::get('resourcesTypes', [ResourceTypeController::class, 'index']);
-    Route::post('resourcesTypes/create', [ResourceTypeController::class, 'store']);
-    Route::get('/room', [RoomController::class, 'index']);
-    Route::post('/room/create', [RoomController::class, 'store']);
-    Route::get('/resources', [ResourcesController::class, 'index']);
-    Route::post('/resources/create', [ResourcesController::class, 'store']);
 });
 
 // ***************************************Rutas para citas*********************************************
 Route::middleware(['auth', NoBrowserCache::class])->group(function () {
-
-    // Rutas API:
-    Route::get('/appointments', [AppointmentsController::class, 'index'])->name("citas");
-    Route::get('/appointments/index', [AppointmentsController::class, 'index'])->name("citas");
-    Route::post('/citas', [AppointmentsController::class, 'store'])->name("appointments");
-    Route::get('/appointments/ver/{id}', [AppointmentsController::class, 'show'])->name("appointments.show");
-    Route::put('/appointments/editar/{id}', [AppointmentsController::class, 'update'])->name('appointments.update');
-    Route::delete('/appointments/eliminar/{id}', [AppointmentsController::class, 'destroy'])->name("appointments.destroy");
-
     Route::get('/citas', function () {
         return view('appointments');
     })->name('citas-ver');
@@ -130,14 +98,10 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
     Route::get('/export',[ExportController::class, 'export'])->name('export');
     Route::get('/citas/pdf', [AppointmentsController::class, 'pdf'])->name("pdf");
-    Route::get('/citas/horarios-disponibles', [AppointmentsController::class, 'AvailableSchedules'])->name("AvailableSchedules");
 });
 
 // ***************************************Rutas para admin*********************************************
 Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])->group(function () {
-    // Retornar una respuesta del servidor:
-    Route::get('/users', [UsersController::class, "index"])->name('usuarios.index');
-
     // Retornar una vista:
     Route::get('/dashboard', function () {
         return view('Administración.dashboard');

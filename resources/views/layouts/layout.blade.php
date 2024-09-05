@@ -48,7 +48,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{ route("agendar") }}">Agendar Citas</a></li>
-                                <li><a class="dropdown-item" href="{{ route("appointments") }}">Mis citas</a></li>
+                                <li><a class="dropdown-item" href="{{ route("citas-ver") }}">Mis citas</a></li>
                                 @if( Auth::user()->roles_id == 1 )
                                     <li>
                                         <hr class="dropdown-divider">

@@ -67,73 +67,8 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const searchForm = document.getElementById('searchForm');
-            const searchInput = document.getElementById('searchInput');
-            const appointmentsTable = document.getElementById('appointmentsTable');
-
-            searchForm.addEventListener('submit', function (event) {
-                event.preventDefault(); // Evitar que se envíe el formulario
-            });
-
-            searchInput.addEventListener('input', function () {
-                const searchTerm = searchInput.value.trim().toLowerCase();
-
-                // Filtrar filas de la tabla basado en el término de búsqueda
-                Array.from(appointmentsTable.getElementsByTagName('tr')).forEach(function (row, index) {
-                    if (index === 0) return; // Saltar la fila de encabezados
-
-                    const cells = row.getElementsByTagName('td');
-                    let rowMatchesSearch = false;
-
-                    Array.from(cells).forEach(function (cell, cellIndex) {
-                        const cellText = cell.textContent.toLowerCase();
-
-                        if (cellText.includes(searchTerm)) {
-                            rowMatchesSearch = true;
-                        }
-                    });
-
-                    if (rowMatchesSearch) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            });
-        });
-
-        function showDeleteConfirmationMessage(event, appointment) {
-            event.preventDefault();
-
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: "¡No podrás revertir esto!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        icon: 'success',
-                        iconColor: '#046620',
-                        title: '¡Cita eliminada exitosamente!',
-                        text: 'La cita ha sido eliminada exitosamente.',
-                        confirmButtonColor: '#046620',
-                        timer: 2000,
-                        showConfirmButton: false
-                    }).then(() => {
-                        document.getElementById('deleteForm-' + appointment).submit();
-                    });
-                }
-            });
-        }
-    </script>
     <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
+    <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
     <script type="module" src="{{ asset('js/appointments.js') }}"></script>
 
     <br><br>

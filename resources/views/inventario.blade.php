@@ -103,5 +103,6 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset("js/makeOptions.js") }}"></script>
+    <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
+    <script type="module" src="{{ asset("js/makeOptions.js") }}"></script>
 @endsection
