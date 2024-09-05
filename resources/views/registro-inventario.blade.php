@@ -1,5 +1,6 @@
-@extends('adminlte::page')
+{{--@extends('adminlte::page')--}}
 
+@extends('layouts.layout')
 @section('title', 'Inventario')
 
 @section('content_header')

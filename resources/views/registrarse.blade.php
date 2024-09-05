@@ -45,7 +45,7 @@
 
                     <div class="form-group position-relative p-2">
                         <select name="career" id="career" class="form-control">
-                            <option value="" selected disabled>Seleccione un departamento</option>
+                            <option value="" selected disabled>Seleccione una carrera</option>
                         </select>
                     </div>
 
