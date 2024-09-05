@@ -71,7 +71,7 @@ function handleEdit(id) {
 
                 showSuccessAlert(
                     '¡Perfil actualizado!',
-                    'El perfil se ha sido actualizado.')
+                    'El perfil se ha actualizado correctamente.')
                     .then(() => {
                         window.location.href = '/usuarios';
                     });
