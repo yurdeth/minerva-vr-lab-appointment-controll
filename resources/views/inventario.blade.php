@@ -1,9 +1,9 @@
-@extends('layouts.layout')
+@extends('Administración.dashboard')
 
 {{--Section para poder trabajar con layout --}}
 
 @section('content')
-
+    @vite('resources/js/app.js')
     <div class="container-fluid" style="margin-top: 70px; margin-bottom: 70px; max-width: 950px;">
         <div class="row bg-white">
             <div class="col-12">

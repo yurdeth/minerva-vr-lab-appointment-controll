@@ -1,5 +1,5 @@
 {{--@extends('adminlte::page')--}}
-@extends('layouts.layout')
+@extends('Administración.dashboard')
 
 @section('title', 'Usuarios')
 
@@ -8,9 +8,10 @@
 @stop
 
 @section('content')
-    @vite(['resources/js/app.js'])
 
-    <div class="container-xl" style="margin-top: 70px; margin-bottom: 70px;">
+{{--    @vite(['resources/js/app.js']) Quitando los estilos--}}
+
+    <div>
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="card">
@@ -119,6 +120,3 @@
     <script type="module" src="{{ asset('js/users.js') }}"></script>
 @stop
 
-@section('css')
-    <link rel="stylesheet" href="{{ asset('CSS/administracion.css')}}">
-@stop

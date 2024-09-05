@@ -1,6 +1,6 @@
 {{--@extends('adminlte::page')--}}
 
-@extends('layouts.layout')
+@extends('Administración.dashboard')
 @section('title', 'Inventario')
 
 @section('content_header')
