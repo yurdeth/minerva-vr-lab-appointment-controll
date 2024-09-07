@@ -36,13 +36,13 @@
                 </a>
             </li>
             <li>
-                <a href="{{route("usuarios-dashboard")}}">
+                <a href="{{route("usuarios")}}">
                     <span><i class="fa-solid fa-user-group"></i></span>
                     <span class="Opciones">Usuarios</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route("citas_dashboard") }}">
                     <span><i class="fa-solid fa-calendar-days"></i></span>
                     <span class="Opciones">Citas</span>
                 </a>
@@ -76,8 +76,8 @@
                 </li>
             </ul>
         </div>
-{{--        Aqui iba el div de cierre de <div class="container">--}}
-{{--        </div>--}}
+        {{--        Aqui iba el div de cierre de <div class="container">--}}
+        {{--        </div>--}}
         <br><br>
         <!-- Fin del Navbar Horizontal -->
         <!------------------------------------------------------------------------------------------------------------->
@@ -85,13 +85,13 @@
         <!-- Contenidos del Dashboard -->
         <div class="">
             <div class="">
-{{--                <h1>Bienvenido</h1>--}}
+                {{--                <h1>Bienvenido</h1>--}}
                 <hr>
                 @yield('content_header')
                 @yield('content')
             </div>
         </div>
-    </>
+    </div>
 </section>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/1.1.6/choices.min.js"></script>

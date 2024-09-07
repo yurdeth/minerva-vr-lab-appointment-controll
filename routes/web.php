@@ -107,17 +107,18 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
         return view('Administración.dashboard');
     })->name('dashboard');
 
-    Route::get('/usuarios', function () {
-        return view('users');
-    })->name('usuarios');
-
     Route::get('dashboard/usuarios', function () {
         return view('users');
-    })->name('usuarios-dashboard');
+    })->name('usuarios');
 
     Route::get('/usuarios/ver/{id}', function () {
         return view('editUser');
     })->name('usuarios-editar');
+
+    Route::get('dashboard/citas/', function () {
+        $dashboard = true;
+        return view('appointments', compact("dashboard"));
+    })->name('citas_dashboard');
 });
 
 // ***************************************Iniciar credenciales admin*********************************************
