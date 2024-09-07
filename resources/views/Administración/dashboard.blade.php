@@ -63,7 +63,7 @@
         <div class="navHorizontal">
             <ul>
                 <li>
-                    <a href="#">
+                    <a class="nav-link" href="{{ route('profile', ['id' => Auth::user()->id]) }}">
                         <span><i class="fa-solid fa-user"></i></span>
                         <span class="title">Admin</span>
                     </a>
