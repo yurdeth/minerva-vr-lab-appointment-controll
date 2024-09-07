@@ -187,7 +187,7 @@ a > .title{
  .contenido {
     position: absolute;
     width: calc(100% - 300px);
-    left: 300px;
+    left: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -198,7 +198,7 @@ a > .title{
 
 /* Estilos para la clase .datos */
 .datos {
-    width: 80%;
+    width: 90%;
     background-color: #ffffff;
     padding: 40px;
     border-radius: 8px;

@@ -1,4 +1,3 @@
-{{--@extends('adminlte::page')--}}
 @extends('Administración.dashboard')
 
 @section('title', 'Usuarios')
@@ -8,9 +7,7 @@
 @stop
 
 @section('content')
-
-{{--    @vite(['resources/js/app.js']) Quitando los estilos--}}
-
+<link rel="stylesheet" href="{{ asset('CSS/administracion/tables.css')}}">
     <div>
         <div class="row justify-content-center">
             <div class="col-12">
@@ -18,13 +15,15 @@
                     <div class="card-header bg-white">
                         <div class="row align-items-center"> <!-- Ensure vertical alignment -->
                             <div class="col-6 col-md-8 text-center"> <!-- Adjust the size as needed -->
+                                <br>
                                 <h2>Todos los Usuarios</h2>
+                                <br>
                             </div>
                             <div class="col-6 col-md-4">
                                 <form action="" id="searchForm">
                                     <div class="input-group">
                                         <input type="text" id="searchInput" class="form-control" placeholder="Buscar...">
-                                        <button type="submit" class="btn btn-primary">Buscar</button>
+                                        <button type="submit" class="btn btn-success">Buscar</button>
                                     </div>
                                 </form>
                             </div>

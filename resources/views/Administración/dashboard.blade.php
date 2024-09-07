@@ -24,7 +24,7 @@
                 </div>
             </li>
             <li>
-                <a href="{{ route("inicio") }}">
+                <a href="{{ route("inicio") }}" onclick="cambiarMensaje('inicio')">
                     <span><i class="fa-solid fa-house"></i></span>
                     <span class="Opciones">Home</span>
                 </a>
@@ -36,19 +36,19 @@
                 </a>
             </li>
             <li>
-                <a href="{{route("usuarios")}}">
+                <a href="{{route("usuarios")}}" onclick="cambiarMensaje('usuarios')">
                     <span><i class="fa-solid fa-user-group"></i></span>
                     <span class="Opciones">Usuarios</span>
                 </a>
             </li>
             <li>
-                <a href="{{ route("citas_dashboard") }}">
+                <a href="{{ route("citas_dashboard") }}" onclick="cambiarMensaje('citas')">
                     <span><i class="fa-solid fa-calendar-days"></i></span>
                     <span class="Opciones">Citas</span>
                 </a>
             </li>
             <li>
-                <a href="{{route("registro-inventario")}}">
+                <a href="{{route("registro-inventario")}}" onclick="cambiarMensaje('inventario')">
                     <span><i class="fa-solid fa-vr-cardboard"></i></span>
                     <span class="Opciones">Inventario</span>
                 </a>
@@ -76,27 +76,74 @@
                 </li>
             </ul>
         </div>
-        {{--        Aqui iba el div de cierre de <div class="container">--}}
-        {{--        </div>--}}
         <br><br>
         <!-- Fin del Navbar Horizontal -->
         <!------------------------------------------------------------------------------------------------------------->
 
         <!-- Contenidos del Dashboard -->
-        <div class="">
-            <div class="">
-                {{--                <h1>Bienvenido</h1>--}}
-                <hr>
-                @yield('content_header')
-                @yield('content')
+        <div class="contenido">
+            <div class="datos">
+                <!-- Definimos una variable para el mensaje a mostrar -->
+                @php
+                    $mensaje = '';
+                @endphp
+                <!-- Verificamos si la variable mensaje no está vacía -->
+                @if(!empty($mensaje))
+                <!-- Si mensaje tiene contenido, se mostramos un encabezado con dicho mensaje -->
+                <h1 id="mensaje">{{ $mensaje }}</h1>
+                    <hr>
+                @else
+                 <!-- Si mensaje está vacío mostramos un mensaje de bienvenida por defecto -->
+                 <h1 id="mensaje">Bienvenido</h1>
+                 <hr>
+                @endif
+                <div id="content">
+                    @yield('content')
+                </div>
+
             </div>
         </div>
-    </div>
 </section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/1.1.6/choices.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{asset("js/main.js")}}"></script>
-{{--<script src="{{asset("js/test.js")}}"></script>--}}
+<script>
+    // Función que se encarga de cambiar el mensaje mostrado en la página
+    function cambiarMensaje(opcion) {
+        let mensaje = '';
+        //Estructura switch para asignar un mensaje basado en la opción seleccionada
+        switch(opcion) {
+            case 'inicio':
+                mensaje = 'Bienvenido';
+                break;
+            case 'carreras':
+                mensaje = 'Bienvenido a Carreras';
+                break;
+            case 'usuarios':
+                mensaje = 'Usuarios Minerva VR Web';
+                break;
+            case 'citas':
+                mensaje = 'Bienvenido a Citas';
+                break;
+            case 'inventario':
+                mensaje = 'Inventario de Equipo';
+                break;
+            default:
+                mensaje = 'Bienvenido'; // Mensaje por defecto si la opción no coincide con ningúna
+        }
+        document.querySelector('.datos h1').innerText = mensaje;
+        //Guardamos el mensaje en localStorage para que persista después de recargar la página
+        localStorage.setItem('mensaje', mensaje);
+    }
+
+    // Evento que se ejecuta cuando el contenido del DOM ha sido completamente cargado
+    document.addEventListener('DOMContentLoaded', function() {
+        // Recuperamos el mensaje guardado en localStorage
+        let mensajeGuardado = localStorage.getItem('mensaje');
+        // Si hay un mensaje guardado, actualiza el contenido del elemento <h1> con ese mensaje
+        if (mensajeGuardado) {
+            document.querySelector('.datos h1').innerText = mensajeGuardado;
+        }
+    });
+</script>
+
 </body>
 </html>

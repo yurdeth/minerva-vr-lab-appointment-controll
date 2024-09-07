@@ -1,5 +1,3 @@
-{{--@extends('adminlte::page')--}}
-
 @extends('Administración.dashboard')
 @section('title', 'Inventario')
 
@@ -8,7 +6,7 @@
 @stop
 
 @section('content')
-    @vite(['resources/js/app.js'])
+<link rel="stylesheet" href="{{ asset('CSS/administracion/tables.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
           integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -23,9 +21,6 @@
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header bg-white">
-                        <h2 class="text-center">Tu inventario</h2>
-                    </div>
                     <div class="card-body">
                         <div class="table-responsive" style="height: 100%; width: 100%;">
                             <table class="table table-bordered text-center" style="width: 100%; margin-bottom: 0;" id="inventoryTable">
