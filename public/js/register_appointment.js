@@ -1,4 +1,5 @@
-import {showAlert, showSuccessAlert, showErrorAlert} from './utils/alert.js'
+import {showSuccessAlert, showErrorAlert} from './utils/alert.js'
+import {apiRequest} from "./utils/api.js";
 
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelector("form").addEventListener("submit", function (event) {
@@ -45,20 +46,20 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        fetch('/api/appointments', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                date: date.value,
-                time: selectedTime,
-                number_of_assistants: number_of_assistants.value
-            }),
-        })
+        const headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        };
+
+        const body = {
+            date: date.value,
+            time: selectedTime,
+            number_of_assistants: number_of_assistants.value
+        };
+
+        apiRequest('/api/appointments', 'POST', body, headers)
             .then(response => {
                 response.json().then(data => {
                     if(data.error){
@@ -79,7 +80,6 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => {
                 console.log('Error:', error);
-                showErrorAlert('Oops...', 'Ocurrió un error al registrar tu cita. Por favor intenta de nuevo.');
             })
     });
 });

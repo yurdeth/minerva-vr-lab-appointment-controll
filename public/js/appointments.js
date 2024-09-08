@@ -61,14 +61,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 const number_of_participants = row.insertCell(6);
                 const actions = row.insertCell(7);
 
-                const formatedDate = new Date(item.date);
-                const options = {year: 'numeric', month: 'long', day: 'numeric'};
+                // Sumar un dia a la fecha:
+                const dateParts = item.date.split('-');
+                const formatedDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                formatedDate.setDate(formatedDate.getDate());
+
+                // Mostrar fecha de manera textual:
+                const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+                const monthName = months[formatedDate.getMonth()];
+                const dateText = `${formatedDate.getDate()} de ${monthName} de ${formatedDate.getFullYear()}`;
 
                 code.innerHTML = item.id;
                 name.innerHTML = item.name;
                 department.innerHTML = item.department_name;
                 career.innerHTML = item.career_name;
-                date.innerHTML = formatedDate.toLocaleDateString('es-SV', options);
+                date.innerHTML = dateText;
                 time.innerHTML = item.time;
                 number_of_participants.innerHTML = item.number_of_participants;
 
