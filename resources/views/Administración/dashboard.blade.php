@@ -87,15 +87,15 @@
                 @php
                     $mensaje = '';
                 @endphp
-                <!-- Verificamos si la variable mensaje no está vacía -->
+                    <!-- Verificamos si la variable mensaje no está vacía -->
                 @if(!empty($mensaje))
-                <!-- Si mensaje tiene contenido, se mostramos un encabezado con dicho mensaje -->
-                <h1 id="mensaje">{{ $mensaje }}</h1>
+                    <!-- Si mensaje tiene contenido, se mostramos un encabezado con dicho mensaje -->
+                    <h1 id="mensaje">{{ $mensaje }}</h1>
                     <hr>
                 @else
-                 <!-- Si mensaje está vacío mostramos un mensaje de bienvenida por defecto -->
-                 <h1 id="mensaje">Bienvenido</h1>
-                 <hr>
+                    <!-- Si mensaje está vacío mostramos un mensaje de bienvenida por defecto -->
+                    <h1 id="mensaje">Bienvenido</h1>
+                    <hr>
                 @endif
                 <div id="content">
                     @yield('content')
@@ -110,7 +110,7 @@
     function cambiarMensaje(opcion) {
         let mensaje = '';
         //Estructura switch para asignar un mensaje basado en la opción seleccionada
-        switch(opcion) {
+        switch (opcion) {
             case 'inicio':
                 mensaje = 'Bienvenido';
                 break;
@@ -135,7 +135,7 @@
     }
 
     // Evento que se ejecuta cuando el contenido del DOM ha sido completamente cargado
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Recuperamos el mensaje guardado en localStorage
         let mensajeGuardado = localStorage.getItem('mensaje');
         // Si hay un mensaje guardado, actualiza el contenido del elemento <h1> con ese mensaje
@@ -144,6 +144,8 @@
         }
     });
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/1.1.6/choices.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 </html>
