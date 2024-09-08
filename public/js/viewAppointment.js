@@ -90,7 +90,7 @@ function handleDelete(id) {
                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                             }
                         }).then(() => {
-                            window.location.href = '/citas';
+                            window.location.href = '/dashboard/citas';
                         }).catch(error => console.error(error));
                     });
             }else{
