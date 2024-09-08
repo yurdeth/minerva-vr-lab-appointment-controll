@@ -1,4 +1,19 @@
 /* Responsive para laptops */
+@media (max-width: 1920px) {
+    .contenido {
+        width: calc(100% - 200px);
+        padding: 50px;
+        left: 100px;
+    }
+    .datos {
+        width: calc(100% - 20px);
+    }
+
+    #content{
+        width: 100%;
+    }
+}
+
 @media (max-width: 1024px){
 
     /* Menu Vertical */
