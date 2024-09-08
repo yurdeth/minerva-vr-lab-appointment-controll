@@ -151,6 +151,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const roomId = document.getElementById("room").value;
         const fixed_asset_code = document.getElementById("fixed_asset_code").value;
 
+        if (fixed_asset_code === '') {
+            showErrorAlert('Error', 'Ingrese el código de activo fijo').then(() => {
+                document.getElementById('fixed_asset_code').focus();
+            });
+            return;
+        }
+
         const data = {
             resource_type_id: resourceTypeId,
             status_id: statusId,

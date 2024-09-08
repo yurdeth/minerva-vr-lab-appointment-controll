@@ -69,7 +69,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+{{--                    <button><a class="nav-link" href="{{ route("logout") }}">Cerrar Sesión</a></button>--}}
+                    <a class="nav-link" href="{{ route("logout") }}">
                         <span><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
                         <span class="title">Salir</span>
                     </a>
