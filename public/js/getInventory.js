@@ -19,12 +19,19 @@ document.addEventListener("DOMContentLoaded", event => {
                 let cell3 = row.insertCell(2);
                 let cell4 = row.insertCell(3);
                 let cell5 = row.insertCell(4);
+                let cell6 = row.insertCell(5);
 
                 cell1.innerHTML = index + 1;
                 cell2.innerHTML = resource.room.name;
                 cell3.innerHTML = resource.resource_type.resource_name;
                 cell4.innerHTML = resource.status.status;
                 cell5.innerHTML = resource.fixed_asset_code;
+
+                // Agregar botones de acciones
+                cell6.innerHTML = `
+                    <a href="" class="btn btn-primary">Editar</a>
+                    <button type="button" class="btn btn-danger">Eliminar</button>   
+                `;
             });
         })
         .catch(error => {
