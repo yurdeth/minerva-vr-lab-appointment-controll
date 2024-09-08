@@ -99,7 +99,7 @@ function handleDelete(id) {
                 apiRequest(`/api/users/eliminar/${id}`, 'DELETE', null, headers)
                     .then(response => {
                         response.json().then(() => {
-                            showSuccessAlert('Operación completada', 'El usuario se ha eliminado del sistema')
+                            showSuccessAlert('Operación completada', 'Usuario eliminado correctamente')
                                 .then(() => {
                                     window.location.href = '/dashboard/usuarios';
                                 });

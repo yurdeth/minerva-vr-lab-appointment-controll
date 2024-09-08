@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
     apiRequest('/api/users', 'GET', null, headers)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             if (Array.isArray(data)) {
                 data.forEach(item => {
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
