@@ -1,4 +1,13 @@
-@extends('layouts.layout')
+<?php
+    if (!isset($dashboard)) {
+        $layout = 'layouts.layout';
+    }else{
+        $layout = 'Administración.dashboard';
+    }
+?>
+
+@extends($layout)
+@vite(['resources/js/app.js'])
 
 @section('content')
 
@@ -13,7 +22,7 @@
             <div class="col-auto">
                 <a href="{{ route("agendar") }}" class="btn btn-success position-relative">
                     <i class="fa fa-address-book"></i>
-                    <span class="tooltip-text">Agregar cita</span>
+                    <span class="tooltip-text">Agregar cita </span>
                 </a>
                 <a href="{{ route("export") }}" class="btn btn-info position-relative">
                     <i class="fa fa-file-excel"></i>
@@ -45,7 +54,8 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive" style="height: 100%; width: 100%;">
-                            <table id="appointmentsTable" class="table table-bordered text-center" style="width: 100%; margin-bottom: 0;">
+                            <table id="appointmentsTable" class="table table-bordered text-center"
+                                   style="width: 100%; margin-bottom: 0;">
                                 <thead class="table-avatar">
                                 <tr>
                                     <th scope="col">#</th>

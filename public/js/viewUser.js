@@ -58,14 +58,24 @@ function handleEdit(id) {
             password_confirmation: password_confirmation.value
         })
     })
-        .then(() => {
-            showSuccessAlert(
-                '¡Perfil actualizado!',
-                'El perfil se ha sido actualizado.')
-                .then(() => {
-                    window.location.href = '/usuarios';
-                });
+        .then(response => {
+            response.json().then(data => {
+                if(data.error){
+                    if(data.error.career[0].includes("The career field is required")){
+                        showErrorAlert('Oops...', 'Por favor, selecciona la carrera').then(() => {
+                            document.getElementById('career').focus();
+                        });
+                        return;
+                    }
+                }
 
+                showSuccessAlert(
+                    '¡Perfil actualizado!',
+                    'El perfil se ha actualizado correctamente.')
+                    .then(() => {
+                        window.location.href = '/usuarios';
+                    });
+            })
         })
         .catch(error => {
             console.error(error);

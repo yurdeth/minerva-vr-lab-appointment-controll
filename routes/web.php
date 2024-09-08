@@ -66,11 +66,11 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
 // ***************************************Rutas para inventarios*********************************************
 Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])->group(function () {
-    Route::get('/inventario', function () {
+    Route::get('/dashboard/inventario', function () {
         return view('inventario');
     })->name('inventario');
 
-    Route::get('/registro-inventario', function () {
+    Route::get('/dashboard/registro-inventario', function () {
         return view('registro-inventario');
     })->name('registro-inventario');
 
@@ -107,13 +107,18 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
         return view('Administración.dashboard');
     })->name('dashboard');
 
-    Route::get('/usuarios', function () {
+    Route::get('dashboard/usuarios', function () {
         return view('users');
     })->name('usuarios');
 
     Route::get('/usuarios/ver/{id}', function () {
         return view('editUser');
     })->name('usuarios-editar');
+
+    Route::get('dashboard/citas/', function () {
+        $dashboard = true;
+        return view('appointments', compact("dashboard"));
+    })->name('citas_dashboard');
 });
 
 // ***************************************Iniciar credenciales admin*********************************************
