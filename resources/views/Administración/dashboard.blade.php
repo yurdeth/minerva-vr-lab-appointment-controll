@@ -122,7 +122,7 @@
                 mensaje = 'Usuarios Minerva VR Web';
                 break;
             case 'citas':
-                mensaje = 'Bienvenido a Citas';
+                mensaje = 'Registro de Citas para Capacitación';
                 break;
             case 'inventario':
                 mensaje = 'Inventario de Equipo';
