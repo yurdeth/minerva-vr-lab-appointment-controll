@@ -86,22 +86,57 @@ class ResourcesController extends Controller {
     /**
      * Display the specified resource.
      */
-    public function show(Resources $resources) {
-        //
-    }
+    public function show(String $id) {
+        $resource = Resources::with(['room', 'status', 'resourceType'])->find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Resources $resources) {
-        //
+        if (!$resource) {
+            return response()->json([
+                'message' => 'Resource not found',
+                'status' => 404
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Resource found',
+            'resource' => $resource,
+            'status' => 200
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Resources $resources) {
-        //
+        $validator = Validator::make($request->all(), [
+                "fixed_asset_code" => "required|unique:resources,fixed_asset_code", // Número de activo fijo
+                "resource_type_id" => "required|exists:resource_types,id",
+                "status_id" => "required|exists:statuses,id",
+                "room_id" => "required|exists:room,id",
+            ]
+        );
+
+        if ($validator->fails()) {
+            $data = [
+                'message' => 'Error validating data',
+                'errors' => $validator->errors(),
+                'status' => 400
+            ];
+
+            return response()->json($data);
+        }
+
+        $resources->fixed_asset_code = $request->fixed_asset_code;
+        $resources->resource_type_id = $request->resource_type_id;
+        $resources->status_id = $request->status_id;
+        $resources->room_id = $request->room_id;
+
+        $resources->save();
+
+        return response()->json([
+            'message' => 'Resource updated successfully',
+            'resource' => $resources,
+            'status' => 200
+        ]);
     }
 
     /**
@@ -121,6 +156,7 @@ class ResourcesController extends Controller {
 
         return response()->json([
             'message' => 'Resource deleted successfully',
+            'success' => true,
             'status' => 200
         ]);
     }

@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
                     showSuccessAlert('Recurso creado', 'El articulo se registró correctamente').then(() => {
-                        window.location.href = '/dashboard/registro-inventario';
+                        window.location.href = '/dashboard/inventario';
                     });
                 });
             })

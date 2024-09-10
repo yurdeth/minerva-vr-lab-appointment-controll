@@ -48,7 +48,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{route("inventory")}}" onclick="cambiarMensaje('inventario')">
+                <a href="{{route("inventario")}}" onclick="cambiarMensaje('inventario')">
                     <span><i class="fa-solid fa-vr-cardboard"></i></span>
                     <span class="Opciones">Inventario</span>
                 </a>

@@ -78,8 +78,6 @@
                                         <th scope="col">Estado</th>
                                         <th scope="col">Número de activo fijo</th>
                                         <th scope="col">Acciones</th>
-                                        {{--<th scope="col">Número de activo fijo</th>--}}
-                                        {{--<th scope="col">Computadora</th>--}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -98,14 +96,11 @@
                                 <i class="fas fa-chevron-right"></i>
                             </button>
                         </div>
-
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
     <script type="module" src="{{ asset("js/getInventory.js") }}"></script>
 @stop

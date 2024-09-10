@@ -320,7 +320,7 @@ return [
         ],
         [
             'text' => 'Inventario',
-            'url' => 'registro-inventario',
+            'url' => 'inventario',
         ]
 
     ],

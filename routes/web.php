@@ -66,13 +66,18 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
 // ***************************************Rutas para inventarios*********************************************
 Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])->group(function () {
-    Route::get('/dashboard/registrar-inventario', function () {
-        return view('inventory.registerInventory');
-    })->name('registrar-inventario');
 
     Route::get('/dashboard/inventario', function () {
         return view('inventory.inventory');
-    })->name('inventory');
+    })->name('inventario');
+
+    Route::get('/dashboard/inventario/registrar', function () {
+        return view('inventory.registerInventory');
+    })->name('registrar-inventario');
+
+    Route::get('/dashboard/inventario/ver/{id}', function () {
+        return view('inventory.editInventory');
+    })->name('editar-inventario');
 
     /*Código con la funcionalidad que no de error al abrir el informe de inventario*/
     Route::post('/insertar-inventario', [StatusesController::class, 'store'])->name("insertar-inventario");

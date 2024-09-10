@@ -1,4 +1,3 @@
-import {getResponse} from './getResponsePromise.js';
 import {apiRequest} from "./utils/api.js";
 import {showErrorAlert, showSuccessAlert} from "./utils/alert.js";
 
@@ -49,11 +48,15 @@ document.addEventListener("DOMContentLoaded", event => {
             if (result.isConfirmed) {
                 apiRequest(`/api/resources/eliminar/${id}`, 'DELETE', null, headers)
                     .then(response => {
-                        response.json().then(() => {
-                            showSuccessAlert('Operación completada', 'El recurso se ha eliminado correctamente')
-                                .then(() => {
-                                    window.location.reload();
-                                });
+                        response.json().then(data => {
+                            if(data.success){
+                                showSuccessAlert('Operación completada', 'Recurso eliminado correctamente')
+                                    .then(() => {
+                                        window.location.href = '/dashboard/inventario';
+                                    });
+                            } else{
+                                showErrorAlert('Error', 'No se pudo eliminar el recurso');
+                            }
                         })
                     }).catch(error => console.error(error));
             } else {
@@ -61,30 +64,6 @@ document.addEventListener("DOMContentLoaded", event => {
             }
         });
     }
-
-
-    // Función para obtener los datos y paginarlos
-    /*getResponse('/api/resources')
-        .then(response => response)
-        .then(data => {
-            console.log("Response: ", data);
-
-            if (data.total === 0) {
-                return;
-            }
-
-            // Guardar los datos del inventario en una variable
-            inventoryData = data.resources;
-
-            // Mostrar la primera página
-            displayTable(currentPage);
-
-            // Actualizar el estado de los botones
-            updatePaginationButtons();
-        })
-        .catch(error => {
-            console.error("Error fetching resources: ", error);
-        });*/
 
     // Función para mostrar la tabla de acuerdo a la página actual
     function displayTable(page) {
@@ -114,7 +93,7 @@ document.addEventListener("DOMContentLoaded", event => {
 
             // Agregar botones de acciones
             cell6.innerHTML = `
-                <a href="" class="btn btn-primary">Editar</a>
+                <a href="/dashboard/inventario/ver/${resource.id}" class="btn btn-primary">Editar</a>
                 <form id="deleteForm-${resource.id}" method="post" style="display: inline;">
                     <input type="hidden" name="_token" value="${headers['X-CSRF-TOKEN']}">
                     <input type="hidden" name="_id" id="id-${resource.id}" value="${resource.id}">
