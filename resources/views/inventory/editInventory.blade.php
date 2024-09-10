@@ -12,7 +12,7 @@
     </div>
     <!-- Contenido de la vista -->
     <div class="contentInventario">
-        <form action="{{ route("registro-inventario") }}" method="get" id="form_inventario">
+        <form action="{{ route("inventory") }}" method="get" id="form_inventario">
             @csrf
             <div class="opcionesInventario">
 

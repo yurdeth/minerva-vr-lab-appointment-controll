@@ -66,13 +66,13 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
 // ***************************************Rutas para inventarios*********************************************
 Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])->group(function () {
-    Route::get('/dashboard/inventario', function () {
-        return view('inventario');
-    })->name('inventario');
+    Route::get('/dashboard/registrar-inventario', function () {
+        return view('inventory.registerInventory');
+    })->name('registrar-inventario');
 
-    Route::get('/dashboard/registro-inventario', function () {
-        return view('registro-inventario');
-    })->name('registro-inventario');
+    Route::get('/dashboard/inventario', function () {
+        return view('inventory.inventory');
+    })->name('inventory');
 
     /*Código con la funcionalidad que no de error al abrir el informe de inventario*/
     Route::post('/insertar-inventario', [StatusesController::class, 'store'])->name("insertar-inventario");
@@ -107,7 +107,7 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
         return view('Administración.dashboard');
     })->name('dashboard');
 
-    Route::get('dashboard/usuarios', function () {
+    Route::get('/dashboard/usuarios', function () {
         return view('users');
     })->name('usuarios');
 
@@ -115,7 +115,7 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
         return view('editUser');
     })->name('usuarios-editar');
 
-    Route::get('dashboard/citas/', function () {
+    Route::get('/dashboard/citas/', function () {
         $dashboard = true;
         return view('appointments', compact("dashboard"));
     })->name('citas_dashboard');

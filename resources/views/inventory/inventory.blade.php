@@ -57,7 +57,7 @@
           integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <div class="container-xl" style="margin-top: 30px; margin-bottom: 30px;">
-        <a href="{{route("inventario")}}" class="btnInventario">
+        <a href="{{route("registrar-inventario")}}" class="btnInventario">
             <i class="fa-solid fa-vr-cardboard"></i>
             <span class="tooltip-text"> Registrar Inventario</span>
         </a>
