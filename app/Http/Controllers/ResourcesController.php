@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Resources;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ResourcesController extends Controller {
@@ -106,9 +107,23 @@ class ResourcesController extends Controller {
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Resources $resources) {
+    public function update(Request $request, string $id) {
+        if (Auth::user()->id != $id && Auth::user()->roles_id != 1) {
+            return redirect()->route('HomeVR');
+        }
+
+        $resources = Resources::find($id);
+
+        if (!$resources) {
+            return response()->json([
+                'message' => 'Resource not found',
+                'success' => false,
+                'status' => 404
+            ]);
+        }
+
         $validator = Validator::make($request->all(), [
-                "fixed_asset_code" => "required|unique:resources,fixed_asset_code", // Número de activo fijo
+                "fixed_asset_code" => "required", // Número de activo fijo
                 "resource_type_id" => "required|exists:resource_types,id",
                 "status_id" => "required|exists:statuses,id",
                 "room_id" => "required|exists:room,id",
@@ -119,6 +134,7 @@ class ResourcesController extends Controller {
             $data = [
                 'message' => 'Error validating data',
                 'errors' => $validator->errors(),
+                'success' => false,
                 'status' => 400
             ];
 
@@ -135,6 +151,7 @@ class ResourcesController extends Controller {
         return response()->json([
             'message' => 'Resource updated successfully',
             'resource' => $resources,
+            'success' => true,
             'status' => 200
         ]);
     }
@@ -148,6 +165,7 @@ class ResourcesController extends Controller {
         if (!$resource) {
             return response()->json([
                 'message' => 'Resource not found',
+                'success' => false,
                 'status' => 404
             ]);
         }

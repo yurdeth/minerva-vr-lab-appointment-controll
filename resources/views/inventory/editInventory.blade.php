@@ -44,7 +44,7 @@
                 <div class="col"></div>
 
                 <div class="buttonContainer">
-                    <input type="button" value="Actualizar" class="btn-success" id="submitRegister">
+                    <input type="button" value="Actualizar" class="btn-success" id="submitUpdate">
                     <input type="button" value="Eliminar" class="btn-danger" id="submitDelete">
                 </div>
 

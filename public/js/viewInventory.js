@@ -12,7 +12,7 @@ const room = document.getElementById('room');
 const resource_type = document.getElementById('resource_type');
 const status = document.getElementById('status');
 const fixed_asset_code = document.getElementById('fixed_asset_code');
-const submitRegister = document.getElementById('submitRegister');
+const submitUpdate = document.getElementById('submitUpdate');
 const submitDelete = document.getElementById('submitDelete');
 
 function getQueryParam(name) {
@@ -90,12 +90,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
 
-                console.log(data.resource);
-                console.log("Codigo activo fijo: " + data.resource.fixed_asset_code);
-                console.log("Status ID: " + data.resource.status.id);
-                console.log("Resource type ID: " + data.resource.resource_type.id);
-                console.log("Room ID: " + data.resource.room.id);
-
                 fixed_asset_code.value = data.resource.fixed_asset_code;
                 status.value = data.resource.status.id;
                 resource_type.value = data.resource.resource_type.id;
@@ -135,71 +129,65 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    let formulario = document.getElementById("form_inventario");
+    submitUpdate.addEventListener('click', function () {
+        const resourceTypeId = resource_type.value;
+        const statusId = status.value;
+        const roomId = room.value;
+        const fixedAssetCode = fixed_asset_code.value;
 
-    formulario.addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        const resourceTypeId = document.getElementById("resource_type").value;
-        const statusId = document.getElementById("status").value;
-        const roomId = document.getElementById("room").value;
-        const fixed_asset_code = document.getElementById("fixed_asset_code").value;
-
-        if (fixed_asset_code === '') {
+        if (fixedAssetCode === '') {
             showErrorAlert('Error', 'Ingrese el código de activo fijo').then(() => {
-                document.getElementById('fixed_asset_code').focus();
+                fixed_asset_code.focus();
             });
             return;
         }
 
         const data = {
-            resource_type_id: resourceTypeId, status_id: statusId, room_id: roomId, fixed_asset_code: fixed_asset_code
+            resource_type_id: resourceTypeId,
+            status_id: statusId,
+            room_id: roomId,
+            fixed_asset_code: fixedAssetCode
         };
 
-        fetch(`/api/resources/editar/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify(data)
-        })
+        apiRequest(`/api/resources/editar/${id}`, 'PUT', data, headers)
             .then(response => {
                 response.json().then(data => {
-
-                    if (data.message.includes('Error validating data')) {
+                    if (!data.success){
                         if (data.errors.room_id) {
                             showErrorAlert('Error', 'Seleccione la sala a la que pertenece el artículo').then(() => {
-                                document.getElementById('room').focus();
+                                room.focus();
                             });
                             return;
                         }
 
                         if (data.errors.fixed_asset_code) {
                             showErrorAlert('Error', 'El código de activo fijo ya ha sido tomado').then(() => {
-                                document.getElementById('fixed_asset_code').focus();
+                                fixed_asset_code.focus();
                             });
                             return;
                         }
 
                         if (data.errors.resource_type_id) {
                             showErrorAlert('Error', 'Seleccione el tipo de recurso').then(() => {
-                                document.getElementById('resource_type').focus();
+                                resource_type.focus();
                             });
                             return;
                         }
 
                         if (data.errors.status_id) {
                             showErrorAlert('Error', 'Seleccione el estado en que se encuentra del artículo').then(() => {
-                                document.getElementById('status').focus();
+                                status.focus();
                             });
+                            return;
+                        }
+
+                        else{
+                            showErrorAlert('Error', 'No se pudo actualizar el recurso');
                             return;
                         }
                     }
 
-                    showSuccessAlert('Recurso creado', 'El articulo se registró correctamente').then(() => {
+                    showSuccessAlert('Recurso actualizado', 'El artículo se ha actualizado correctamente').then(() => {
                         window.location.href = '/dashboard/inventario';
                     });
                 });
