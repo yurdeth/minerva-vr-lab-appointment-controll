@@ -107,7 +107,21 @@ class ResourcesController extends Controller {
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Resources $resources) {
-        //
+    public function destroy(String $id) {
+        $resource = Resources::find($id);
+
+        if (!$resource) {
+            return response()->json([
+                'message' => 'Resource not found',
+                'status' => 404
+            ]);
+        }
+
+        $resource->delete();
+
+        return response()->json([
+            'message' => 'Resource deleted successfully',
+            'status' => 200
+        ]);
     }
 }

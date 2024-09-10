@@ -55,4 +55,6 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
 
     Route::get('/resources', [ResourcesController::class, 'index']);
     Route::post('/resources/create', [ResourcesController::class, 'store']);
+
+    Route::delete('/resources/eliminar/{id}', [ResourcesController::class, 'destroy']);
 });

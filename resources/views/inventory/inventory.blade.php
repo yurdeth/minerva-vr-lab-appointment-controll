@@ -106,8 +106,8 @@
         </div>
     </div>
     <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
+    <script type="module" src="{{asset("js/utils/api.js")}}"></script>
     <script type="module" src="{{ asset("js/getInventory.js") }}"></script>
-    <script type="module" src="{{ asset('js/getInventory.js') }}"></script>
 @stop
 
 @section('css')
