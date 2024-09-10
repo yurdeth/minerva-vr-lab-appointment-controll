@@ -119,6 +119,10 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
         $dashboard = true;
         return view('appointments', compact("dashboard"));
     })->name('citas_dashboard');
+
+    Route::get('/dashboard/carreras', function () {
+        return view('Administración.careers');
+    })->name('carreras');
 });
 
 // ***************************************Iniciar credenciales admin*********************************************

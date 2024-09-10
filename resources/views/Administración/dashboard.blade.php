@@ -30,7 +30,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('carreras') }}" onclick="cambiarMensaje('carreras')">
                     <i class="fa-solid fa-school"></i>
                     <span class="Opciones">Carreras</span>
                 </a>
