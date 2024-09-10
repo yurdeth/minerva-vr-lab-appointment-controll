@@ -41,19 +41,25 @@
 
     <div class="container-xl">
         <div class="d-flex justify-content-start custom-gap" style="margin-top: 15px;">
-            <a href="#" class="btn btn-success">
+            <a href="#" class="btn btn-success" style="height: 40px;">
                 <i class="fa fa-graduation-cap"></i>
                 <span class="tooltip-text">Agregar Carrera</span>
             </a>
-            <a href="#" class="btn btn-success">
+            <a href="#" class="btn btn-success" style="height: 40px;">
                 <i class="fa fa-building"></i>
                 <span class="tooltip-text">Agregar Departamento</span>
             </a>
+            <form action="" id="searchForm">
+                <div class="input-group">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Buscar...">
+                    <button type="submit" class="btn btn-success">Buscar</button>
+                </div>
+            </form>
         </div>
     </div>
 
     <!--Titulo de la vista -->
-    <div class="container-fluid">
+    <div class="container-fluid" style="margin-top: 5px;">
         <div class="title">
             <h2 style="color: black;">Registro de Carreras</h2>
         </div>

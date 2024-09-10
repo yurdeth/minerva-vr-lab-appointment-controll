@@ -50,17 +50,35 @@
             margin: 0 15px;
             font-weight: bold;
         }
+
+        .custom-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Alinea verticalmente ambos elementos */
+        }
     </style>
 
 <link rel="stylesheet" href="{{ asset('CSS/administracion/tables.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
           integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
-    <div class="container-xl" style="margin-top: 30px; margin-bottom: 30px;">
-        <a href="{{route("registrar-inventario")}}" class="btnInventario">
-            <i class="fa-solid fa-vr-cardboard"></i>
-            <span class="tooltip-text"> Registrar Inventario</span>
-        </a>
+
+    <div class="container-xl custom-flex" style="margin-bottom: 20px;">
+        <div>
+            <a href="{{route('registrar-inventario')}}" class="btnInventario" style="margin-top: 1px;">
+                <i class="fa-solid fa-vr-cardboard"></i>
+                <span class="tooltip-text">Registrar Inventario</span>
+            </a>
+        </div>
+
+        <div>
+            <form action="" id="searchForm" style="margin-top: 24px;">
+                <div class="input-group">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Buscar...">
+                    <button type="submit" class="btn btn-success">Buscar</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <div class="container-xl">
