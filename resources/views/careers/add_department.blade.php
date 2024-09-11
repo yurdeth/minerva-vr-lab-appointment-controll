@@ -30,7 +30,7 @@
 
                 <div class="card-body">
                     <div class="table-responsive" style="height: 100%; width: 100%;">
-                        <table class="table table-bordered text-center" id="careersTable" style="width: 100%; margin-bottom: 0;">
+                        <table class="table table-bordered text-center" id="departmentsTable" style="width: 100%; margin-bottom: 0;">
                             <thead class="table-avatar">
                             <tr>
                                 <th scope="col">Nombre</th>
