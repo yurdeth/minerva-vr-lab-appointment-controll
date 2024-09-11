@@ -21,14 +21,14 @@
 
                 <div class="col">
                     <p>Seleccione el departamento</p>
-                    <select name="status" class="form-select status" id="status">
+                    <select name="status" class="form-select status" id="department">
                         <option value="0">Seleccionar departamento</option>
                     </select>
                 </div>
 
                 <div class="col">
                     <p>Nombre de la carrera</p>
-                    <input type="text" name="tipo_carrera" class="form-control" id="tipo_carrera" placeholder="Ingrese tipo de carrera" style="width: 400px; padding: 10px;">
+                    <input type="text" name="tipo_carrera" class="form-control" id="career" placeholder="Ingrese tipo de carrera" style="width: 400px; padding: 10px;">
                 </div>
 
                 <div class="buttonContainer">
@@ -38,4 +38,10 @@
             </div>
         </form>
     </div>
+
+    <script src="{{ asset('js/departments.js') }}"></script>
+    <script src="{{ asset('js/careers.js') }}"></script>
+    <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
+    <script type="module" src="{{asset("js/utils/api.js")}}"></script>
+    <script type="module" src="{{asset("js/careers/view_career.js")}}"></script>
 @endsection

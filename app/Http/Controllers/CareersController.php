@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCareersRequest;
 use App\Http\Requests\UpdateCareersRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -69,6 +70,15 @@ class CareersController extends Controller {
     public function show(Request $request) {
         // Obtener las carreras a partir del department_id
         return DB::table('careers')->where('department_id', $request->id)->get();
+    }
+
+    public function getCareerData(Request $request): Collection {
+        // Obtener el nombre de la carrera y el nombre del departamento a partir del career_id
+        return DB::table('careers')
+            ->join('departments', 'careers.department_id', '=', 'departments.id')
+            ->where('careers.id', $request->id)
+            ->select('careers.id', 'careers.career_name', 'careers.department_id', 'departments.department_name')
+            ->get();
     }
 
     /**
