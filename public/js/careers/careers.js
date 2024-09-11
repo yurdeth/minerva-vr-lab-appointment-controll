@@ -20,7 +20,12 @@ function confirmDelete(id) {
             if (result.isConfirmed) {
                 apiRequest(`/api/careers/eliminar/${id}`, 'DELETE', null, headers)
                     .then(response => {
-                        response.json().then(() => {
+                        response.json().then(data => {
+                            console.log(data);
+                            if (!data.success) {
+                                showErrorAlert('Error', data.message);
+                            }
+
                             showSuccessAlert('Operación completada', 'La carrera se ha eliminado del sistema')
                                 .then(() => {
                                     window.location.reload();
@@ -67,4 +72,3 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(error => console.error(error));
 });
-

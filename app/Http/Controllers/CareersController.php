@@ -56,7 +56,20 @@ class CareersController extends Controller {
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Careers $careers) {
-        //
+    public function destroy(string $id) {
+        $career = Careers::find($id);
+
+        if (!$career) {
+            return response()->json([
+                'message' => 'Carrera no encontrada',
+                'success' => false
+            ], 404);
+        }
+
+        $career->delete();
+        return response()->json([
+            'message' => 'Carrera eliminada',
+            'success' => true
+        ], 201);
     }
 }

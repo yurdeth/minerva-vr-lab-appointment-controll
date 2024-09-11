@@ -20,15 +20,15 @@
             <div class="opcionesInventario">
 
                 <div class="col">
-                    <p>Tipo de Carrera</p>
-                    <input type="text" name="tipo_carrera" class="form-control" id="tipo_carrera" placeholder="Ingrese tipo de carrera" style="width: 400px; padding: 10px;">
-                </div>
-
-                <div class="col">
-                    <p>Departamento</p>
+                    <p>Seleccione el departamento</p>
                     <select name="status" class="form-select status" id="status">
                         <option value="0">Seleccionar departamento</option>
                     </select>
+                </div>
+
+                <div class="col">
+                    <p>Nombre de la carrera</p>
+                    <input type="text" name="tipo_carrera" class="form-control" id="tipo_carrera" placeholder="Ingrese tipo de carrera" style="width: 400px; padding: 10px;">
                 </div>
 
                 <div class="buttonContainer">

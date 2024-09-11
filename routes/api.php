@@ -58,4 +58,6 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     Route::post('/resources/create', [ResourcesController::class, 'store']);
     Route::put('/resources/editar/{id}', [ResourcesController::class, 'update']);
     Route::delete('/resources/eliminar/{id}', [ResourcesController::class, 'destroy']);
+
+    Route::delete('/careers/eliminar/{id}', [CareersController::class, 'destroy'])->name("careers.destroy");
 });
