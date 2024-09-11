@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\DB;
 class Careers extends Model {
     use HasFactory;
 
+    protected $table = 'careers';
+    protected $fillable = ['career_name', 'department_id'];
+
     public function getCareers(): \Illuminate\Support\Collection {
 
         return DB::table('careers')

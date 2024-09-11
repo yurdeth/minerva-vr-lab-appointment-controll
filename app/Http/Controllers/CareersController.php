@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Careers;
 use App\Http\Requests\StoreCareersRequest;
 use App\Http\Requests\UpdateCareersRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class CareersController extends Controller {
     /**
@@ -27,8 +29,38 @@ class CareersController extends Controller {
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCareersRequest $request) {
-        //
+    public function store(Request $request): JsonResponse {
+        $validate = Validator::make($request->all(), [
+            'career_name' => 'required|string|unique:careers,career_name',
+            'department_id' => 'required|integer'
+        ]);
+
+        if($validate->fails()){
+            return response()->json([
+                'message' => 'Error en los datos',
+                'error' => $validate->errors(),
+                'success' => false,
+            ]);
+        }
+
+        $career = Careers::create([
+            'career_name' => $request->career_name,
+            'department_id' => $request->department_id
+        ]);
+
+        if(!$career){
+            return response()->json([
+                'message' => 'Error al crear el registro',
+                'success' => false,
+            ]);
+        }
+
+        $career->save();
+
+        return response()->json([
+            'message' => 'Carrera agregada correctamente',
+            'success' => true,
+        ]);
     }
 
     /**

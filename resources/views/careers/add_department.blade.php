@@ -20,7 +20,7 @@
             <div class="opcionesInventario">
 
                 <div class="col">
-                    <p>Tipo de Departamento</p>
+                    <p>Nombre del nuevo departamento</p>
                     <input type="text" name="department_name" class="form-control" id="department_name" placeholder="Ingrese el tipo de departamento" style="width: 400px; padding: 10px;">
                 </div>
 

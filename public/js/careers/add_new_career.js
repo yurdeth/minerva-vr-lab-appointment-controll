@@ -1,5 +1,5 @@
 import {apiRequest} from '../utils/api.js'
-import {showErrorAlert, showSuccessAlert} from '../utils/alert.js'
+import {showAlert, showErrorAlert, showSuccessAlert} from '../utils/alert.js'
 
 const headers = {
     'Content-Type': 'application/json',
@@ -8,32 +8,39 @@ const headers = {
     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 };
 
-const department_name_input = document.getElementById('department_name');
+const career_name_input = document.getElementById('career_name');
 const submitButton = document.getElementById('submitButton');
 
 function submitForm() {
-    const department_name = department_name_input.value;
+    const career_name = career_name_input.value;
+    const department_name = document.getElementById('department').value;
+
+    if (career_name.trim() === '') {
+        showErrorAlert('Error', 'El nombre de la carrera es requerido');
+        return;
+    }
 
     if (department_name.trim() === '') {
-        showErrorAlert('Error', 'El nombre del departamento es requerido');
+        showErrorAlert('Error', 'El departamento es requerido');
         return;
     }
 
     const body = {
-        department_name: department_name
+        career_name: career_name,
+        department_id: department_name
     };
 
-    apiRequest('/api/departments/nuevo', 'POST', body, headers)
+    apiRequest('/api/careers/nueva', 'POST', body, headers)
         .then(response => {
             response.json().then(data => {
                 if (!data.success) {
                     if (data.error){
-                        if(data.error.department_name[0].includes('has already been taken')){
-                            showErrorAlert('Error', 'El nombre del departamento ya ha sido registrado');
+                        if(data.error.career_name[0].includes('has already been taken')){
+                            showErrorAlert('Error', 'El nombre de la carrera ya ha sido registrado');
                             return;
                         }
 
-                        showErrorAlert('Error', "Ha ocurrido un error al intentar crear el departamento");
+                        showErrorAlert('Error', "Ha ocurrido un error al intentar crear la carrera");
                         return;
                     }
 
@@ -41,7 +48,7 @@ function submitForm() {
                     return;
                 }
 
-                showSuccessAlert('Operación completada', 'El departamento se ha creado correctamente')
+                showSuccessAlert('Operación completada', 'Carera registrada correctamente')
                     .then(() => {
                         window.location.href = '/dashboard/carreras';
                     });
@@ -49,14 +56,10 @@ function submitForm() {
         }).catch(error => console.error(error));
 }
 
-submitButton.addEventListener('click', function (event) {
-    event.preventDefault();
-    submitForm();
-});
+submitButton.addEventListener('click', submitForm);
 
-department_name_input.addEventListener('keydown', function(event) {
+career_name_input.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
-        event.preventDefault();
         submitForm();
     }
 });

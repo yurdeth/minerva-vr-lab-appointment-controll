@@ -21,21 +21,27 @@
 
                 <div class="col">
                     <p>Seleccione el departamento</p>
-                    <select name="status" class="form-select status" id="status">
+                    <select class="form-select status" id="department" name="department_name">
                         <option value="0">Seleccionar departamento</option>
                     </select>
                 </div>
 
                 <div class="col">
                     <p>Nombre de la carrera</p>
-                    <input type="text" name="tipo_carrera" class="form-control" id="tipo_carrera" placeholder="Ingrese tipo de carrera" style="width: 400px; padding: 10px;">
+                    <input type="text" name="career_name" class="form-control" id="career_name"
+                           placeholder="Ingrese tipo de carrera" style="width: 400px; padding: 10px;" required>
                 </div>
 
                 <div class="buttonContainer">
-                    <input type="submit" value="Registrar Carrera" class="btn-success" id="submit">
+                    <input type="button" value="Registrar Carrera" class="btn-success" id="submitButton">
                 </div>
 
             </div>
         </form>
     </div>
+
+    <script type="module" src="{{ asset('js/departments.js') }}"></script>
+    <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
+    <script type="module" src="{{asset("js/utils/api.js")}}"></script>
+    <script type="module" src="{{asset("js/careers/add_new_career.js")}}"></script>
 @endsection
