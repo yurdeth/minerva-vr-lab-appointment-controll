@@ -126,7 +126,7 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
     })->name('citas_dashboard');
 
     Route::get('/dashboard/carreras', function () {
-        return view('Administración.careers');
+        return view('careers.careers');
     })->name('carreras');
 });
 

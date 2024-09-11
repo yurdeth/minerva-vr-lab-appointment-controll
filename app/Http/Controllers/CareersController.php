@@ -13,7 +13,8 @@ class CareersController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
-        return DB::table('careers')->get();
+        $careers = new Careers();
+        return $careers->getCareers();
     }
 
     /**

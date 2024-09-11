@@ -70,25 +70,13 @@
             @csrf
             <div class="opcionesInventario">
 
-                <!-- <div class="col">
-                    <p>Tipo de Carrera</p>
-                    <input type="text" name="tipo_carrera" class="form-control" id="tipo_carrera" placeholder="Ingrese tipo de carrera" style="width: 400px; padding: 10px;">
-                </div>
-
-                <div class="col">
-                    <p>Departamento</p>
-                    <select name="status" class="form-select status" id="status">
-                        <option value="0">Seleccionar departamento</option>
-                    </select>
-                </div> -->
-
                 <div class="card-body">
                     <div class="table-responsive" style="height: 100%; width: 100%;">
-                        <table class="table table-bordered text-center" id="usersTable" style="width: 100%; margin-bottom: 0;">
+                        <table class="table table-bordered text-center" id="careersTable" style="width: 100%; margin-bottom: 0;">
                             <thead class="table-avatar">
                             <tr>
-                                <th scope="col">Departamento</th>
                                 <th scope="col">Carrera</th>
+                                <th scope="col">Departamento</th>
                                 <th scope="col">Acciones</th>
                             </tr>
                             </thead>
@@ -97,11 +85,11 @@
                     </div>
                 </div>
 
-                <!-- <div class="buttonContainer">
-                    <input type="submit" value="Registrar Carrera" class="btn-success" id="submit">
-                </div> -->
-
             </div>
         </form>
     </div>
+
+    <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
+    <script type="module" src="{{asset("js/utils/api.js")}}"></script>
+    <script type="module" src="{{asset("js/careers/careers.js")}}"></script>
 @endsection
