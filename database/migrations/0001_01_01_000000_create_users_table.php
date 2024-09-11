@@ -19,7 +19,6 @@ return new class extends Migration {
         // Insertar datos en la tabla departments
         DB::table('departments')->insert([
             ['department_name' => 'Ingeniería y Arquitectura'],
-            ['department_name' => 'Medicina'],
         ]);
 
         Schema::create('careers', function (Blueprint $table) {
@@ -34,17 +33,7 @@ return new class extends Migration {
 
         // Insertar datos en la tabla careers
         DB::table('careers')->insert([
-            ['career_name' => 'Arquitectura', 'department_id' => 1],
-            ['career_name' => 'Ingeniería Civil', 'department_id' => 1],
             ['career_name' => 'Ingeniería de Sistemas Informáticos', 'department_id' => 1],
-            ['career_name' => 'Ingeniería Eléctrica', 'department_id' => 1],
-            ['career_name' => 'Ingeniería Industrial', 'department_id' => 1],
-            ['career_name' => 'Ingeniería Mecánica', 'department_id' => 1],
-
-            ['career_name' => 'Laboratorio Clínico', 'department_id' => 2],
-            ['career_name' => 'Doctorado en Medicina', 'department_id' => 2],
-            ['career_name' => 'Anestesiología e Inhaloterapia', 'department_id' => 2],
-            ['career_name' => 'Fisioterapia y Terapia Ocupacional', 'department_id' => 2],
         ]);
 
         Schema::create('roles', function (Blueprint $table) {

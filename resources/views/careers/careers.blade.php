@@ -71,7 +71,7 @@
     <link rel="stylesheet" href="{{ asset('CSS/administracion/inventario.css')}}">
     <link rel="stylesheet" href="{{ asset('CSS/administracion/tables.css')}}">
 
-    <div class="container-xl">
+    <div class="container-xl custom-flex" style="margin-bottom: 20px;">
         <div class="d-flex justify-content-start custom-gap" style="margin-top: 15px;">
             <a href="{{ route('departamentos-agregar') }}" class="btn btn-success" style="height: 40px;">
                 <i class="fa fa-building"></i>
@@ -104,7 +104,8 @@
 
                 <div class="card-body">
                     <div class="table-responsive" style="height: 100%; width: 100%;">
-                        <table class="table table-bordered text-center" id="careersTable" style="width: 100%; margin-bottom: 0;">
+                        <table class="table table-bordered text-center" id="careersTable"
+                               style="width: 100%; margin-bottom: 0;">
                             <thead class="table-avatar">
                             <tr>
                                 <th scope="col">Carrera</th>
@@ -132,6 +133,40 @@
             </div>
         </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchForm = document.getElementById('searchForm');
+            const searchInput = document.getElementById('searchInput');
+            const careersTable = document.getElementById('careersTable'); // Corrected ID
+
+            searchForm.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent form submission
+            });
+
+            searchInput.addEventListener('input', function () {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+
+                // Filter table rows based on search term
+                Array.from(careersTable.getElementsByTagName('tr')).forEach(function (row, index) {
+                    if (index === 0) return; // Skip header row
+
+                    const cells = row.getElementsByTagName('td');
+                    let rowMatchesSearch = false;
+
+                    Array.from(cells).forEach(function (cell) {
+                        const cellText = cell.textContent.toLowerCase();
+
+                        if (cellText.includes(searchTerm)) {
+                            rowMatchesSearch = true;
+                        }
+                    });
+
+                    row.style.display = rowMatchesSearch ? '' : 'none';
+                });
+            });
+        });
+    </script>
 
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>

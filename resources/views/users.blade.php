@@ -52,35 +52,6 @@
     </div>
 
     <script>
-        function showDeleteConfirmationMessage(event, userId) {
-            event.preventDefault();
-
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: "¡No podrás revertir esto!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        icon: 'success',
-                        iconColor: '#046620',
-                        title: '¡Perfil eliminado exitosamente!',
-                        text: 'Tu perfil ha sido eliminado exitosamente.',
-                        confirmButtonColor: '#046620',
-                        timer: 2000,
-                        showConfirmButton: false
-                    }).then(() => {
-                        document.getElementById('deleteForm-' + userId).submit();
-                    });
-                }
-            });
-        }
-
         document.addEventListener('DOMContentLoaded', function () {
             const searchForm = document.getElementById('searchForm');
             const searchInput = document.getElementById('searchInput');
