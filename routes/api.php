@@ -37,13 +37,13 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     Route::delete('/appointments/eliminar/{id}', [AppointmentsController::class, 'destroy'])->name("appointments.destroy");
     Route::get('/appointments/available', [AppointmentsController::class, 'AvailableSchedules'])->name("appointments.available");
 
-    // **************************************** GET Usuarios ******************************************************
+    // **************************************** Usuarios ******************************************************
     Route::get('/users', [UsersController::class, "index"])->name('usuarios.index');
     Route::get("/users/ver/{id}", [UsersController::class, "show"])->name("users.show");
     Route::put("/users/editar/{id}", [UsersController::class, "update"])->name("users.update");
     Route::delete("/users/eliminar/{id}", [UsersController::class, "destroy"])->name("users.destroy");
 
-    // **************************************** GET Inventarios ******************************************************
+    // **************************************** Inventarios ******************************************************
     Route::get('/statuses', [StatusesController::class, 'index']);
     Route::post('/statuses/create', [StatusesController::class, 'store']);
 
@@ -59,10 +59,14 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     Route::put('/resources/editar/{id}', [ResourcesController::class, 'update']);
     Route::delete('/resources/eliminar/{id}', [ResourcesController::class, 'destroy']);
 
+    // **************************************** Carreras ******************************************************
     Route::post('/careers/nueva', [CareersController::class, 'store'])->name("careers.store");
     Route::get('/careers/ver/{id}', [CareersController::class, 'getCareerData'])->name("careers.getCareerData");
     Route::put('/careers/editar/{id}', [CareersController::class, 'update'])->name("careers.update");
     Route::delete('/careers/eliminar/{id}', [CareersController::class, 'destroy'])->name("careers.destroy");
 
+    // **************************************** Departamentos ******************************************************
     Route::post('/departments/nuevo', [DepartmentsController::class, 'store'])->name("departments.store");
+    Route::get('/departments/ver/{id}', [DepartmentsController::class, 'show'])->name("careers.show");
+    Route::delete('/departments/eliminar/{id}', [DepartmentsController::class, 'destroy'])->name("departments.destroy");
 });

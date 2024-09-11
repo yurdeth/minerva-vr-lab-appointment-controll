@@ -21,7 +21,8 @@
 
                 <div class="col">
                     <p>Nombre del nuevo departamento</p>
-                    <input type="text" name="department_name" class="form-control" id="department_name" placeholder="Ingrese el tipo de departamento" style="width: 400px; padding: 10px;">
+                    <input type="text" name="department_name" class="form-control" id="department_name"
+                           placeholder="Ingrese el nombre del departamento" style="width: 400px; padding: 10px;">
                 </div>
 
                 <div class="buttonContainer">
@@ -30,7 +31,8 @@
 
                 <div class="card-body">
                     <div class="table-responsive" style="height: 100%; width: 100%;">
-                        <table class="table table-bordered text-center" id="departmentsTable" style="width: 100%; margin-bottom: 0;">
+                        <table class="table table-bordered text-center" id="departmentsTable"
+                               style="width: 100%; margin-bottom: 0;">
                             <thead class="table-avatar">
                             <tr>
                                 <th scope="col">Nombre</th>

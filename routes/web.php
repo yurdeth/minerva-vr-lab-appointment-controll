@@ -107,7 +107,7 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
 // ***************************************Rutas para admin*********************************************
 Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])->group(function () {
-    // Retornar una vista:
+
     Route::get('/dashboard', function () {
         return view('Administración.dashboard');
     })->name('dashboard');
@@ -133,13 +133,17 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
         return view('careers.add_career');
     })->name('carreras-agregar');
 
-    Route::get('/dashboard/departamentos/nuevo/', function () {
-        return view('careers.add_department');
-    })->name('departamentos-agregar');
-
     Route::get('/dashboard/carreras/ver/{id}', function () {
         return view('careers.edit_career');
     })->name('carreras-ver');
+
+    Route::get('/dashboard/departamentos/', function () {
+        return view('careers.add_department');
+    })->name('departamentos-agregar');
+
+    Route::get('/dashboard/departamentos/ver/{id}', function () {
+        return view('careers.edit_department');
+    })->name('departamentos-ver');
 });
 
 // ***************************************Iniciar credenciales admin*********************************************
@@ -158,7 +162,7 @@ Route::get("init", function () {
     $user->name = "admin";
     $user->email = "admin@admin.com";
     $user->password = Hash::make(env("ADMIN_PASSWORD"));
-    $user->career_id = '3';
+    $user->career_id = '1';
     $user->roles_id = '1';
     $user->save();
 

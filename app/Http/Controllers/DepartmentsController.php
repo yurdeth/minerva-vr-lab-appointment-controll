@@ -7,6 +7,7 @@ use App\Http\Requests\StoreDepartmentsRequest;
 use App\Http\Requests\UpdateDepartmentsRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -63,8 +64,11 @@ class DepartmentsController extends Controller {
     /**
      * Display the specified resource.
      */
-    public function show(Departments $departments) {
-        //
+    public function show(Request $request): Collection {
+        return DB::table('departments')
+            ->where('id', $request->id)
+            ->select('id', 'department_name')
+            ->get();
     }
 
     /**
@@ -84,7 +88,21 @@ class DepartmentsController extends Controller {
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Departments $departments) {
-        //
+    public function destroy(string $id): JsonResponse {
+        $department = Departments::find($id);
+
+        if(!$department){
+            return response()->json([
+                'message' => 'El departamento solicitado no ha podido encontrarse',
+                'success' => false
+            ], 404);
+        }
+
+        $department->delete();
+
+        return response()->json([
+            'message' => 'Departamento eliminado correctamente',
+            'success' => true
+        ], 201);
     }
 }

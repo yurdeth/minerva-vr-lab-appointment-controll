@@ -140,6 +140,7 @@ class CareersController extends Controller {
         }
 
         $career->delete();
+
         return response()->json([
             'message' => 'Carrera eliminada',
             'success' => true
