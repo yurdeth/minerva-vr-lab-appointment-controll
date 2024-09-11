@@ -21,7 +21,7 @@ function submitForm() {
     }
 
     if (department_name.trim() === '') {
-        showErrorAlert('Error', 'El departamento es requerido');
+        showErrorAlert('Error', 'Seleccione un departamento');
         return;
     }
 
@@ -33,10 +33,16 @@ function submitForm() {
     apiRequest('/api/careers/nueva', 'POST', body, headers)
         .then(response => {
             response.json().then(data => {
+                console.log(data);
                 if (!data.success) {
-                    if (data.error){
-                        if(data.error.career_name[0].includes('has already been taken')){
+                    if (data.error) {
+                        if (data.error.career_name && data.error.career_name[0].includes('has already been taken')) {
                             showErrorAlert('Error', 'El nombre de la carrera ya ha sido registrado');
+                            return;
+                        }
+
+                        if (data.error.department_id && data.error.department_id[0].includes('department id field is required')) {
+                            showErrorAlert('Error', 'Seleccione un departamento');
                             return;
                         }
 
@@ -58,7 +64,7 @@ function submitForm() {
 
 submitButton.addEventListener('click', submitForm);
 
-career_name_input.addEventListener('keydown', function(event) {
+career_name_input.addEventListener('keydown', function (event) {
     if (event.key === 'Enter') {
         submitForm();
     }

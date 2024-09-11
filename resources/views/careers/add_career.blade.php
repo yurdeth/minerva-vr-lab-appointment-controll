@@ -22,7 +22,7 @@
                 <div class="col">
                     <p>Seleccione el departamento</p>
                     <select class="form-select status" id="department" name="department_name">
-                        <option value="0">Seleccionar departamento</option>
+                        <option value="" selected disabled>Seleccionar departamento</option>
                     </select>
                 </div>
 
