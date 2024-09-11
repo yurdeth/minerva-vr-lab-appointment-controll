@@ -41,7 +41,7 @@
 
     <div class="container-xl">
         <div class="d-flex justify-content-start custom-gap" style="margin-top: 15px;">
-            <a href="#" class="btn btn-success" style="height: 40px;">
+            <a href="{{ route('departamentos-agregar') }}" class="btn btn-success" style="height: 40px;">
                 <i class="fa fa-building"></i>
                 <span class="tooltip-text">Agregar Departamento</span>
             </a>

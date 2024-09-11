@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     careerName.innerHTML = career.career_name;
                     departmentName.innerHTML = career.department_name;
                     actions.innerHTML = `
-                    <a href="/carreras/ver/${career.id}" class="btn btn-primary">Editar</a>
+                    <a href="/dashboard/carreras/ver/${career.id}" class="btn btn-primary">Editar</a>
                     <form id="deleteForm-${career.id}" method="post" style="display: inline;">
                         <input type="hidden" name="_token" value="${csrfToken}">
                         <input type="hidden" name="_id" id="id-${career.id}" value="${career.id}">

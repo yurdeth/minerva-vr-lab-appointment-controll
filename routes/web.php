@@ -132,6 +132,14 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
     Route::get('/dashboard/carreras/nueva/', function () {
         return view('careers.add_career');
     })->name('carreras-agregar');
+
+    Route::get('/dashboard/departamentos/nuevo/', function () {
+        return view('careers.add_department');
+    })->name('departamentos-agregar');
+
+    Route::get('/dashboard/carreras/ver/{id}', function () {
+        return view('careers.edit_career');
+    })->name('carreras-ver');
 });
 
 // ***************************************Iniciar credenciales admin*********************************************

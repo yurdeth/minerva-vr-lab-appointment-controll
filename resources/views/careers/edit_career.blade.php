@@ -10,7 +10,7 @@
     <!--Titulo de la vista -->
     <div class="container-fluid" style="margin-top: 5px;">
         <div class="title">
-            <h2 style="color: black;">Agregar un Departamento</h2>
+            <h2 style="color: black;">Editar datos de la carrera</h2>
         </div>
     </div>
     <!-- Contenido de la vista -->
@@ -20,19 +20,22 @@
             <div class="opcionesInventario">
 
                 <div class="col">
-                    <p>Tipo de Departamento</p>
-                    <input type="text" name="department_name" class="form-control" id="department_name" placeholder="Ingrese el tipo de departamento" style="width: 400px; padding: 10px;">
+                    <p>Seleccione el departamento</p>
+                    <select name="status" class="form-select status" id="status">
+                        <option value="0">Seleccionar departamento</option>
+                    </select>
+                </div>
+
+                <div class="col">
+                    <p>Nombre de la carrera</p>
+                    <input type="text" name="tipo_carrera" class="form-control" id="tipo_carrera" placeholder="Ingrese tipo de carrera" style="width: 400px; padding: 10px;">
                 </div>
 
                 <div class="buttonContainer">
-                    <input type="button" value="Registrar Departamento" class="btn-success" id="submitButton">
+                    <input type="submit" value="Registrar Carrera" class="btn-success" id="submit">
                 </div>
 
             </div>
         </form>
     </div>
-
-    <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
-    <script type="module" src="{{asset("js/utils/api.js")}}"></script>
-    <script type="module" src="{{asset("js/departments/departments.js")}}"></script>
 @endsection
