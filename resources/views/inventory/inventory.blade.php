@@ -119,6 +119,41 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchForm = document.getElementById('searchForm');
+            const searchInput = document.getElementById('searchInput');
+            const inventoryTable = document.getElementById('inventoryTable'); // Corrected ID
+
+            searchForm.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent form submission
+            });
+
+            searchInput.addEventListener('input', function () {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+
+                // Filter table rows based on search term
+                Array.from(inventoryTable.getElementsByTagName('tr')).forEach(function (row, index) {
+                    if (index === 0) return; // Skip header row
+
+                    const cells = row.getElementsByTagName('td');
+                    let rowMatchesSearch = false;
+
+                    Array.from(cells).forEach(function (cell) {
+                        const cellText = cell.textContent.toLowerCase();
+
+                        if (cellText.includes(searchTerm)) {
+                            rowMatchesSearch = true;
+                        }
+                    });
+
+                    row.style.display = rowMatchesSearch ? '' : 'none';
+                });
+            });
+        });
+    </script>
+
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
     <script type="module" src="{{ asset("js/getInventory.js") }}"></script>
 @stop
