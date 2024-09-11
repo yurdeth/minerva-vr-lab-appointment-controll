@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (data.length === 0) {
                 showErrorAlert('Oops...', 'No se encontraron datos del usuario.')
                     .then(() => {
-                        window.location.href = '/usuarios';
+                        window.location.href = '/dashboard/usuarios';
                     });
                 return;
             }

@@ -91,8 +91,39 @@ class CareersController extends Controller {
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCareersRequest $request, Careers $careers) {
-        //
+    public function update(Request $request) {
+
+        if(!$request->career_name){
+            return response()->json([
+                'message' => 'Error: no se ha proporcionado el nombre de la carrera',
+                'success' => false
+            ]);
+        }
+
+        if(!$request->department_id){
+            return response()->json([
+                'message' => 'Error: no se ha proporcionado un departamento',
+                'success' => false
+            ]);
+        }
+
+        $career = Careers::find($request->id);
+
+        if (!$career) {
+            return response()->json([
+                'message' => 'Carrera no encontrada',
+                'success' => false
+            ], 404);
+        }
+
+        $career->career_name = $request->career_name;
+        $career->department_id = $request->department_id;
+        $career->save();
+
+        return response()->json([
+            'message' => 'Carrera actualizada',
+            'success' => true
+        ], 201);
     }
 
     /**

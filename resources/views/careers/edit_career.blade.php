@@ -31,9 +31,7 @@
                     <input type="text" name="tipo_carrera" class="form-control" id="career" placeholder="Ingrese tipo de carrera" style="width: 400px; padding: 10px;">
                 </div>
 
-                <div class="buttonContainer">
-                    <input type="submit" value="Registrar Carrera" class="btn-success" id="submit">
-                </div>
+                <div id="actionsButtons" class="row"></div>
 
             </div>
         </form>

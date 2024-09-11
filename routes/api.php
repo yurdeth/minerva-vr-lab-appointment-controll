@@ -61,6 +61,7 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
 
     Route::post('/careers/nueva', [CareersController::class, 'store'])->name("careers.store");
     Route::get('/careers/ver/{id}', [CareersController::class, 'getCareerData'])->name("careers.getCareerData");
+    Route::put('/careers/editar/{id}', [CareersController::class, 'update'])->name("careers.update");
     Route::delete('/careers/eliminar/{id}', [CareersController::class, 'destroy'])->name("careers.destroy");
 
     Route::post('/departments/nuevo', [DepartmentsController::class, 'store'])->name("departments.store");
