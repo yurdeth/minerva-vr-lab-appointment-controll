@@ -5,6 +5,38 @@
 @section('content')
 
     <style>
+        .pagination-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px; /* Aumenté el padding para hacer más evidente */
+            max-width: 300px; /* Ajusta el ancho máximo según necesites */
+            margin: 8px auto; /* Esto centrará el contenedor */
+        }
+
+        .btn-arrow {
+            background-color: transparent;
+            border: none;
+            font-size: 18px;
+            color: #ff4a4a;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .btn-arrow:disabled {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .page-number {
+            font-size: 18px;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
         .custom-gap {
             display: flex;
             justify-content: start; /* Alinea los botones a la izquierda */
@@ -83,6 +115,18 @@
                             <tbody id=""></tbody>
                         </table>
                     </div>
+
+                    <!-- Contenedor para los botones de paginación -->
+                    <div id="pagination" class="pagination-container">
+                        <button id="prevPage" class="btn-arrow" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <span id="currentPage" class="page-number">1</span>
+                        <button id="nextPage" class="btn-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+
                 </div>
 
             </div>
