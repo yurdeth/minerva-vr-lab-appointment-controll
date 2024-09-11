@@ -47,6 +47,7 @@
     </div>
 
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
+    <script type="module" src="{{asset("js/utils/api.js")}}"></script>
     <script type="module" src="{{ asset('js/register_appointment.js') }}"></script>
     <script src="{{ asset('js/showAvailableShedules.js') }}"></script>
 @endsection

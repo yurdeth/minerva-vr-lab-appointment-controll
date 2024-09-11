@@ -25,6 +25,7 @@ class Appointments extends Model {
     public function GetAppointments(){
         if (Auth::user()->roles_id == 1) {
             return DB::table('appointments')
+                ->orderBy('appointments.id', 'asc')
                 ->join('participants', 'appointments.id', '=', 'participants.appointment_id')
                 ->join('users', 'appointments.user_id', '=', 'users.id')
                 ->join('careers', 'users.career_id', '=', 'careers.id')
@@ -46,6 +47,7 @@ class Appointments extends Model {
             $userId = Auth::id(); // Obtener el ID del usuario autenticado
 
             return DB::table('appointments')
+                ->orderBy('appointments.id', 'asc')
                 ->where('appointments.user_id', $userId)
                 ->join('participants', 'appointments.id', '=', 'participants.appointment_id')
                 ->join('users', 'appointments.user_id', '=', 'users.id')
@@ -81,6 +83,7 @@ class Appointments extends Model {
         if (Auth::user()->roles_id == 1 || $appointment->user_id == $userId) {
             // Realizar la consulta detallada si el usuario tiene permisos
             return DB::table('appointments')
+                ->orderBy('appointments.id', 'asc')
                 ->where('appointments.id', $id)
                 ->join('participants', 'appointments.id', '=', 'participants.appointment_id')
                 ->join('users', 'appointments.user_id', '=', 'users.id')

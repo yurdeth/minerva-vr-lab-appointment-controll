@@ -17,6 +17,7 @@ class UsersController extends Controller {
      */
     public function index() {
         $users = DB::table('users')
+            ->orderBy('users.id', 'asc')
             ->where('users.id', '!=', 1)
             ->join('careers', 'users.career_id', '=', 'careers.id')
             ->join('departments', 'careers.department_id', '=', 'departments.id')

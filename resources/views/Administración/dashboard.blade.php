@@ -30,7 +30,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('carreras') }}" onclick="cambiarMensaje('carreras')">
                     <i class="fa-solid fa-school"></i>
                     <span class="Opciones">Carreras</span>
                 </a>
@@ -48,7 +48,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{route("registro-inventario")}}" onclick="cambiarMensaje('inventario')">
+                <a href="{{route("inventario")}}" onclick="cambiarMensaje('inventario')">
                     <span><i class="fa-solid fa-vr-cardboard"></i></span>
                     <span class="Opciones">Inventario</span>
                 </a>
@@ -122,7 +122,7 @@
                 mensaje = 'Usuarios Minerva VR Web';
                 break;
             case 'citas':
-                mensaje = 'Bienvenido a Citas';
+                mensaje = 'Registro de Citas para Capacitación';
                 break;
             case 'inventario':
                 mensaje = 'Inventario de Equipo';

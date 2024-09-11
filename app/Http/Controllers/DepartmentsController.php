@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Departments;
 use App\Http\Requests\StoreDepartmentsRequest;
 use App\Http\Requests\UpdateDepartmentsRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class DepartmentsController extends Controller {
     /**
@@ -25,8 +28,36 @@ class DepartmentsController extends Controller {
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDepartmentsRequest $request) {
-        //
+    public function store(Request $request): JsonResponse {
+        $validate = Validator::make($request->all(), [
+            "department_name" => "required|string|unique:departments,department_name",
+        ]);
+
+        if($validate->fails()){
+            return response()->json([
+                'message' => 'Error en los datos',
+                'error' => $validate->errors(),
+                'success' => false,
+            ]);
+        }
+
+        $department = Departments::create([
+            'department_name' => $request->department_name,
+        ]);
+
+        if(!$department){
+            return response()->json([
+                'message' => 'Error al crear el registro',
+                'success' => false,
+            ]);
+        }
+
+        $department->save();
+
+        return response()->json([
+            'message' => 'Departamento agregado correctamente',
+            'success' => true,
+        ]);
     }
 
     /**

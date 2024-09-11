@@ -1,5 +1,12 @@
 import {showAlert, showSuccessAlert, showErrorAlert} from './utils/alert.js'
-import {getResponse} from './getResponsePromise.js';
+import {apiRequest} from './utils/api.js'
+
+const headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+}
 
 /**
  * Muestra un mensaje de confirmación para eliminar una cita.
@@ -16,21 +23,15 @@ function confirmDelete(id) {
         'Cancelar')
         .then((result) => {
             if (result.isConfirmed) {
-                showSuccessAlert('Eliminando', 'El usuario será eliminado del sistema')
-                    .then(() => {
-                        fetch(`/api/users/eliminar/${id}`, {
-                            method: "DELETE",
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json',
-                                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                            }
-                        }).then(() => {
-                            window.location.reload();
-                        }).catch(error => console.error(error));
-                    });
-
+                apiRequest(`/api/users/eliminar/${id}`, 'DELETE', null, headers)
+                    .then(response => {
+                        response.json().then(() => {
+                            showSuccessAlert('Operación completada', 'El usuario se ha eliminado del sistema')
+                                .then(() => {
+                                    window.location.reload();
+                                });
+                        })
+                    }).catch(error => console.error(error));
             } else {
                 showErrorAlert('Cancelado', 'Operación cancelada');
             }
@@ -39,31 +40,30 @@ function confirmDelete(id) {
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    getResponse('/api/users')
-        // .then(response => response.json())
-        .then(response => {
-            // console.log(response);
-            response.forEach(item => {
+    apiRequest('/api/users', 'GET', null, headers)
+        .then(response => response.json())
+        .then(data => {
+            if (Array.isArray(data)) {
+                data.forEach(item => {
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const table = document.getElementById('usersTable');
+                    const row = table.insertRow(-1);
 
-                const table = document.getElementById('usersTable');
-                const row = table.insertRow(-1);
+                    const code = row.insertCell(0);
+                    const name = row.insertCell(1);
+                    const email = row.insertCell(2);
+                    const department_name = row.insertCell(3);
+                    const career_name = row.insertCell(4);
+                    const actions = row.insertCell(5);
 
-                const code = row.insertCell(0);
-                const name = row.insertCell(1);
-                const email = row.insertCell(2);
-                const department_name = row.insertCell(3);
-                const career_name = row.insertCell(4);
-                const actions = row.insertCell(5);
+                    code.innerHTML = item.id;
+                    name.innerHTML = item.name;
+                    email.innerHTML = item.email;
+                    department_name.innerHTML = item.department_name;
+                    career_name.innerHTML = item.career_name;
 
-                code.innerHTML = item.id;
-                name.innerHTML = item.name;
-                email.innerHTML = item.email;
-                department_name.innerHTML = item.department_name;
-                career_name.innerHTML = item.career_name;
-
-                actions.innerHTML = `
+                    actions.innerHTML = `
                     <a href="/usuarios/ver/${item.id}" class="btn btn-primary">Editar</a>
                     <form id="deleteForm-${item.id}" method="post" style="display: inline;">
                         <input type="hidden" name="_token" value="${csrfToken}">
@@ -73,13 +73,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     </form>
                 `;
 
-                document.getElementById(`btnDelete-${item.id}`).addEventListener('click', function () {
-                    confirmDelete(item.id);
+                    document.getElementById(`btnDelete-${item.id}`).addEventListener('click', function () {
+                        confirmDelete(item.id);
+                    });
                 });
-            });
-
+            } else {
+                console.error("Error: Data is not an array");
+            }
         })
         .catch(error => {
-            console.log(error);
+            console.error("Error: " + error);
         });
 });

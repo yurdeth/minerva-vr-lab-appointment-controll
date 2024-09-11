@@ -1,5 +1,12 @@
 import {showAlert, showSuccessAlert, showErrorAlert, showWarningAlert} from './utils/alert.js'
-import {getResponse} from './getResponsePromise.js';
+import {apiRequest} from './utils/api.js'
+
+const headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+};
 
 /**
  * Maneja la edición de una cita.
@@ -37,28 +44,20 @@ function handleEdit(id) {
         return;
     }
 
-    fetch(`/api/appointments/editar/${id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({
-            date: date.value,
-            time: time.value,
-            number_of_assistants: number_of_assistants.value
-        })
-    })
-        .then(() => {
-            showSuccessAlert(
-                'Éxito',
-                '¡Cita actualizada exitosamente!')
-                .then(() => {
-                    window.location.href = '/citas';
-                });
+    const body = {
+        date: date.value,
+        time: time.value,
+        number_of_assistants: number_of_assistants.value
+    };
 
+    apiRequest(`/api/appointments/editar/${id}`, 'PUT', body, headers)
+        .then(response => {
+            response.json().then(() => {
+                showSuccessAlert('Éxito', '¡Cita actualizada exitosamente!')
+                    .then(() => {
+                        window.location.href = '/dashboard/citas';
+                    });
+            });
         })
         .catch(error => {
             console.error(error);
@@ -79,21 +78,16 @@ function handleDelete(id) {
         'Cancelar')
         .then(result => {
             if (result.isConfirmed) {
-                showSuccessAlert('Eliminando...', 'La cita será eliminada.')
-                    .then(() => {
-                        fetch(`/api/appointments/eliminar/${id}`, {
-                            method: "DELETE",
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json',
-                                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                            }
-                        }).then(() => {
-                            window.location.href = '/citas';
-                        }).catch(error => console.error(error));
-                    });
-            }else{
+                apiRequest(`/api/appointments/eliminar/${id}`, 'DELETE', null, headers)
+                    .then(response => {
+                        response.json().then(() => {
+                            showSuccessAlert('Eliminando...', 'Cita eliminada correctamente.')
+                                .then(() => {
+                                    window.location.href = '/dashboard/citas';
+                                });
+                        });
+                    }).catch(error => console.error(error));
+            } else {
                 showErrorAlert('Cancelado', 'Operación cancelada');
             }
         });
@@ -104,65 +98,63 @@ document.addEventListener('DOMContentLoaded', function () {
     const id = urlParts[urlParts.length - 1];
 
     if (id) {
-        getResponse(`/api/appointments/ver/${id}`)
-            .then(response => {
-                if (!response || response.length === 0) {
-                    console.error('No appointment data found.');
-                    return;
-                }
-
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                const item = response[0];
-
-                const name = document.getElementById('name');
-                const date = document.getElementById('date');
-                const time = document.getElementById('time');
-                const number_of_participants = document.getElementById('number_of_assistants');
-
-                if (!item) {
+        apiRequest(`/api/appointments/ver/${id}`, 'GET', null, headers)
+            .then(response => response.json())
+            .then(data => {
+                if (!data || data.message && data.message.includes('Route [citas] not defined')) {
                     showErrorAlert('Oops...', 'No se encontraron datos de la cita.')
                         .then(() => {
                             window.location.href = '/citas';
-                        })
+                        });
                     return;
                 }
 
-                if (name) name.value = item.name;
-                date.value = item.date;
-                time.value = item.time;
-                number_of_participants.value = item.number_of_participants;
+                if (Array.isArray(data)) {
+                    data.forEach(item => {
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                const actionsButtons = document.getElementById('actionsButtons');
-                actionsButtons.classList.add('row');
+                        const name = document.getElementById('name');
+                        const date = document.getElementById('date');
+                        const time = document.getElementById('time');
+                        const number_of_participants = document.getElementById('number_of_assistants');
 
-                actionsButtons.innerHTML = `
-                    <div class="d-flex justify-content-center gap-3 mt-3">
+                        if (name) name.value = item.name;
+                        date.value = item.date;
+                        time.value = item.time;
+                        number_of_participants.value = item.number_of_participants;
 
-                        <form id="editForm-${item.id}">
-                            <input type="hidden" name="_token" value="${csrfToken}">
-                            <input type="hidden" name="_method" value="PUT">
-                            <input type="hidden" name="_id" id="id-${item.id}" value="${item.id}">
-                            <button type="button" id="btnUpdate-${item.id}" class="btn btn-primary">Actualizar</button>
-                        </form>
+                        const actionsButtons = document.getElementById('actionsButtons');
+                        actionsButtons.classList.add('row');
 
-                        <form id="deleteForm-${item.id}" method="post">
-                            <input type="hidden" name="_token" value="${csrfToken}">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="_id" id="id-${item.id}" value="${item.id}">
-                            <button type="button" id="btnDestroy-${item.id}" class="btn btn-danger">Eliminar</button>
-                        </form>
+                        actionsButtons.innerHTML = `
+                            <div class="d-flex justify-content-center gap-3 mt-3">
 
-                    <div>
-                `;
+                                <form id="editForm-${item.id}">
+                                    <input type="hidden" name="_token" value="${csrfToken}">
+                                    <input type="hidden" name="_method" value="PUT">
+                                    <input type="hidden" name="_id" id="id-${item.id}" value="${item.id}">
+                                    <button type="button" id="btnUpdate-${item.id}" class="btn btn-primary">Actualizar</button>
+                                </form>
 
-                document.getElementById(`btnUpdate-${item.id}`).addEventListener('click', function () {
-                    handleEdit(item.id);
-                });
+                                <form id="deleteForm-${item.id}" method="post">
+                                    <input type="hidden" name="_token" value="${csrfToken}">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_id" id="id-${item.id}" value="${item.id}">
+                                    <button type="button" id="btnDestroy-${item.id}" class="btn btn-danger">Eliminar</button>
+                                </form>
 
-                document.getElementById(`btnDestroy-${item.id}`).addEventListener('click', function () {
-                    handleDelete(item.id);
-                });
+                            <div>
+                        `;
 
+                        document.getElementById(`btnUpdate-${item.id}`).addEventListener('click', function () {
+                            handleEdit(item.id);
+                        });
+
+                        document.getElementById(`btnDestroy-${item.id}`).addEventListener('click', function () {
+                            handleDelete(item.id);
+                        });
+                    });
+                }
             })
             .catch(error => {
                 console.error(error);

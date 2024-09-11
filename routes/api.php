@@ -41,7 +41,7 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     Route::get('/users', [UsersController::class, "index"])->name('usuarios.index');
     Route::get("/users/ver/{id}", [UsersController::class, "show"])->name("users.show");
     Route::put("/users/editar/{id}", [UsersController::class, "update"])->name("users.update");
-    Route::delete("/users/eliminar/{id}", [UsersController::class, "users.destroy"]);
+    Route::delete("/users/eliminar/{id}", [UsersController::class, "destroy"])->name("users.destroy");
 
     // **************************************** GET Inventarios ******************************************************
     Route::get('/statuses', [StatusesController::class, 'index']);
@@ -54,5 +54,15 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     Route::post('/room/create', [RoomController::class, 'store']);
 
     Route::get('/resources', [ResourcesController::class, 'index']);
+    Route::get('/resources/ver/{id}', [ResourcesController::class, 'show']);
     Route::post('/resources/create', [ResourcesController::class, 'store']);
+    Route::put('/resources/editar/{id}', [ResourcesController::class, 'update']);
+    Route::delete('/resources/eliminar/{id}', [ResourcesController::class, 'destroy']);
+
+    Route::post('/careers/nueva', [CareersController::class, 'store'])->name("careers.store");
+    Route::get('/careers/ver/{id}', [CareersController::class, 'getCareerData'])->name("careers.getCareerData");
+    Route::put('/careers/editar/{id}', [CareersController::class, 'update'])->name("careers.update");
+    Route::delete('/careers/eliminar/{id}', [CareersController::class, 'destroy'])->name("careers.destroy");
+
+    Route::post('/departments/nuevo', [DepartmentsController::class, 'store'])->name("departments.store");
 });

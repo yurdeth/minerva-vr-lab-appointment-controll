@@ -66,13 +66,18 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
 // ***************************************Rutas para inventarios*********************************************
 Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])->group(function () {
+
     Route::get('/dashboard/inventario', function () {
-        return view('inventario');
+        return view('inventory.inventory');
     })->name('inventario');
 
-    Route::get('/dashboard/registro-inventario', function () {
-        return view('registro-inventario');
-    })->name('registro-inventario');
+    Route::get('/dashboard/inventario/registrar', function () {
+        return view('inventory.registerInventory');
+    })->name('registrar-inventario');
+
+    Route::get('/dashboard/inventario/ver/{id}', function () {
+        return view('inventory.editInventory');
+    })->name('editar-inventario');
 
     /*Código con la funcionalidad que no de error al abrir el informe de inventario*/
     Route::post('/insertar-inventario', [StatusesController::class, 'store'])->name("insertar-inventario");
@@ -107,7 +112,7 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
         return view('Administración.dashboard');
     })->name('dashboard');
 
-    Route::get('dashboard/usuarios', function () {
+    Route::get('/dashboard/usuarios', function () {
         return view('users');
     })->name('usuarios');
 
@@ -115,10 +120,26 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
         return view('editUser');
     })->name('usuarios-editar');
 
-    Route::get('dashboard/citas/', function () {
+    Route::get('/dashboard/citas/', function () {
         $dashboard = true;
         return view('appointments', compact("dashboard"));
     })->name('citas_dashboard');
+
+    Route::get('/dashboard/carreras', function () {
+        return view('careers.careers');
+    })->name('carreras');
+
+    Route::get('/dashboard/carreras/nueva/', function () {
+        return view('careers.add_career');
+    })->name('carreras-agregar');
+
+    Route::get('/dashboard/departamentos/nuevo/', function () {
+        return view('careers.add_department');
+    })->name('departamentos-agregar');
+
+    Route::get('/dashboard/carreras/ver/{id}', function () {
+        return view('careers.edit_career');
+    })->name('carreras-ver');
 });
 
 // ***************************************Iniciar credenciales admin*********************************************
