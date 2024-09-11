@@ -67,6 +67,7 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
 
     // **************************************** Departamentos ******************************************************
     Route::post('/departments/nuevo', [DepartmentsController::class, 'store'])->name("departments.store");
-    Route::get('/departments/ver/{id}', [DepartmentsController::class, 'show'])->name("careers.show");
+    Route::get('/departments/ver/{id}', [DepartmentsController::class, 'show'])->name("departments.show");
+    Route::put('/departments/editar/{id}', [DepartmentsController::class, 'update'])->name("departments.update");
     Route::delete('/departments/eliminar/{id}', [DepartmentsController::class, 'destroy'])->name("departments.destroy");
 });

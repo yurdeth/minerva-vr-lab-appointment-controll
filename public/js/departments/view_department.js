@@ -25,11 +25,7 @@ function getQueryParam(name) {
  * Maneja la edición de un usuario.
  * @param {number} id - El ID del usuario a editar.
  */
-/*function handleEdit(id) {
-    if (!career.value) {
-        showErrorAlert('Error', 'Por favor, ingrese el nombre de la carrera');
-        return;
-    }
+function handleEdit(id) {
 
     if (!department.value) {
         showErrorAlert('Error', 'Por favor, seleccione un departamento');
@@ -37,21 +33,15 @@ function getQueryParam(name) {
     }
 
     const body = {
-        career_name: career.value,
-        department_id: department.value
+        department_name: department.value
     }
 
-    apiRequest(`/api/careers/editar/${id}`, 'PUT', body, headers)
+    apiRequest(`/api/departments/editar/${id}`, 'PUT', body, headers)
         .then(response => {
             response.json().then(data => {
                 if(!data.success){
-                    if (data.message.includes('carrera')){
-                        showErrorAlert('Error', 'Ingrese el nombre de la carrera');
-                        return;
-                    }
-
-                    if(data.message.includes('departamento')){
-                        showErrorAlert('Error', 'Seleccione un departamento');
+                    if (data.message.includes('departamento')){
+                        showErrorAlert('Error', 'Ingrese el nombre del departamento');
                         return;
                     }
 
@@ -60,18 +50,18 @@ function getQueryParam(name) {
                     }
                 }
 
-                showSuccessAlert('Operación completada', 'Carrera actualizada correctamente')
+                showSuccessAlert('Operación completada', 'Departamento actualizado correctamente')
                     .then(() => {
-                        window.location.href = '/dashboard/carreras';
+                        window.location.href = '/dashboard/departamentos';
                     });
             });
         })
         .catch(error => console.error(error));
-}*/
+}
 
 /**
  * Maneja la eliminación de un usuario.
- * @param {number} id - El ID del usuario a eliminar.
+ * @param {number} id - El ID del departamento a eliminar.
  */
 function handleDelete(id) {
     showAlert(

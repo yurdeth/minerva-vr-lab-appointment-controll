@@ -20,13 +20,6 @@ class DepartmentsController extends Controller {
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create() {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request): JsonResponse {
@@ -72,17 +65,33 @@ class DepartmentsController extends Controller {
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Departments $departments) {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDepartmentsRequest $request, Departments $departments) {
-        //
+    public function update(Request $request) {
+
+        if(!$request->department_name){
+            return response()->json([
+                'message' => 'Error: no se ha proporcionado el nombre del departamento',
+                'success' => false
+            ]);
+        }
+
+        $department = Departments::find($request->id);
+
+        if (!$department) {
+            return response()->json([
+                'message' => 'Departamento no encontrado',
+                'success' => false
+            ], 404);
+        }
+
+        $department->department_name = $request->department_name;
+        $department->save();
+
+        return response()->json([
+            'message' => 'Departamento actualizado',
+            'success' => true
+        ], 201);
     }
 
     /**

@@ -72,7 +72,7 @@ function handleEdit(id) {
 
 /**
  * Maneja la eliminación de un usuario.
- * @param {number} id - El ID del usuario a eliminar.
+ * @param {number} id - El ID de la carrera a eliminar.
  */
 function handleDelete(id) {
     showAlert(
