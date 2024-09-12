@@ -68,9 +68,15 @@ class AppointmentsController extends Controller {
         $appointment->save();
         $participants->save();
 
+        if(Auth::id() == 1){
+            $redirectTo = '/dashboard/citas';
+        } else{
+            $redirectTo = '/citas';
+        }
+
         return response()->json([
             "message" => "Cita registrada",
-            "redirect_to" => 'index',
+            "redirect_to" => $redirectTo,
             "success" => true,
         ]);
     }
