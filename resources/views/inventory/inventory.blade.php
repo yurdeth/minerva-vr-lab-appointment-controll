@@ -6,65 +6,14 @@
 @stop
 
 @section('content')
-
-    <style>
-        .pagination-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 10px; /* Aumenté el padding para hacer más evidente */
-            max-width: 300px; /* Ajusta el ancho máximo según necesites */
-            margin: 8px auto; /* Esto centrará el contenedor */
-        }
-        /* .pagination-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 5px;
-            width: max-content;
-            margin-top: 8px;
-        } */
-
-        .btn-arrow {
-            background-color: transparent;
-            border: none;
-            font-size: 18px;
-            color: #ff4a4a;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
-        .btn-arrow:disabled {
-            color: #ccc;
-            cursor: not-allowed;
-        }
-
-        .page-number {
-            font-size: 18px;
-            margin: 0 15px;
-            font-weight: bold;
-        }
-
-        .custom-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center; /* Alinea verticalmente ambos elementos */
-        }
-    </style>
-
 <link rel="stylesheet" href="{{ asset('CSS/administracion/tables.css')}}">
+<link rel="stylesheet" href="{{ asset('CSS/administracion/responsiveInventory.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
           integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
     <div class="container-xl custom-flex" style="margin-bottom: 20px;">
-        <div>
+        <div class="registra">
             <a href="{{route('registrar-inventario')}}" class="btnInventario" style="margin-top: 1px;">
                 <i class="fa-solid fa-vr-cardboard"></i>
                 <span class="tooltip-text">Registrar Inventario</span>

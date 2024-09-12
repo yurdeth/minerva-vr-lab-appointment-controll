@@ -171,7 +171,7 @@
 
 .table-avatar th {
     text-align: center;
-    background-color: #b6babd ;
+    background-color: #e1e4e6 ;
 }
 
 /*---------------------------------------------------------------*/
@@ -189,6 +189,36 @@
     .btn-danger {
         padding: 8px 18px;
         margin-top: 10px;
+    }
+
+}
+
+@media (max-width: 1350px) {
+    .card{
+        width: 100%;
+    }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 1260px){
+
+    .opcionesCitas {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .opcionesCitas .col-auto {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .opcionesCitas a {
+        width: 100%;
+        text-align: center;
     }
 }
 

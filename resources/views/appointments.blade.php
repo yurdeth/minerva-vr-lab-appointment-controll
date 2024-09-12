@@ -54,7 +54,7 @@ if (!isset($dashboard)) {
                 </div>
 
                 <div class="card-body">
-                    <div class="table-responsive" style="height: 100%; width: 100%;">
+                    <div class="table-responsive">
                         <table id="appointmentsTable" class="table table-bordered text-center"
                                style="width: 100%; margin-bottom: 0;">
                             <thead class="table-avatar">
