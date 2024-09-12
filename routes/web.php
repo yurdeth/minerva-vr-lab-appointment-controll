@@ -86,19 +86,19 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
 // ***************************************Rutas para citas*********************************************
 Route::middleware(['auth', NoBrowserCache::class])->group(function () {
     Route::get('/citas', function () {
-        return view('appointments');
+        return view('appointments.appointments');
     })->name('citas-ver');
 
     Route::get('/citas/index', function () {
-        return view('appointments');
+        return view('appointments.appointments');
     })->name('citas-ver-index');
 
     Route::get('/citas/nueva', function () {
-        return view('registro_cita');
+        return view('appointments.addAppointment');
     })->name('agendar');
 
     Route::get('/citas/ver/{id}', function () {
-        return view('editAppointments');
+        return view('appointments.editAppointments');
     })->name('citas-editar');
 
     Route::get('/export',[ExportController::class, 'export'])->name('export');
@@ -122,7 +122,7 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
 
     Route::get('/dashboard/citas/', function () {
         $dashboard = true;
-        return view('appointments', compact("dashboard"));
+        return view('appointments.appointments', compact("dashboard"));
     })->name('citas_dashboard');
 
     Route::get('/dashboard/carreras', function () {
