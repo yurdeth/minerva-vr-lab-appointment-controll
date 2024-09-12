@@ -21,57 +21,6 @@ function getQueryParam(name) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    //Dar un tiempo para que se cree la sala
-    setTimeout(function () {
-        apiRequest('/api/room', 'GET', null, headers)
-            .then(response => {
-                response.json().then(data => {
-                    data.rooms.forEach(room => {
-                        let selectRoom = document.getElementById('room');
-                        let option = document.createElement('option');
-                        option.value = room.id;
-                        option.text = room.name;
-                        selectRoom.appendChild(option);
-                    });
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-
-        apiRequest('/api/resourcesTypes', 'GET', null, headers)
-            .then(response => {
-                response.json().then(data => {
-                    data.resourceTypes.forEach(resourceType => {
-                        let selectResourceType = document.getElementById('resource_type');
-                        let option = document.createElement('option');
-                        option.value = resourceType.id;
-                        option.text = resourceType.resource_name;
-                        selectResourceType.appendChild(option);
-                    });
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-
-        apiRequest('/api/statuses', 'GET', null, headers)
-            .then(response => {
-                response.json().then(data => {
-                    data.statuses.forEach(status => {
-                        let selectStatus = document.getElementById('status');
-                        let option = document.createElement('option');
-                        option.value = status.id;
-                        option.text = status.status;
-                        selectStatus.appendChild(option);
-                    });
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }, 100);
-
     let id = getQueryParam('id');
     if (!id) {
         let urlParts = window.location.pathname.split('/');
@@ -81,7 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
     apiRequest(`/api/resources/ver/${id}`, 'GET', null, headers)
         .then(response => {
             response.json().then(data => {
-
                 if (data.message === 'Resource not found') {
                     showErrorAlert('Oops...', 'No se encontraron datos del recurso.')
                         .then(() => {
@@ -91,9 +39,55 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 fixed_asset_code.value = data.resource.fixed_asset_code;
-                status.value = data.resource.status.id;
-                resource_type.value = data.resource.resource_type.id;
-                room.value = data.resource.room.id;
+
+                // Llenar los selects y asignar valores
+                apiRequest('/api/room', 'GET', null, headers)
+                    .then(response => {
+                        response.json().then(roomData => {
+                            roomData.rooms.forEach(roomItem => {
+                                let option = document.createElement('option');
+                                option.value = roomItem.id;
+                                option.text = roomItem.name;
+                                room.appendChild(option);
+                            });
+                            room.value = data.resource.room.id;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+
+                apiRequest('/api/resourcesTypes', 'GET', null, headers)
+                    .then(response => {
+                        response.json().then(resourceTypeData => {
+                            resourceTypeData.resourceTypes.forEach(resourceTypeItem => {
+                                let option = document.createElement('option');
+                                option.value = resourceTypeItem.id;
+                                option.text = resourceTypeItem.resource_name;
+                                resource_type.appendChild(option);
+                            });
+                            resource_type.value = data.resource.resource_type.id;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+
+                apiRequest('/api/statuses', 'GET', null, headers)
+                    .then(response => {
+                        response.json().then(statusData => {
+                            statusData.statuses.forEach(statusItem => {
+                                let option = document.createElement('option');
+                                option.value = statusItem.id;
+                                option.text = statusItem.status;
+                                status.appendChild(option);
+                            });
+                            status.value = data.resource.status.id;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
             })
         })
         .catch(error => {
