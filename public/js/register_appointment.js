@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     showSuccessAlert('¡Listo!', 'Tu cita ha sido registrada exitosamente.');
                     if (response.ok) {
                         setTimeout(() => {
-                            window.location.href = '/citas';
+                            window.location.href = data.redirect_to;
                         }, 1000);
                     }
                 })
