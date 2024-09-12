@@ -38,9 +38,9 @@
         </form>
     </div>
 
-    <script src="{{ asset('js/departments.js') }}"></script>
-    <script src="{{ asset('js/careers.js') }}"></script>
+    <script src="{{ asset('js/loadDepartments.js') }}"></script>
+    <script src="{{ asset('js/loadCareers.js') }}"></script>
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
-    <script type="module" src="{{asset("js/careers/view_career.js")}}"></script>
+    <script type="module" src="{{asset("js/careers/viewCareer.js")}}"></script>
 @endsection

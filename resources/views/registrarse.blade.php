@@ -80,8 +80,8 @@
 
     </div>
 
-    <script src="{{ asset('js/departments.js') }}"></script>
-    <script src="{{ asset('js/careers.js') }}"></script>
+    <script src="{{ asset('js/loadDepartments.js') }}"></script>
+    <script src="{{ asset('js/loadCareers.js') }}"></script>
     <script src="{{ asset('js/register.js') }}"></script>
 
 @endsection

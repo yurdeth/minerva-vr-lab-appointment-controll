@@ -33,5 +33,5 @@
 
     <script type="module" src="{{ asset("js/utils/alert.js") }}"></script>
     <script type="module" src="{{ asset("js/utils/api.js") }}"></script>
-    <script type="module" src="{{ asset("js/departments/view_department.js") }}"></script>
+    <script type="module" src="{{ asset("js/departments/viewDepartment.js") }}"></script>
 @endsection

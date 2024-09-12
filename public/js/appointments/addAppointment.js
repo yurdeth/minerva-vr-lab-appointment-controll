@@ -63,9 +63,17 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => {
                 response.json().then(data => {
                     if(data.error){
-                        if (data.error.time[0].includes("cita registrada")) {
+                        console.error(data.error);
+
+                        if (data.error.time && data.error.time[0].includes("cita registrada")) {
                             showErrorAlert('Oops...',
                                 'Ya existe una cita registrada en esta fecha y hora, o en el rango de una hora (cada sesión dura una hora)');
+                            return;
+                        }
+
+                        if (data.error.date && data.error.date[0].includes("after today")) {
+                            showErrorAlert('Oops...',
+                                'La cita debe ser una fecha posterior a hoy');
                             return;
                         }
                     }

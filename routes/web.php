@@ -60,7 +60,7 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
     })->name('HomeVR');
 
     Route::get('/profile', function () {
-        return view('editUser');
+        return view('users.editUser');
     })->name('profile');
 });
 
@@ -113,11 +113,11 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
     })->name('dashboard');
 
     Route::get('/dashboard/usuarios', function () {
-        return view('users');
+        return view('users.users');
     })->name('usuarios');
 
     Route::get('/usuarios/ver/{id}', function () {
-        return view('editUser');
+        return view('users.editUser');
     })->name('usuarios-editar');
 
     Route::get('/dashboard/citas/', function () {
