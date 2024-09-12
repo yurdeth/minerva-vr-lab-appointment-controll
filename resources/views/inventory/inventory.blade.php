@@ -105,7 +105,7 @@
     </script>
 
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
-    <script type="module" src="{{ asset("js/getInventory.js") }}"></script>
+    <script type="module" src="{{ asset("js/inventory/getInventory.js") }}"></script>
 @stop
 
 @section('css')
