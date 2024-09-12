@@ -50,5 +50,5 @@
 
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
-    <script type="module" src="{{asset("js/departments/loadDepartments.js")}}"></script>
+    <script type="module" src="{{asset("js/departments/departments.js")}}"></script>
 @endsection

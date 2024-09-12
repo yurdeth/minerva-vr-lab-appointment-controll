@@ -14,7 +14,7 @@ use App\Http\Controllers\ExportController;
 
 // ********************************Rutas para rutas no definidas*************************************
 Route::fallback(function () {
-    return redirect()->route('iniciar_sesion');
+    return redirect()->route('iniciarSesion');
 });
 
 // ***************************************Rutas públicas*********************************************
@@ -39,12 +39,12 @@ Route::get('/registrarse', function () {
     return view("registrarse");
 })->name('registrarse');
 
-Route::get('/iniciar_sesion', function () {
+Route::get('/iniciar-sesion', function () {
     if (Auth::check()) {
         return redirect()->route('HomeVR');
     }
-    return view("iniciar_sesion");
-})->name('iniciar_sesion');
+    return view("iniciarSesion");
+})->name('iniciarSesion');
 
 Route::post('/signin', [AuthController::class, 'login'])->name("signin");
 Route::post('/signup', [AuthController::class, 'register'])->name("signup");
@@ -130,19 +130,19 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
     })->name('carreras');
 
     Route::get('/dashboard/carreras/nueva/', function () {
-        return view('careers.add_career');
+        return view('careers.addCareer');
     })->name('carreras-agregar');
 
     Route::get('/dashboard/carreras/ver/{id}', function () {
-        return view('careers.edit_career');
+        return view('careers.editCareer');
     })->name('carreras-ver');
 
     Route::get('/dashboard/departamentos/', function () {
-        return view('careers.add_department');
+        return view('careers.addDepartment');
     })->name('departamentos-agregar');
 
     Route::get('/dashboard/departamentos/ver/{id}', function () {
-        return view('careers.edit_department');
+        return view('careers.editDepartment');
     })->name('departamentos-ver');
 });
 

@@ -69,7 +69,7 @@
                         Registrarse
                     </button>
 
-                    <p class="mt-3"><strong>¿Ya tienes una cuenta?</strong> <a href="{{ route('iniciar_sesion') }}"
+                    <p class="mt-3"><strong>¿Ya tienes una cuenta?</strong> <a href="{{ route('iniciarSesion') }}"
                                                                            style="text-decoration: none; color: #660D04;">
                             <strong>Iniciar sesión</strong> </a></p>
                 </form>

@@ -12,7 +12,7 @@ use App\Rules\OnlyUesMail;
 
 class AuthController extends Controller {
     public function signin() {
-        return redirect()->route('iniciar_sesion');
+        return redirect()->route('iniciarSesion');
     }
 
     public function signup() {
@@ -96,7 +96,7 @@ class AuthController extends Controller {
         }
 
         if(!$request->email || !$request->password) {
-            return redirect()->route('iniciar_sesion')->with('error', 'Por favor, ingrese sus credenciales.');
+            return redirect()->route('iniciarSesion')->with('error', 'Por favor, ingrese sus credenciales.');
         }
 
         return response()->json([

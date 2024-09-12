@@ -170,5 +170,5 @@
 
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
-    <script type="module" src="{{asset("js/careers/loadCareers.js")}}"></script>
+    <script type="module" src="{{asset("js/careers/careers.js")}}"></script>
 @endsection

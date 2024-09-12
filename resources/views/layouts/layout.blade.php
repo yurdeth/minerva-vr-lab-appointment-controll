@@ -69,7 +69,7 @@
                             </a>
                         </button>
                     @else
-                        <button><a class="nav-link" href="{{ route('iniciar_sesion') }}">Iniciar sesión</a></button>
+                        <button><a class="nav-link" href="{{ route('iniciarSesion') }}">Iniciar sesión</a></button>
                         <button><a class="nav-link" href="{{ route('registrarse') }}">Registrarse</a></button>
                     @endauth
                 </div>

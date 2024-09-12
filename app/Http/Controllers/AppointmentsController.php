@@ -25,7 +25,7 @@ class AppointmentsController extends Controller {
     //method to generate pdf
     public function pdf(){
         $appointments = (new Appointments)->GetAppointments();
-        $pdf = Pdf::loadView('citaspdf',compact('appointments'));
+        $pdf = Pdf::loadView('appointments.citasPdf',compact('appointments'));
         return $pdf->stream();
     }
 
