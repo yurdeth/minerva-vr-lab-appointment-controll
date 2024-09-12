@@ -1,4 +1,4 @@
-@extends('Administración.dashboard')
+@extends('administration.dashboard')
 
 {{--Section para poder trabajar con layout --}}
 

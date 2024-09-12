@@ -1,4 +1,4 @@
-@extends('Administración.dashboard')
+@extends('administration.dashboard')
 
 {{--Section para poder trabajar con layout --}}
 
@@ -28,7 +28,8 @@
 
                 <div class="col">
                     <p>Nombre de la carrera</p>
-                    <input type="text" name="tipo_carrera" class="form-control" id="career" placeholder="Ingrese tipo de carrera" style="width: 400px; padding: 10px;">
+                    <input type="text" name="tipo_carrera" class="form-control" id="career"
+                           placeholder="Ingrese tipo de carrera" style="width: 400px; padding: 10px;">
                 </div>
 
                 <div id="actionsButtons" class="row"></div>

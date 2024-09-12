@@ -1,4 +1,4 @@
-@extends('Administración.dashboard')
+@extends('administration.dashboard')
 
 {{--Section para poder trabajar con layout --}}
 
@@ -43,7 +43,7 @@
                     </select>
                 </div>
 
-                <div class="col"> </div>
+                <div class="col"></div>
 
                 <div class="buttonContainer">
                     <input type="submit" value="Registrar" class="btn-success" id="submit">

@@ -1,5 +1,5 @@
-import {showSuccessAlert, showErrorAlert} from './utils/alert.js'
-import {apiRequest} from './utils/api.js'
+import {showSuccessAlert, showErrorAlert} from '../utils/alert.js'
+import {apiRequest} from '../utils/api.js'
 
 const headers = {
     'Content-Type': 'application/json',

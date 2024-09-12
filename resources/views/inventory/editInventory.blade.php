@@ -1,4 +1,4 @@
-@extends('Administración.dashboard')
+@extends('administration.dashboard')
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('CSS/administracion/inventario.css')}}">

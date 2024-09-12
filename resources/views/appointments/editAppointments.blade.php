@@ -44,6 +44,6 @@
 
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
-    <script type="module" src="{{ asset('js/viewAppointment.js') }}"></script>
+    <script type="module" src="{{ asset('js/appointments/viewAppointment.js') }}"></script>
 
 @endsection

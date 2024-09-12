@@ -1,4 +1,4 @@
-@extends('Administración.dashboard')
+@extends('administration.dashboard')
 @section('title', 'Inventario')
 
 @section('content_header')
@@ -6,8 +6,8 @@
 @stop
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('CSS/administracion/tables.css')}}">
-<link rel="stylesheet" href="{{ asset('CSS/administracion/responsiveInventory.css')}}">
+    <link rel="stylesheet" href="{{ asset('CSS/administracion/tables.css')}}">
+    <link rel="stylesheet" href="{{ asset('CSS/administracion/responsiveInventory.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
           integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -36,19 +36,20 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive" style="height: 100%; width: 100%;">
-                            <table class="table table-bordered text-center" style="width: 100%; margin-bottom: 0;" id="inventoryTable">
+                            <table class="table table-bordered text-center" style="width: 100%; margin-bottom: 0;"
+                                   id="inventoryTable">
                                 <thead class="table-avatar">
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Número de sala</th>
-                                        <th scope="col">Tipo de recurso</th>
-                                        <th scope="col">Estado</th>
-                                        <th scope="col">Número de activo fijo</th>
-                                        <th scope="col">Acciones</th>
-                                    </tr>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Número de sala</th>
+                                    <th scope="col">Tipo de recurso</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Número de activo fijo</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    <tr></tr>
+                                <tr></tr>
                                 </tbody>
                             </table>
                         </div>

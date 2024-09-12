@@ -109,7 +109,7 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])->group(function () {
 
     Route::get('/dashboard', function () {
-        return view('Administración.dashboard');
+        return view('administration.dashboard');
     })->name('dashboard');
 
     Route::get('/dashboard/usuarios', function () {
