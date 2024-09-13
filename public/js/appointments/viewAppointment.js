@@ -116,12 +116,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         const name = document.getElementById('name');
                         const date = document.getElementById('date');
                         const time = document.getElementById('time');
-                        const number_of_participants = document.getElementById('number_of_assistants');
+                        const number_of_assistants = document.getElementById('number_of_assistants');
 
                         if (name) name.value = item.name;
                         date.value = item.date;
                         time.value = item.time;
-                        number_of_participants.value = item.number_of_participants;
+                        number_of_assistants.value = item.number_of_assistants;
 
                         const actionsButtons = document.getElementById('actionsButtons');
                         actionsButtons.classList.add('row');

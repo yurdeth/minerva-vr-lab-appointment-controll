@@ -14,7 +14,7 @@ class Appointments extends Model {
     protected $fillable = [
         "date",
         "time",
-        "status",
+        "number_of_assistants",
         "user_id"
     ];
 
@@ -26,13 +26,12 @@ class Appointments extends Model {
         if (Auth::user()->roles_id == 1) {
             return DB::table('appointments')
                 ->orderBy('appointments.id', 'asc')
-                ->join('participants', 'appointments.id', '=', 'participants.appointment_id')
                 ->join('users', 'appointments.user_id', '=', 'users.id')
                 ->join('careers', 'users.career_id', '=', 'careers.id')
                 ->join('departments', 'careers.department_id', '=', 'departments.id')
                 ->select(
                     'appointments.id',
-                    'participants.number_of_participants',
+                    'appointments.number_of_assistants',
                     'users.name',
                     'careers.department_id',
                     'departments.department_name',
@@ -49,13 +48,12 @@ class Appointments extends Model {
             return DB::table('appointments')
                 ->orderBy('appointments.id', 'asc')
                 ->where('appointments.user_id', $userId)
-                ->join('participants', 'appointments.id', '=', 'participants.appointment_id')
                 ->join('users', 'appointments.user_id', '=', 'users.id')
                 ->join('careers', 'users.career_id', '=', 'careers.id')
                 ->join('departments', 'careers.department_id', '=', 'departments.id')
                 ->select([
                     'appointments.id',
-                    'participants.number_of_participants',
+                    'appointments.number_of_assistants',
                     'users.name',
                     'careers.department_id',
                     'departments.department_name',
@@ -85,13 +83,12 @@ class Appointments extends Model {
             return DB::table('appointments')
                 ->orderBy('appointments.id', 'asc')
                 ->where('appointments.id', $id)
-                ->join('participants', 'appointments.id', '=', 'participants.appointment_id')
                 ->join('users', 'appointments.user_id', '=', 'users.id')
                 ->join('careers', 'users.career_id', '=', 'careers.id')
                 ->join('departments', 'careers.department_id', '=', 'departments.id')
                 ->select(
                     'appointments.id',
-                    'participants.number_of_participants',
+                    'appointments.number_of_assistants',
                     'users.name',
                     'careers.department_id',
                     'departments.department_name',

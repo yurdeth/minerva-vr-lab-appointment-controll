@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const career = row.insertCell(3);
                 const date = row.insertCell(4);
                 const time = row.insertCell(5);
-                const number_of_participants = row.insertCell(6);
+                const number_of_assistants = row.insertCell(6);
                 const actions = row.insertCell(7);
 
                 // Sumar un dia a la fecha:
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 career.innerHTML = item.career_name;
                 date.innerHTML = dateText;
                 time.innerHTML = item.time;
-                number_of_participants.innerHTML = item.number_of_participants;
+                number_of_assistants.innerHTML = item.number_of_assistants;
 
                 actions.innerHTML = `
                         <a href="/citas/ver/${item.id}" class="btn btn-primary">Editar</a>
