@@ -52,7 +52,18 @@ function handleEdit(id) {
 
     apiRequest(`/api/appointments/editar/${id}`, 'PUT', body, headers)
         .then(response => {
-            response.json().then(() => {
+            response.json().then(data => {
+                if(!data.success){
+                    if (data.error) {
+                        if (data.error.time && data.error.time[0].includes("cita registrada")) {
+                            showWarningAlert('Oops...', 'Ya existe una cita registrada en esta fecha y hora, o en el rango de una hora.');
+                        } else {
+                            showErrorAlert('Error', 'No se pudo actualizar la cita.');
+                        }
+                    }
+                    return;
+                }
+
                 showSuccessAlert('Éxito', '¡Cita actualizada exitosamente!')
                     .then(() => {
                         window.location.href = '/dashboard/citas';
@@ -80,11 +91,13 @@ function handleDelete(id) {
             if (result.isConfirmed) {
                 apiRequest(`/api/appointments/eliminar/${id}`, 'DELETE', null, headers)
                     .then(response => {
-                        response.json().then(() => {
-                            showSuccessAlert('Eliminando...', 'Cita eliminada correctamente.')
+                        response.json().then(data => {
+                            console.log(data);
+
+                            /*showSuccessAlert('Eliminando...', 'Cita eliminada correctamente.')
                                 .then(() => {
                                     window.location.href = '/dashboard/citas';
-                                });
+                                });*/
                         });
                     }).catch(error => console.error(error));
             } else {

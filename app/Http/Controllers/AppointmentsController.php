@@ -99,6 +99,37 @@ class AppointmentsController extends Controller {
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id) {
+        if(!$id){
+            return response()->json([
+                'message' => 'Error: no ID was provided',
+                'success' => false
+            ], 404);
+        }
+
+        $appointment = Appointments::find($id);
+
+        if ($appointment->time == $request->time){
+            $validate = Validator::make($request->all(), [
+                "date" => "required|date|after:today",
+//                "time" => ["required", new AppointmentConflict($request->date, $request->time)],
+                "number_of_assistants" => "required",
+            ]);
+        } else{
+            $validate = Validator::make($request->all(), [
+                "date" => "required|date|after:today",
+                "time" => ["required", new AppointmentConflict($request->date, $request->time)],
+                "number_of_assistants" => "required",
+            ]);
+        }
+
+        if ($validate->fails()) {
+            return response()->json([
+                "message" => "Error en los datos",
+                "error" => $validate->errors(),
+                "success" => false,
+            ]);
+        }
+
         $appointment = Appointments::find($id);
 
         $appointment->date = $request->date;
@@ -107,7 +138,17 @@ class AppointmentsController extends Controller {
 
         $appointment->save();
 
-        return redirect()->route('citas-ver');
+        if(Auth::id() == 1){
+            $redirectTo = '/dashboard/citas';
+        } else{
+            $redirectTo = '/citas';
+        }
+
+        return response()->json([
+            "message" => "Cita registrada",
+            "redirect_to" => $redirectTo,
+            "success" => true,
+        ]);
     }
 
     /**

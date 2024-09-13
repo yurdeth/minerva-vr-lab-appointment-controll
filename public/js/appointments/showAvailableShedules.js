@@ -12,6 +12,10 @@ function showAvailableShedules() {
     const dateInput = document.querySelector('input[name="date"]').value;
     removeAllChildNodes(loadAvailableSchedulesDiv);
 
+    if(!dateInput){
+        alert('Por favor selecciona una fecha');
+    }
+
     fetch(`${url}?date=${dateInput}`, {
         method: 'GET',
         headers: {
@@ -21,7 +25,9 @@ function showAvailableShedules() {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            console.log(response.json());
+        })
         .then(data => {
 
             if (data.length > 0) {
