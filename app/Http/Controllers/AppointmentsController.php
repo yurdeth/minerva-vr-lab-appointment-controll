@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointments;
-use App\Models\Participants;
 use App\Rules\AppointmentConflict;
 use Exception;
 use Illuminate\Http\Request;
@@ -62,7 +61,6 @@ class AppointmentsController extends Controller {
         }
 
         $appointment->save();
-//        $participants->save();
 
         if(Auth::id() == 1){
             $redirectTo = '/dashboard/citas';
@@ -102,14 +100,12 @@ class AppointmentsController extends Controller {
      */
     public function update(Request $request, $id) {
         $appointment = Appointments::find($id);
-//        $participants = Participants::where('appointment_id', $appointment->id)->first();
 
         $appointment->date = $request->date;
         $appointment->time = $request->time;
         $appointment->number_of_assistants = $request->number_of_assistants;
 
         $appointment->save();
-//        $participants->save();
 
         return redirect()->route('citas-ver');
     }
