@@ -222,3 +222,34 @@
     }
 }
 
+@media (max-width: 800px){
+
+    .card{
+        width: 90%;
+    }
+
+    .table-responsive {
+        width: 90%;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 768px){
+    .container-xl {
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    .opcionesCitas {
+
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 1px;
+    }
+
+    .opcionesCitas > .col-auto{
+        width: auto;
+    }
+
+}
+
