@@ -34,7 +34,7 @@ class AppointmentsController extends Controller {
     public function store(Request $request) {
         $validate = Validator::make($request->all(), [
             "date" => "required|date|after:today",
-            "time" => ["required", new AppointmentConflict($request->date, $request->time)],
+            "time" => ["required", new AppointmentConflict(null, $request->date, $request->time)],
             "number_of_assistants" => "required",
         ]);
 
@@ -108,19 +108,18 @@ class AppointmentsController extends Controller {
 
         $appointment = Appointments::find($id);
 
-        if ($appointment->time == $request->time){
-            $validate = Validator::make($request->all(), [
-                "date" => "required|date|after:today",
-//                "time" => ["required", new AppointmentConflict($request->date, $request->time)],
-                "number_of_assistants" => "required",
-            ]);
-        } else{
-            $validate = Validator::make($request->all(), [
-                "date" => "required|date|after:today",
-                "time" => ["required", new AppointmentConflict($request->date, $request->time)],
-                "number_of_assistants" => "required",
-            ]);
+        if(!$appointment){
+            return response()->json([
+                'message' => 'Error: appointment not found',
+                'success' => false
+            ], 404);
         }
+
+        $validate = Validator::make($request->all(), [
+            "date" => "required|date|after:today",
+            "time" => ["required", new AppointmentConflict($request, $request->date, $request->time)],
+            "number_of_assistants" => "required",
+        ]);
 
         if ($validate->fails()) {
             return response()->json([

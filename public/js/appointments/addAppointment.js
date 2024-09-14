@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
         apiRequest('/api/appointments', 'POST', body, headers)
             .then(response => {
                 response.json().then(data => {
-                    if(data.error){
+                    if (data.error) {
                         console.error(data.error);
 
                         if (data.error.time && data.error.time[0].includes("cita registrada")) {
@@ -78,12 +78,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
 
-                    showSuccessAlert('¡Listo!', 'Tu cita ha sido registrada exitosamente.');
-                    if (response.ok) {
-                        setTimeout(() => {
-                            window.location.href = data.redirect_to;
-                        }, 1000);
-                    }
+                    showSuccessAlert('¡Listo!', 'Tu cita ha sido registrada exitosamente.').then(() => {
+                        window.location.href = data.redirect_to;
+                    }).catch(error => console.error(error));
                 })
             })
             .catch(error => {

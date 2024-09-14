@@ -61,22 +61,44 @@ document.addEventListener('DOMContentLoaded', function () {
                 const number_of_assistants = row.insertCell(6);
                 const actions = row.insertCell(7);
 
-                // Sumar un dia a la fecha:
+                // Formatear la fecha de item.date de YYYY-MM-DD a DD de mes de YYYY
                 const dateParts = item.date.split('-');
                 const formatedDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
                 formatedDate.setDate(formatedDate.getDate());
 
                 // Mostrar fecha de manera textual:
-                const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+                const months = [
+                    'Enero',
+                    'Febrero',
+                    'Marzo',
+                    'Abril',
+                    'Mayo',
+                    'Junio',
+                    'Julio',
+                    'Agosto',
+                    'Septiembre',
+                    'Octubre',
+                    'Noviembre',
+                    'Diciembre'
+                ];
                 const monthName = months[formatedDate.getMonth()];
                 const dateText = `${formatedDate.getDate()} de ${monthName} de ${formatedDate.getFullYear()}`;
+
+                // Formatear la hora en formato de 12 horas
+                let timeParts = item.time.split(':');
+                let hours = timeParts[0];
+                let minutes = timeParts[1];
+                let ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                let formatedTime = hours + ':' + minutes + ' ' + ampm;
 
                 code.innerHTML = item.id;
                 name.innerHTML = item.name;
                 department.innerHTML = item.department_name;
                 career.innerHTML = item.career_name;
                 date.innerHTML = dateText;
-                time.innerHTML = item.time;
+                time.innerHTML = formatedTime;
                 number_of_assistants.innerHTML = item.number_of_assistants;
 
                 actions.innerHTML = `

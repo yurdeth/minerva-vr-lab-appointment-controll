@@ -44,15 +44,17 @@
         </div>
     </div>
 
-    <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
-    <script type="module" src="{{asset("js/utils/api.js")}}"></script>
-    <script type="module" src="{{ asset('js/appointments/viewAppointment.js') }}"></script>
-    {{--<script src="{{ asset('js/appointments/showAvailableShedules.js') }}" defer></script>
+    <script defer type="module" src="{{asset("js/utils/alert.js")}}"></script>
+    <script defer type="module" src="{{asset("js/utils/api.js")}}"></script>
+    <script defer type="module" src="{{ asset('js/appointments/viewAppointment.js') }}"></script>
+    <script defer src="{{ asset('js/appointments/showAvailableShedules.js') }}"></script>
 
-    <script>
+    <script defer>
         document.addEventListener('DOMContentLoaded', function (){
-            showAvailableShedules();
+            setTimeout(() => {
+                showAvailableShedules();
+            }, 1000);
         });
-    </script>--}}
+    </script>
 
 @endsection
