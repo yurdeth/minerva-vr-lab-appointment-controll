@@ -71,6 +71,17 @@ if (!isset($dashboard)) {
             </div>
         </div>
 
+        <!-- Contenedor para los botones de paginación -->
+        <div id="pagination" class="pagination-container">
+            <button id="prevPage" class="btn-arrow" disabled>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <span id="currentPage" class="page-number">1</span>
+            <button id="nextPage" class="btn-arrow">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
     </div>
 
     <script>
