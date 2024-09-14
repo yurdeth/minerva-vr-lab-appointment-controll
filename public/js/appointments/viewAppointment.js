@@ -68,7 +68,7 @@ function handleEdit(id) {
 
                 showSuccessAlert('Éxito', '¡Cita actualizada exitosamente!')
                     .then(() => {
-                        window.location.href = '/dashboard/citas';
+                        window.location.href = '/citas';
                     });
             });
         })
@@ -94,12 +94,10 @@ function handleDelete(id) {
                 apiRequest(`/api/appointments/eliminar/${id}`, 'DELETE', null, headers)
                     .then(response => {
                         response.json().then(data => {
-                            console.log(data);
-
-                            /*showSuccessAlert('Eliminando...', 'Cita eliminada correctamente.')
+                            showSuccessAlert('Eliminando...', 'Cita eliminada correctamente.')
                                 .then(() => {
-                                    window.location.href = '/dashboard/citas';
-                                });*/
+                                    window.location.href = '/citas';
+                                });
                         });
                     }).catch(error => console.error(error));
             } else {

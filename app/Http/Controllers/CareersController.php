@@ -148,12 +148,14 @@ class CareersController extends Controller {
     }
 
     private function validateCareerName($careerName): ?JsonResponse {
+        $maxLength = 50;
+
         if (is_numeric($careerName)) {
             return $this->errorResponse('Error: el nombre de la carrera no puede ser un valor numérico');
         }
 
-        if (strlen($careerName) > 50) {
-            return $this->errorResponse('Error: el nombre de la carrera no puede exceder los 50 caracteres');
+        if (strlen($careerName) > $maxLength) {
+            return $this->errorResponse('Error: el nombre de la carrera no puede exceder los ' . $maxLength . ' caracteres');
         }
 
         if (strlen($careerName) < 5) {
@@ -164,8 +166,8 @@ class CareersController extends Controller {
             return $this->errorResponse('Error: el nombre de la carrera no puede estar vacío');
         }
 
-        if (!preg_match("/^[a-zA-ZñÑ ]*$/", $careerName)) {
-            return $this->errorResponse('Error: el nombre de la carrera no puede contener simbolos o caracteres especiales, como las tildes.');
+        if (!preg_match("/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]*$/", $careerName)) {
+            return $this->errorResponse('Error: el nombre de la carrera no puede contener símbolos o caracteres especiales, excepto las tildes.');
         }
 
         return null;

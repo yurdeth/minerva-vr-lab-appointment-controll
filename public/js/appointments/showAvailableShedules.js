@@ -20,7 +20,7 @@ function showAvailableShedules() {
     removeAllChildNodes(loadAvailableSchedulesDiv);
 
     if(!dateInput){
-        alert('Por favor selecciona una fecha');
+        return;
     }
 
     fetch(`${url}?date=${dateInput}`, {
@@ -37,7 +37,7 @@ function showAvailableShedules() {
                 if (data.length > 0) {
                     let p = document.createElement('p');
                     p.classList.add("text-start");
-                    p.innerHTML = "Horarios previamente seleccionados";
+                    p.innerHTML = "Horarios previamente seleccionados por otros usuarios para este día: ";
 
                     let table = document.createElement('table');
                     table.classList.add("table", "table-bordered", "text-center");

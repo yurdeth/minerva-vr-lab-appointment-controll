@@ -116,12 +116,14 @@ class DepartmentsController extends Controller {
     }
 
     private function validateDepartmentName($departmentName): ?JsonResponse {
+        $maxLength = 50;
+
         if (is_numeric($departmentName)) {
             return $this->errorResponse('Error: el nombre del departamento no puede ser un valor numérico');
         }
 
-        if (strlen($departmentName) > 50) {
-            return $this->errorResponse('Error: el nombre del departamento no puede exceder los 50 caracteres');
+        if (strlen($departmentName) > $maxLength) {
+            return $this->errorResponse('Error: el nombre del departamento no puede exceder los ' . $maxLength . ' caracteres');
         }
 
         if (strlen($departmentName) < 5) {
@@ -132,8 +134,8 @@ class DepartmentsController extends Controller {
             return $this->errorResponse('Error: el nombre del departamento no puede estar vacío');
         }
 
-        if (!preg_match("/^[a-zA-ZñÑ ]*$/", $departmentName)) {
-            return $this->errorResponse('Error: el nombre del departamento no puede contener simbolos o caracteres especiales');
+        if (!preg_match("/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]*$/", $departmentName)) {
+            return $this->errorResponse('Error: el nombre del departamento no puede contener símbolos o caracteres especiales, excepto las tildes.');
         }
 
         return null;
