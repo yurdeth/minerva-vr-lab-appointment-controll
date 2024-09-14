@@ -1,9 +1,9 @@
 const selectDepartment = document.getElementById('department');
 
 document.addEventListener('DOMContentLoaded', function () {
-    setTimeout(() => {
+    if(selectDepartment.value !== ''){
         fetchCareers(selectDepartment.value);
-    }, 600);
+    }
 });
 
 selectDepartment.addEventListener('change', function () {

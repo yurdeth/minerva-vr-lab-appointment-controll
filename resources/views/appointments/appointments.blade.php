@@ -36,7 +36,7 @@ if (!isset($dashboard)) {
             </div>
 
             <!-- Parte de la busqueda -->
-            <div class="busquedaCitas">
+            <div class="busquedaCitas" style="margin-left: 20%;">
                 <form action="" id="searchForm">
                     <div class="input-group">
                         <input type="text" id="searchInput" class="form-control" placeholder=" Buscar...">
@@ -46,30 +46,9 @@ if (!isset($dashboard)) {
             </div>
         </div>
 
-        {{--<div class="card-header bg-white">
-            <div class="row align-items-center"> <!-- Ensure vertical alignment -->
-                <div class="col-6 col-md-8 text-center"> <!-- Adjust the size as needed -->
-                    <br>
-                    <h2>Todas las citas</h2>
-                    <br>
-                </div>
-                <div class="col-6 col-md-4">
-                    <form action="" id="searchForm">
-                        <div class="input-group">
-                            <input type="text" id="searchInput" class="form-control"
-                                   placeholder="Buscar...">
-                            <button type="submit" class="btn btn-success">Buscar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>--}}
-
         <div class="card-header bg-white">
             <h2 class="titleCitas">Todas tus Citas</h2>
         </div>
-
-
 
         <div class="card-body">
             <div class="table-responsive" style="height: 100%; width: 100%;">
@@ -92,35 +71,6 @@ if (!isset($dashboard)) {
             </div>
         </div>
 
-        <!-- Parte de la tabla -->
-        {{--<div class="contentCita">
-            <div class="card">
-                <div class="card-header bg-white">
-                    <h2 class="titleCitas">Todas tus Citas</h2>
-                </div>
-
-                <div class="card-body">
-                    <div class="table-responsive" style="height: 100%; width: 100%;">
-                        <table id="appointmentsTable" class="table table-bordered text-center"
-                               style="width: 100%; margin-bottom: 0;">
-                            <thead class="table-avatar">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Encargado</th>
-                                <th scope="col">Departamento</th>
-                                <th scope="col">Carrera</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Hora</th>
-                                <th scope="col">Participantes</th>
-                                <th scope="col">Acciones</th>
-                            </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>--}}
     </div>
 
     <script>

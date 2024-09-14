@@ -24,7 +24,7 @@
                     @csrf
 
                     <div class="form-group position-relative p-2">
-                        <input type="text" class="form-control" id="nombre" name="name" placeholder="Nombre"
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Nombre"
                                style="padding-left: 30px;">
                         <i class="fas fa-user position-absolute"
                            style="top: 50%; transform: translateY(-50%); left: 10px; padding-left: 5px;"></i>
@@ -80,8 +80,10 @@
 
     </div>
 
-    <script src="{{ asset('js/loadDepartments.js') }}"></script>
-    <script src="{{ asset('js/loadCareers.js') }}"></script>
-    <script src="{{ asset('js/register.js') }}"></script>
+    <script type="module" src="{{ asset('js/loadDepartments.js') }}"></script>
+    <script type="module" src="{{ asset('js/loadCareers.js') }}"></script>
+    <script type="module" src="{{ asset('js/register.js') }}"></script>
+    <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
+    <script type="module" src="{{asset("js/utils/api.js")}}"></script>
 
 @endsection
