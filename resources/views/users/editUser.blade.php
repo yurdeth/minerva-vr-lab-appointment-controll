@@ -76,11 +76,11 @@
 
     </div>
 
-    <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
-    <script type="module" src="{{ asset('js/viewUser.js') }}"></script>
-    <script src="{{ asset('js/departments.js') }}"></script>
-    <script src="{{ asset('js/careers.js') }}"></script>
+    <script type="module" src="{{asset("js/utils/api.js")}}"></script>
+    <script type="module" src="{{ asset('js/users/viewUser.js') }}"></script>
+    <script src="{{ asset('js/loadDepartments.js') }}"></script>
+    <script src="{{ asset('js/loadCareers.js') }}"></script>
 
 @stop
 

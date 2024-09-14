@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointments;
-use App\Models\Participants;
 use App\Rules\AppointmentConflict;
 use Exception;
 use Illuminate\Http\Request;
@@ -25,7 +24,7 @@ class AppointmentsController extends Controller {
     //method to generate pdf
     public function pdf(){
         $appointments = (new Appointments)->GetAppointments();
-        $pdf = Pdf::loadView('citaspdf',compact('appointments'));
+        $pdf = Pdf::loadView('appointments.citasPdf',compact('appointments'));
         return $pdf->stream();
     }
 
@@ -50,15 +49,11 @@ class AppointmentsController extends Controller {
         $appointment = Appointments::create([
             'date' => $request->date,
             'time' => $request->time,
+            'number_of_assistants' => $request->number_of_assistants,
             'user_id' => Auth::id(),
         ]);
 
-        $participants = Participants::create([
-            'number_of_participants' => $request->number_of_assistants,
-            'appointment_id' => $appointment->id
-        ]);
-
-        if (!$appointment || !$participants) {
+        if (!$appointment) {
             return response()->json([
                 "message" => "Error al crear el registro",
                 "success" => false,
@@ -66,11 +61,16 @@ class AppointmentsController extends Controller {
         }
 
         $appointment->save();
-        $participants->save();
+
+        if(Auth::id() == 1){
+            $redirectTo = '/dashboard/citas';
+        } else{
+            $redirectTo = '/citas';
+        }
 
         return response()->json([
             "message" => "Cita registrada",
-            "redirect_to" => 'index',
+            "redirect_to" => $redirectTo,
             "success" => true,
         ]);
     }
@@ -100,14 +100,12 @@ class AppointmentsController extends Controller {
      */
     public function update(Request $request, $id) {
         $appointment = Appointments::find($id);
-        $participants = Participants::where('appointment_id', $appointment->id)->first();
 
         $appointment->date = $request->date;
         $appointment->time = $request->time;
-        $participants->number_of_participants = $request->number_of_assistants;
+        $appointment->number_of_assistants = $request->number_of_assistants;
 
         $appointment->save();
-        $participants->save();
 
         return redirect()->route('citas-ver');
     }

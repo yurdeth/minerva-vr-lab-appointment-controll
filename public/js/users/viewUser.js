@@ -1,5 +1,12 @@
-import {showAlert, showSuccessAlert, showErrorAlert, showWarningAlert} from './utils/alert.js'
-import {getResponse} from './getResponsePromise.js';
+import {showAlert, showSuccessAlert, showErrorAlert, showWarningAlert} from '../utils/alert.js'
+import {apiRequest} from '../utils/api.js'
+
+const headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+};
 
 /**
  * Maneja la edición de un usuario.
@@ -42,26 +49,19 @@ function handleEdit(id) {
         return;
     }
 
-    fetch(`/api/users/editar/${id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({
-            name: name.value,
-            email: email.value,
-            career: career.value,
-            password: password.value,
-            password_confirmation: password_confirmation.value
-        })
-    })
+    const body = {
+        name: name.value,
+        email: email.value,
+        career: career.value,
+        password: password.value,
+        password_confirmation: password_confirmation.value
+    }
+
+    apiRequest(`/api/users/editar/${id}`, 'PUT', body, headers)
         .then(response => {
             response.json().then(data => {
-                if(data.error){
-                    if(data.error.career[0].includes("The career field is required")){
+                if (data.error) {
+                    if (data.error.career[0].includes("The career field is required")) {
                         showErrorAlert('Oops...', 'Por favor, selecciona la carrera').then(() => {
                             document.getElementById('career').focus();
                         });
@@ -73,7 +73,7 @@ function handleEdit(id) {
                     '¡Perfil actualizado!',
                     'El perfil se ha actualizado correctamente.')
                     .then(() => {
-                        window.location.href = '/usuarios';
+                        window.location.href = '/dashboard/usuarios';
                     });
             })
         })
@@ -96,20 +96,15 @@ function handleDelete(id) {
         'Cancelar')
         .then(result => {
             if (result.isConfirmed) {
-                showSuccessAlert('Eliminando', 'El usuario será eliminado del sistema')
-                    .then(() => {
-                        fetch(`/api/users/eliminar/${id}`, {
-                            method: "DELETE",
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json',
-                                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                            }
-                        }).then(() => {
-                            window.location.href = '/usuarios';
-                        }).catch(error => console.error(error));
-                    });
+                apiRequest(`/api/users/eliminar/${id}`, 'DELETE', null, headers)
+                    .then(response => {
+                        response.json().then(() => {
+                            showSuccessAlert('Operación completada', 'Usuario eliminado correctamente')
+                                .then(() => {
+                                    window.location.href = '/dashboard/usuarios';
+                                });
+                        })
+                    }).catch(error => console.error(error));
             } else {
                 showErrorAlert('Cancelado', 'Operación cancelada');
             }
@@ -133,36 +128,37 @@ document.addEventListener('DOMContentLoaded', function () {
         id = urlParts[urlParts.length - 1];
     }
 
-    getResponse(`/api/users/ver/${id}`)
-        .then(response => {
-            if (response.length === 0) {
+    apiRequest(`/api/users/ver/${id}`, 'GET', null, headers)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length === 0) {
                 showErrorAlert('Oops...', 'No se encontraron datos del usuario.')
                     .then(() => {
-                        window.location.href = '/usuarios';
-                    })
+                        window.location.href = '/dashboard/usuarios';
+                    });
                 return;
             }
 
-            response.forEach(item => {
+            if (Array.isArray(data)) {
+                data.forEach(item => {
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const name = document.getElementById('name');
+                    const email = document.getElementById('email');
+                    const department_name = document.getElementById('department');
+                    const career = document.getElementById('career');
 
-                const name = document.getElementById('name');
-                const email = document.getElementById('email');
-                const department_name = document.getElementById('department');
-                const career = document.getElementById('career');
+                    name.value = item.name;
+                    email.value = item.email;
+                    department_name.value = item.department_name;
+                    career.value = item.career_name;
+                    department_name.selectedIndex = item.department_id;
+                    career.selectedIndex = item.career_id;
 
-                name.value = item.name;
-                email.value = item.email;
-                department_name.value = item.department_name;
-                career.value = item.career_name;
-                department_name.selectedIndex = item.department_id;
-                career.selectedIndex = item.career_id;
+                    const actionsButtons = document.getElementById('actionsButtons');
+                    actionsButtons.classList.add('row');
 
-                const actionsButtons = document.getElementById('actionsButtons');
-                actionsButtons.classList.add('row');
-
-                actionsButtons.innerHTML = `
+                    actionsButtons.innerHTML = `
                     <div class="d-flex justify-content-center gap-3 mt-3">
                         <form id="editForm-${item.id}">
                             <input type="hidden" name="_token" value="${csrfToken}">
@@ -179,14 +175,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 `;
 
-                document.getElementById(`btnUpdate-${item.id}`).addEventListener('click', function () {
-                    handleEdit(item.id);
-                });
+                    document.getElementById(`btnUpdate-${item.id}`).addEventListener('click', function () {
+                        handleEdit(item.id);
+                    });
 
-                document.getElementById(`btnDestroy-${item.id}`).addEventListener('click', function () {
-                    handleDelete(item.id);
+                    document.getElementById(`btnDestroy-${item.id}`).addEventListener('click', function () {
+                        handleDelete(item.id);
+                    });
                 });
-            });
+            } else {
+                console.error("Error: Data is not an array");
+            }
         })
         .catch(error => {
             console.log(error);

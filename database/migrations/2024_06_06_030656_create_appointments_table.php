@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->id();
             $table->date("date");
             $table->time("time");
+            $table->integer('number_of_assistants');
             $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnUpdate()

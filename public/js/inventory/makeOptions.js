@@ -1,5 +1,5 @@
-import {getResponse} from './getResponsePromise.js';
-import {showSuccessAlert, showErrorAlert} from './utils/alert.js'
+import {getResponse} from '../getResponsePromise.js';
+import {showSuccessAlert, showErrorAlert} from '../utils/alert.js'
 
 let roomList = ["Sala 1", "Sala 2"];
 let resourceTypelist = ["Lente", "Computadora"];
@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
                     showSuccessAlert('Recurso creado', 'El articulo se registró correctamente').then(() => {
-                        window.location.href = '/dashboard/registro-inventario';
+                        window.location.href = '/dashboard/inventario';
                     });
                 });
             })

@@ -1,4 +1,4 @@
-@extends('Administración.dashboard')
+@extends('administration.dashboard')
 
 @section('title', 'Usuarios')
 
@@ -7,7 +7,7 @@
 @stop
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('CSS/administracion/tables.css')}}">
+    <link rel="stylesheet" href="{{ asset('CSS/administracion/tables.css')}}">
     <div>
         <div class="row justify-content-center">
             <div class="col-12">
@@ -22,7 +22,8 @@
                             <div class="col-6 col-md-4">
                                 <form action="" id="searchForm">
                                     <div class="input-group">
-                                        <input type="text" id="searchInput" class="form-control" placeholder="Buscar...">
+                                        <input type="text" id="searchInput" class="form-control"
+                                               placeholder="Buscar...">
                                         <button type="submit" class="btn btn-success">Buscar</button>
                                     </div>
                                 </form>
@@ -31,7 +32,8 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive" style="height: 100%; width: 100%;">
-                            <table class="table table-bordered text-center" id="usersTable" style="width: 100%; margin-bottom: 0;">
+                            <table class="table table-bordered text-center" id="usersTable"
+                                   style="width: 100%; margin-bottom: 0;">
                                 <thead class="table-avatar">
                                 <tr>
                                     <th scope="col">ID</th>
@@ -52,35 +54,6 @@
     </div>
 
     <script>
-        function showDeleteConfirmationMessage(event, userId) {
-            event.preventDefault();
-
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: "¡No podrás revertir esto!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        icon: 'success',
-                        iconColor: '#046620',
-                        title: '¡Perfil eliminado exitosamente!',
-                        text: 'Tu perfil ha sido eliminado exitosamente.',
-                        confirmButtonColor: '#046620',
-                        timer: 2000,
-                        showConfirmButton: false
-                    }).then(() => {
-                        document.getElementById('deleteForm-' + userId).submit();
-                    });
-                }
-            });
-        }
-
         document.addEventListener('DOMContentLoaded', function () {
             const searchForm = document.getElementById('searchForm');
             const searchInput = document.getElementById('searchInput');
@@ -114,8 +87,8 @@
         });
     </script>
 
-    <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
-    <script type="module" src="{{ asset('js/users.js') }}"></script>
+    <script type="module" src="{{asset("js/utils/api.js")}}"></script>
+    <script type="module" src="{{ asset('js/users/users.js') }}"></script>
 @stop
 
