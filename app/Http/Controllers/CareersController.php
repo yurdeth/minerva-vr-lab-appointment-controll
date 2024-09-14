@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Careers;
-use App\Http\Requests\StoreCareersRequest;
-use App\Http\Requests\UpdateCareersRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -31,6 +29,11 @@ class CareersController extends Controller {
      * Store a newly created resource in storage.
      */
     public function store(Request $request): JsonResponse {
+        $validationResponse = $this->validateCareerName($request->career_name);
+        if ($validationResponse) {
+            return $validationResponse;
+        }
+
         $validate = Validator::make($request->all(), [
             'career_name' => 'required|string|unique:careers,career_name',
             'department_id' => 'required|integer'
@@ -92,12 +95,9 @@ class CareersController extends Controller {
      * Update the specified resource in storage.
      */
     public function update(Request $request) {
-
-        if(!$request->career_name){
-            return response()->json([
-                'message' => 'Error: no se ha proporcionado el nombre de la carrera',
-                'success' => false
-            ]);
+        $validationResponse = $this->validateCareerName($request->career_name);
+        if ($validationResponse) {
+            return $validationResponse;
         }
 
         if(!$request->department_id){
@@ -145,5 +145,36 @@ class CareersController extends Controller {
             'message' => 'Carrera eliminada',
             'success' => true
         ], 201);
+    }
+
+    private function validateCareerName($careerName): ?JsonResponse {
+        if (is_numeric($careerName)) {
+            return $this->errorResponse('Error: el nombre de la carrera no puede ser un valor numérico');
+        }
+
+        if (strlen($careerName) > 50) {
+            return $this->errorResponse('Error: el nombre de la carrera no puede exceder los 50 caracteres');
+        }
+
+        if (strlen($careerName) < 5) {
+            return $this->errorResponse('Error: el nombre de la carrera debe tener al menos 5 caracteres');
+        }
+
+        if ($careerName == null) {
+            return $this->errorResponse('Error: el nombre de la carrera no puede estar vacío');
+        }
+
+        if (!preg_match("/^[a-zA-ZñÑ ]*$/", $careerName)) {
+            return $this->errorResponse('Error: el nombre de la carrera no puede contener simbolos o caracteres especiales, como las tildes.');
+        }
+
+        return null;
+    }
+
+    private function errorResponse($message): JsonResponse {
+        return response()->json([
+            'message' => $message,
+            'success' => false
+        ]);
     }
 }

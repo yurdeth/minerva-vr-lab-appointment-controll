@@ -6,7 +6,6 @@ use App\Models\Appointments;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use DateTime;
-use Illuminate\Support\Facades\Auth;
 
 class AppointmentConflict implements ValidationRule {
 

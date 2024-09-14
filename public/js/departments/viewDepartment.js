@@ -39,15 +39,16 @@ function handleEdit(id) {
     apiRequest(`/api/departments/editar/${id}`, 'PUT', body, headers)
         .then(response => {
             response.json().then(data => {
+                console.log(data.message);
+                console.log(data.success);
+
                 if(!data.success){
-                    if (data.message.includes('departamento')){
+                    if (data.message.includes('no encontrado')){
                         showErrorAlert('Error', 'Ingrese el nombre del departamento');
                         return;
                     }
-
-                    else{
-                        showErrorAlert('Error', data.message);
-                    }
+                    showErrorAlert('Error', data.message);
+                    return;
                 }
 
                 showSuccessAlert('Operación completada', 'Departamento actualizado correctamente')

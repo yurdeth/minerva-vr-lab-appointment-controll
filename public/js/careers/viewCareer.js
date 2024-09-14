@@ -45,8 +45,10 @@ function handleEdit(id) {
     apiRequest(`/api/careers/editar/${id}`, 'PUT', body, headers)
         .then(response => {
             response.json().then(data => {
+                console.log(data);
+
                 if(!data.success){
-                    if (data.message.includes('carrera')){
+                    if (data.message.includes('carrera no encontrada')){
                         showErrorAlert('Error', 'Ingrese el nombre de la carrera');
                         return;
                     }
@@ -58,6 +60,7 @@ function handleEdit(id) {
 
                     else{
                         showErrorAlert('Error', data.message);
+                        return;
                     }
                 }
 
