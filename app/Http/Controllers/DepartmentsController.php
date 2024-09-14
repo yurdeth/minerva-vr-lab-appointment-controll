@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 use App\Services\ValidationService;
+use App\Services\ValidateUpdateService;
 use App\Enum\ValidationTypeEnum;
 
 class DepartmentsController extends Controller {
@@ -75,7 +76,7 @@ class DepartmentsController extends Controller {
      * Update the specified resource in storage.
      */
     public function update(Request $request) {
-        $validationService = new ValidationService($request, ValidationTypeEnum::DEPARTMENT);
+        $validationService = new ValidateUpdateService($request, ValidationTypeEnum::DEPARTMENT);
         $response = $validationService->ValidateRequest();
         if ($response) {
             return $response;

@@ -32,14 +32,14 @@ class ValidationService {
         return null;
     }
 
-    private function errorResponse($message): JsonResponse {
+    protected function errorResponse($message): JsonResponse {
         return response()->json([
             'message' => $message,
             'success' => false
         ]);
     }
 
-    private function validateRegister(): ?JsonResponse {
+    protected function validateRegister(): ?JsonResponse {
         if (!$this->request->name && !$this->request->email && !$this->request->career && !$this->request->password && !$this->request->password_confirmation) {
             return $this->errorResponse("Todos los campos son requeridos");
         }
@@ -103,7 +103,7 @@ class ValidationService {
         return null;
     }
 
-    private function validateDepartmentName($departmentName): ?JsonResponse {
+    protected function validateDepartmentName($departmentName): ?JsonResponse {
         $maxLength = 50;
 
         if (is_numeric($departmentName)) {
@@ -129,7 +129,7 @@ class ValidationService {
         return null;
     }
 
-    private function validateCareerName($careerName): ?JsonResponse {
+    protected function validateCareerName($careerName): ?JsonResponse {
         $maxLength = 50;
 
         if (is_numeric($careerName)) {
