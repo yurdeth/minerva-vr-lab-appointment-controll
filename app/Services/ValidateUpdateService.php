@@ -68,8 +68,20 @@ class ValidateUpdateService extends ValidationService {
     }
 
     private function careerExists($careerName): ?JsonResponse {
-        $career = DB::table('careers')->where('career_name', $careerName)->first();
-        if ($career) {
+        $currentCareer = DB::table('careers')
+            ->where('id', $this->request->career_id)
+            ->first();
+
+        if ($currentCareer && $currentCareer->career_name === $careerName) {
+            return null;
+        }
+
+        $careerExists = DB::table('careers')
+            ->where('department_id', $this->request->department_id)
+            ->where('career_name', $careerName)
+            ->exists();
+
+        if ($careerExists) {
             return $this->errorResponse("La carrera ya existe");
         }
 
