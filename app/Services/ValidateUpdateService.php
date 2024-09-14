@@ -26,9 +26,9 @@ class ValidateUpdateService extends ValidationService {
             return $this->validateDepartmentName($this->request->department_name);
         }
 
-        /*if ($this->validationType == ValidationTypeEnum::CAREER) {
+        if ($this->validationType == ValidationTypeEnum::CAREER) {
             return $this->validateCareerName($this->request->career_name);
-        }*/
+        }
 
         return null;
     }
@@ -53,6 +53,24 @@ class ValidateUpdateService extends ValidationService {
         $department = DB::table('departments')->where('department_name', $departmentName)->first();
         if ($department) {
             return $this->errorResponse("El departamento ya existe");
+        }
+
+        return null;
+    }
+
+    protected function validateCareerName($careerName): ?JsonResponse {
+        $response = parent::validateCareerName($careerName);
+        if ($response) {
+            return $response;
+        }
+
+        return $this->careerExists($careerName);
+    }
+
+    private function careerExists($careerName): ?JsonResponse {
+        $career = DB::table('careers')->where('career_name', $careerName)->first();
+        if ($career) {
+            return $this->errorResponse("La carrera ya existe");
         }
 
         return null;

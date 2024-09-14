@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 use App\Services\ValidationService;
+use App\Services\ValidateUpdateService;
 use App\Enum\ValidationTypeEnum;
 
 class CareersController extends Controller {
@@ -92,7 +93,7 @@ class CareersController extends Controller {
             ]);
         }
 
-        $validationService = new ValidationService($request, ValidationTypeEnum::CAREER);
+        $validationService = new ValidateUpdateService($request, ValidationTypeEnum::CAREER);
         $response = $validationService->ValidateRequest();
         if ($response) {
             return $response;
