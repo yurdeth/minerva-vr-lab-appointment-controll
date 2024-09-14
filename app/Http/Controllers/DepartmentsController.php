@@ -9,6 +9,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
+use App\Services\ValidationService;
+use App\Enum\ValidationTypeEnum;
+
 class DepartmentsController extends Controller {
     /**
      * Display a listing of the resource.
@@ -21,9 +24,10 @@ class DepartmentsController extends Controller {
      * Store a newly created resource in storage.
      */
     public function store(Request $request): JsonResponse {
-        $validationResponse = $this->validateDepartmentName($request->department_name);
-        if ($validationResponse) {
-            return $validationResponse;
+        $validationService = new ValidationService($request, ValidationTypeEnum::DEPARTMENT);
+        $response = $validationService->ValidateRequest();
+        if ($response) {
+            return $response;
         }
 
         $validate = Validator::make($request->all(), [
@@ -71,9 +75,10 @@ class DepartmentsController extends Controller {
      * Update the specified resource in storage.
      */
     public function update(Request $request) {
-        $validationResponse = $this->validateDepartmentName($request->department_name);
-        if ($validationResponse) {
-            return $validationResponse;
+        $validationService = new ValidationService($request, ValidationTypeEnum::DEPARTMENT);
+        $response = $validationService->ValidateRequest();
+        if ($response) {
+            return $response;
         }
 
         $department = Departments::find($request->id);
@@ -113,38 +118,5 @@ class DepartmentsController extends Controller {
             'message' => 'Departamento eliminado correctamente',
             'success' => true
         ], 201);
-    }
-
-    private function validateDepartmentName($departmentName): ?JsonResponse {
-        $maxLength = 50;
-
-        if (is_numeric($departmentName)) {
-            return $this->errorResponse('Error: el nombre del departamento no puede ser un valor numérico');
-        }
-
-        if (strlen($departmentName) > $maxLength) {
-            return $this->errorResponse('Error: el nombre del departamento no puede exceder los ' . $maxLength . ' caracteres');
-        }
-
-        if (strlen($departmentName) < 5) {
-            return $this->errorResponse('Error: el nombre del departamento debe tener al menos 5 caracteres');
-        }
-
-        if ($departmentName == null) {
-            return $this->errorResponse('Error: el nombre del departamento no puede estar vacío');
-        }
-
-        if (!preg_match("/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]*$/", $departmentName)) {
-            return $this->errorResponse('Error: el nombre del departamento no puede contener símbolos o caracteres especiales, excepto las tildes.');
-        }
-
-        return null;
-    }
-
-    private function errorResponse($message): JsonResponse {
-        return response()->json([
-            'message' => $message,
-            'success' => false
-        ]);
     }
 }

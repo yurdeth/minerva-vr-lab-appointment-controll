@@ -81,7 +81,7 @@ function submitForm() {
     }
 
     const body = {
-        department_name: department_name
+        department_name: department_name.trim()
     };
 
     apiRequest('/api/departments/nuevo', 'POST', body, headers)

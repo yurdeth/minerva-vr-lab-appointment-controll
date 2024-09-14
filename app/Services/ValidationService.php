@@ -4,6 +4,8 @@ namespace App\Services;
 
 use Illuminate\Http\JsonResponse;
 
+use App\Enum\ValidationTypeEnum;
+
 class ValidationService {
 
     protected $request;
@@ -15,8 +17,16 @@ class ValidationService {
     }
 
     public function ValidateRequest(): ?JsonResponse {
-        if ($this->validationType == "register") {
+        if ($this->validationType == ValidationTypeEnum::REGISTER_USER) {
             return $this->validateRegister();
+        }
+
+        if ($this->validationType == ValidationTypeEnum::DEPARTMENT) {
+            return $this->validateDepartmentName($this->request->department_name);
+        }
+
+        if ($this->validationType == ValidationTypeEnum::CAREER) {
+            return $this->validateCareerName($this->request->career_name);
         }
 
         return null;
@@ -88,6 +98,58 @@ class ValidationService {
 
         if ($this->request->password != $this->request->password_confirmation) {
             return $this->errorResponse("Las contraseñas no coinciden");
+        }
+
+        return null;
+    }
+
+    private function validateDepartmentName($departmentName): ?JsonResponse {
+        $maxLength = 50;
+
+        if (is_numeric($departmentName)) {
+            return $this->errorResponse('Error: el nombre del departamento no puede ser un valor numérico');
+        }
+
+        if (strlen($departmentName) > $maxLength) {
+            return $this->errorResponse('Error: el nombre del departamento no puede exceder los ' . $maxLength . ' caracteres');
+        }
+
+        if (strlen($departmentName) < 5) {
+            return $this->errorResponse('Error: el nombre del departamento debe tener al menos 5 caracteres');
+        }
+
+        if ($departmentName == null) {
+            return $this->errorResponse('Error: el nombre del departamento no puede estar vacío');
+        }
+
+        if (!preg_match("/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]*$/", $departmentName)) {
+            return $this->errorResponse('Error: el nombre del departamento no puede contener símbolos o caracteres especiales, excepto las tildes.');
+        }
+
+        return null;
+    }
+
+    private function validateCareerName($careerName): ?JsonResponse {
+        $maxLength = 50;
+
+        if (is_numeric($careerName)) {
+            return $this->errorResponse('Error: el nombre de la carrera no puede ser un valor numérico');
+        }
+
+        if (strlen($careerName) > $maxLength) {
+            return $this->errorResponse('Error: el nombre de la carrera no puede exceder los ' . $maxLength . ' caracteres');
+        }
+
+        if (strlen($careerName) < 5) {
+            return $this->errorResponse('Error: el nombre de la carrera debe tener al menos 5 caracteres');
+        }
+
+        if ($careerName == null) {
+            return $this->errorResponse('Error: el nombre de la carrera no puede estar vacío');
+        }
+
+        if (!preg_match("/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]*$/", $careerName)) {
+            return $this->errorResponse('Error: el nombre de la carrera no puede contener símbolos o caracteres especiales, excepto las tildes.');
         }
 
         return null;

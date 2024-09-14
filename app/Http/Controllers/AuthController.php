@@ -13,11 +13,12 @@ use Illuminate\Support\Facades\Validator;
 use App\Rules\OnlyUesMail;
 
 use App\Services\ValidationService;
+use App\Enum\ValidationTypeEnum;
 
 class AuthController extends Controller {
 
     public function register(Request $request): JsonResponse {
-        $validationService = new ValidationService($request, "register");
+        $validationService = new ValidationService($request, ValidationTypeEnum::REGISTER_USER);
         $response = $validationService->ValidateRequest();
         if ($response) {
             return $response;

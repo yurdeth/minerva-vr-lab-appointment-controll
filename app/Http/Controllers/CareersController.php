@@ -9,6 +9,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
+use App\Services\ValidationService;
+use App\Enum\ValidationTypeEnum;
+
 class CareersController extends Controller {
     /**
      * Display a listing of the resource.
@@ -19,19 +22,13 @@ class CareersController extends Controller {
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create() {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request): JsonResponse {
-        $validationResponse = $this->validateCareerName($request->career_name);
-        if ($validationResponse) {
-            return $validationResponse;
+        $validationService = new ValidationService($request, ValidationTypeEnum::CAREER);
+        $response = $validationService->ValidateRequest();
+        if ($response) {
+            return $response;
         }
 
         $validate = Validator::make($request->all(), [
@@ -85,26 +82,20 @@ class CareersController extends Controller {
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Careers $careers) {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request) {
-        $validationResponse = $this->validateCareerName($request->career_name);
-        if ($validationResponse) {
-            return $validationResponse;
-        }
-
         if(!$request->department_id){
             return response()->json([
                 'message' => 'Error: no se ha proporcionado un departamento',
                 'success' => false
             ]);
+        }
+
+        $validationService = new ValidationService($request, ValidationTypeEnum::CAREER);
+        $response = $validationService->ValidateRequest();
+        if ($response) {
+            return $response;
         }
 
         $career = Careers::find($request->id);
@@ -145,38 +136,5 @@ class CareersController extends Controller {
             'message' => 'Carrera eliminada',
             'success' => true
         ], 201);
-    }
-
-    private function validateCareerName($careerName): ?JsonResponse {
-        $maxLength = 50;
-
-        if (is_numeric($careerName)) {
-            return $this->errorResponse('Error: el nombre de la carrera no puede ser un valor numérico');
-        }
-
-        if (strlen($careerName) > $maxLength) {
-            return $this->errorResponse('Error: el nombre de la carrera no puede exceder los ' . $maxLength . ' caracteres');
-        }
-
-        if (strlen($careerName) < 5) {
-            return $this->errorResponse('Error: el nombre de la carrera debe tener al menos 5 caracteres');
-        }
-
-        if ($careerName == null) {
-            return $this->errorResponse('Error: el nombre de la carrera no puede estar vacío');
-        }
-
-        if (!preg_match("/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]*$/", $careerName)) {
-            return $this->errorResponse('Error: el nombre de la carrera no puede contener símbolos o caracteres especiales, excepto las tildes.');
-        }
-
-        return null;
-    }
-
-    private function errorResponse($message): JsonResponse {
-        return response()->json([
-            'message' => $message,
-            'success' => false
-        ]);
     }
 }

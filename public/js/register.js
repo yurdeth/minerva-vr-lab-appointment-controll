@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     showSuccessAlert('Éxito', "Usuario registrado correctamente")
                         .then(() => {
+                            localStorage.setItem('token', data.token);
                             window.location.href = data.redirect_to;
                         });
                 });
