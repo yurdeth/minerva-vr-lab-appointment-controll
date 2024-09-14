@@ -17,13 +17,15 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
 
+//Pruebas de rutas carreras con nombres repetidos
 Route::get('/departments', [DepartmentsController::class, 'index'])->name("departments");
-Route::get('/careers/{id}', [CareersController::class, 'show'])->name("careers");
+Route::get('/careers/{id}', [CareersController::class, 'show'])->name("careers.show");
 Route::get('/careers/', [CareersController::class, 'index'])->name("careers");
 
 // Rutas no protegidass
 Route::post("register", [AuthController::class, "register"])->name("register");
-Route::post("login", [AuthController::class, "login"])->name("login");
+//Pruebas de rutas login con nombres repetidos
+Route::post("login", [AuthController::class, "login"])->name("login.post");
 
 Route::get("login", [AuthController::class, "login"])->name("login");
 

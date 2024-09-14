@@ -18,12 +18,13 @@ Route::fallback(function () {
 });
 
 // ***************************************Rutas públicas*********************************************
+    //Pruebas de rutas inicio con nombres repetidos
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('HomeVR');
     }
     return view('inicio');
-})->name('inicio');
+})->name('inicio.index');
 
 Route::get('/inicio', function () {
     if (Auth::check()) {
@@ -52,7 +53,9 @@ Route::post('/signup', [AuthController::class, 'register'])->name("signup");
 // ***************************************Rutas para usuarios*********************************************
 Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
-    Route::post("logout", [AuthController::class, "logout"])->name("logout");
+
+    //Pruebas de rutas logout con nombres repetidos
+    Route::post("logout", [AuthController::class, "logout"])->name("logout.post");
     Route::get("logout", [AuthController::class, "logout"])->name("logout");
 
     Route::get('/home', function () {
