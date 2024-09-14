@@ -81,7 +81,7 @@
                 <i class="fa fa-graduation-cap"></i>
                 <span class="tooltip-text">Agregar Carrera</span>
             </a>
-            <form action="" id="searchForm">
+            <form action="" id="searchForm" style="margin-left: auto;">
                 <div class="input-group">
                     <input type="text" id="searchInput" class="form-control" placeholder="Buscar...">
                     <button type="submit" class="btn btn-success">Buscar</button>

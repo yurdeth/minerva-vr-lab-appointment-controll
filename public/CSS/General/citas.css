@@ -18,6 +18,7 @@
 .opcionesCitas{
     display: flex;
     justify-content: flex-start;
+    margin-bottom: 19px;
 }
 
 .col-auto{
@@ -98,12 +99,13 @@
 .busquedaCitas {
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin-top: 0px;
 }
 
 #searchForm {
     width: 100%;
     max-width: 400px;
+    margin-top: -7px;
 }
 
 .input-group {
