@@ -81,19 +81,21 @@ function submitForm() {
     }
 
     const body = {
-        department_name: department_name
+        department_name: department_name.trim()
     };
 
     apiRequest('/api/departments/nuevo', 'POST', body, headers)
         .then(response => {
             response.json().then(data => {
+
+                console.log(data.error);
+
                 if (!data.success) {
                     if (data.error) {
                         if (data.error.department_name[0].includes('has already been taken')) {
                             showErrorAlert('Error', 'El nombre del departamento ya ha sido registrado');
                             return;
                         }
-
                         showErrorAlert('Error', "Ha ocurrido un error al intentar crear el departamento");
                         return;
                     }

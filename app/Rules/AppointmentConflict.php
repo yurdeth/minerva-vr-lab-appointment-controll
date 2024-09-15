@@ -11,8 +11,11 @@ class AppointmentConflict implements ValidationRule {
 
     protected $date;
     protected $time;
+    protected $request;
 
-    public function __construct($date, $time) {
+    public function __construct($request, $date, $time) {
+        $this->request = $request;
+
         $this->date = $date;
 
         //Dividir time por ":"
@@ -24,6 +27,14 @@ class AppointmentConflict implements ValidationRule {
     }
 
     public function passes($attribute, $value): bool {
+        if($this->request){
+            $userAppointmentsExists = Appointments::where('user_id', $this->request->user_id)->exists();
+            if ($userAppointmentsExists) {
+                return false;
+            }
+            return true;
+        }
+
         $exactMatchExists = Appointments::where('date', $this->date)
             ->where('time', $this->time)
             ->exists();
@@ -51,6 +62,7 @@ class AppointmentConflict implements ValidationRule {
     }
 
     public function validate(string $attribute, mixed $value, Closure $fail): void {
+
         if (!$this->passes($attribute, $value)) {
             $fail($this->message());
         }

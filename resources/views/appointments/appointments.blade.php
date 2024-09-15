@@ -2,7 +2,7 @@
 if (!isset($dashboard)) {
     $layout = 'layouts.layout';
 } else {
-    $layout = 'Administración.dashboard';
+    $layout = 'administration.dashboard';
 }
 ?>
 
@@ -34,47 +34,54 @@ if (!isset($dashboard)) {
                     <span class="tooltip-text">Generar Reporte en PDF</span>
                 </a>
             </div>
-        </div>
 
-        <!-- Parte de la busqueda -->
-        <div class="busquedaCitas">
-            <form action="" id="searchForm">
-                <div class="input-group">
-                    <input type="text" id="searchInput" class="form-control" placeholder=" Buscar...">
-                    <button type="submit" class="btn-primary">Buscar</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Parte de la tabla -->
-        <div class="contentCita">
-            <div class="card">
-                <div class="card-header bg-white">
-                    <h2 class="titleCitas">Todas tus Citas</h2>
-                </div>
-
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="appointmentsTable" class="table table-bordered text-center"
-                               style="width: 100%; margin-bottom: 0;">
-                            <thead class="table-avatar">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Encargado</th>
-                                <th scope="col">Departamento</th>
-                                <th scope="col">Carrera</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Hora</th>
-                                <th scope="col">Participantes</th>
-                                <th scope="col">Acciones</th>
-                            </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+            <!-- Parte de la busqueda -->
+            <div class="busquedaCitas" style="margin-left: 20%;">
+                <form action="" id="searchForm">
+                    <div class="input-group">
+                        <input type="text" id="searchInput" class="form-control" placeholder=" Buscar...">
+                        <button type="submit" class="btn-primary">Buscar</button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
+
+        <div class="card-header bg-white">
+            <h2 class="titleCitas">Todas tus Citas</h2>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive" style="height: 100%; width: 100%;">
+                <table id="appointmentsTable" class="table table-bordered text-center"
+                       style="width: 100%; margin-bottom: 0;">
+                    <thead class="table-avatar">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Encargado</th>
+                        <th scope="col">Departamento</th>
+                        <th scope="col">Carrera</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Hora</th>
+                        <th scope="col">Participantes</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Contenedor para los botones de paginación -->
+        <div id="pagination" class="pagination-container">
+            <button id="prevPage" class="btn-arrow" disabled>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <span id="currentPage" class="page-number">1</span>
+            <button id="nextPage" class="btn-arrow">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
     </div>
 
     <script>
@@ -113,7 +120,7 @@ if (!isset($dashboard)) {
 
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
-    <script type="module" src="{{ asset('js/appointments.js') }}"></script>
+    <script type="module" src="{{ asset('js/appointments/appointments.js') }}"></script>
 
     <br><br>
 

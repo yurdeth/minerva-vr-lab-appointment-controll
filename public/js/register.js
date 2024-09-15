@@ -1,94 +1,100 @@
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('form').addEventListener('submit', function(event) {
+import {apiRequest} from './utils/api.js'
+import {showErrorAlert, showSuccessAlert} from './utils/alert.js'
+
+const headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('form').addEventListener('submit', function (event) {
         event.preventDefault(); // Evitar que el formulario se envíe de forma convencional
 
-        // Realizar la solicitud de registro de forma tradicional
-        let form = event.target;
-        let formData = new FormData(form);
+        const name = document.getElementById('name');
+        const email = document.getElementById('email');
+        const career = document.getElementById('career');
+        const password = document.getElementById('password');
+        const passwordConfirmation = document.getElementById('password_confirmation');
 
-        // Validar que las contraseñas coincidan
-        let password = formData.get('password');
-        let passwordConfirmation = formData.get('password_confirmation');
-        // Validar que no haya campos vacíos
-        if (formData.get('name') === '' || formData.get('email') === '' || password === '' || passwordConfirmation === ''){
-            Swal.fire({
-                icon: 'error',
-                iconColor: '#660D04',
-                title: 'Oops...',
-                text: 'Por favor llena todos los campos',
-                confirmButtonColor: '#660D04',
-            });
-            return;
-        }
+        const body = {
+            name: name.value,
+            email: email.value,
+            career: career.value,
+            password: password.value,
+            password_confirmation: passwordConfirmation.value
+        };
 
-        if (password !== passwordConfirmation) {
-            Swal.fire({
-                icon: 'error',
-                iconColor: '#660D04',
-                title: 'Oops...',
-                text: 'Las contraseñas no coinciden',
-                confirmButtonColor: '#660D04',
-            });
-            return;
-        }
+        apiRequest('/signup', 'POST', body, headers)
+            .then(function (response) {
+                response.json().then(data => {
+                    if(!data.success){
+                        if (data.error) {
+                            if (data.error.career) {
+                                if (data.error.career[0].includes("required")) {
+                                    showErrorAlert('Error', 'Por favor, seleccione una carrera');
+                                    return;
+                                }
 
-        fetch(form.action, {
-            method: form.method,
-            body: formData,
-            headers: {
-                'Accept': 'application/json'
-            }
-        })
-            .then(function(response) {
-                if (!response.ok) {
-                    return response.json().then(function(data) {
-                        throw new Error(data.message || 'Error en la solicitud');
-                    });
-                }
-                return response.json();
-            })
-            .then(function(data) {
-                if (data.error) {
-                    let errorMessages = [];
-
-                    console.log(data.error);
-
-                    if (data.error.email) {
-                        data.error.email.forEach(message => {
-                            if (message.includes("email has already")) {
-                                errorMessages.push('Este correo ya está registrado, por favor intenta con otro');
-                            } else if (message.includes("Solo correos universitarios")) {
-                                errorMessages.push('Solo se permiten correos universitarios');
+                                showErrorAlert('Error', 'Error al procesar la carrera');
                             }
-                        });
+
+                            if (data.error.email) {
+                                if (data.error.email[0].includes("required")) {
+                                    showErrorAlert('Error', 'Por favor, ingrese su correo electrónico');
+                                    return;
+                                }
+
+                                if (data.error.email[0].includes("email has already")) {
+                                    showErrorAlert('Error', 'Este correo ya está registrado. Por favor intenta con otro');
+                                    return;
+                                }
+
+                                if (data.error.email[0].includes("correos universitarios")) {
+                                    showErrorAlert('Error', 'Solo se permiten correos universitarios');
+                                    return;
+                                }
+
+                                showErrorAlert('Error', 'Error al procesar el correo electrónico');
+                            }
+
+                            if(data.error.name) {
+                                if (data.error.name[0].includes("required")) {
+                                    showErrorAlert('Error', 'Por favor, ingrese su nombre');
+                                    return;
+                                }
+
+                                showErrorAlert('Error', 'Error al procesar el nombre');
+                            }
+
+                            if(data.error.password) {
+                                if (data.error.password[0].includes("required")) {
+                                    showErrorAlert('Error', 'Por favor, ingrese una contraseña');
+                                    return;
+                                }
+
+                                if (data.error.password[0].includes("The password field must be at least 8 characters")) {
+                                    showErrorAlert('Error', 'La contraseña debe tener al menos 8 caracteres');
+                                    return;
+                                }
+
+                                showErrorAlert('Error', 'Error al procesar la contraseña');
+                            }
+                        } else{
+                            showErrorAlert('Error', data.message);
+                        }
+                        return;
                     }
 
-                    if (data.error.password) {
-                        data.error.password.forEach(message => {
-                            if (message.includes("The password field must be at least 8 characters")) {
-                                errorMessages.push('La contraseña debe tener al menos 8 caracteres');
-                            }
+                    showSuccessAlert('Éxito', "Usuario registrado correctamente")
+                        .then(() => {
+                            localStorage.setItem('token', data.token);
+                            window.location.href = data.redirect_to;
                         });
-                    }
-
-                    Swal.fire({
-                        icon: 'error',
-                        iconColor: '#660D04',
-                        title: 'Oops...',
-                        text: errorMessages.join(', '),
-                        confirmButtonColor: '#660D04',
-                    });
-
-                    return;
-                }
-
-                // Manejar la respuesta del servidor según sea necesario
-                localStorage.setItem('token', data.token);
-
-                // Redireccionar al usuario a la página de inicio
-                window.location.href = data.redirect_to;
+                });
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 // Manejar el error de la solicitud
                 console.error('Error:', error);
                 Swal.fire({

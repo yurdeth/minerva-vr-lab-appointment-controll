@@ -1,4 +1,4 @@
-@extends('Administración.dashboard')
+@extends('administration.dashboard')
 
 {{--Section para poder trabajar con layout --}}
 
@@ -40,8 +40,8 @@
         </form>
     </div>
 
-    <script type="module" src="{{ asset('js/departments.js') }}"></script>
+    <script type="module" src="{{ asset('js/loadDepartments.js') }}"></script>
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
-    <script type="module" src="{{asset("js/careers/add_new_career.js")}}"></script>
+    <script type="module" src="{{asset("js/careers/addNewCareer.js")}}"></script>
 @endsection

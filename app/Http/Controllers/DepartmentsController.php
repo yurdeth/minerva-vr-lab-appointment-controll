@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Departments;
-use App\Http\Requests\StoreDepartmentsRequest;
-use App\Http\Requests\UpdateDepartmentsRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+
+use App\Services\ValidationService;
+use App\Services\ValidateUpdateService;
+use App\Enum\ValidationTypeEnum;
 
 class DepartmentsController extends Controller {
     /**
@@ -23,11 +25,17 @@ class DepartmentsController extends Controller {
      * Store a newly created resource in storage.
      */
     public function store(Request $request): JsonResponse {
+        $validationService = new ValidationService($request, ValidationTypeEnum::DEPARTMENT);
+        $response = $validationService->ValidateRequest();
+        if ($response) {
+            return $response;
+        }
+
         $validate = Validator::make($request->all(), [
             "department_name" => "required|string|unique:departments,department_name",
         ]);
 
-        if($validate->fails()){
+        if ($validate->fails()) {
             return response()->json([
                 'message' => 'Error en los datos',
                 'error' => $validate->errors(),
@@ -39,7 +47,7 @@ class DepartmentsController extends Controller {
             'department_name' => $request->department_name,
         ]);
 
-        if(!$department){
+        if (!$department) {
             return response()->json([
                 'message' => 'Error al crear el registro',
                 'success' => false,
@@ -68,12 +76,10 @@ class DepartmentsController extends Controller {
      * Update the specified resource in storage.
      */
     public function update(Request $request) {
-
-        if(!$request->department_name){
-            return response()->json([
-                'message' => 'Error: no se ha proporcionado el nombre del departamento',
-                'success' => false
-            ]);
+        $validationService = new ValidateUpdateService($request, ValidationTypeEnum::DEPARTMENT);
+        $response = $validationService->ValidateRequest();
+        if ($response) {
+            return $response;
         }
 
         $department = Departments::find($request->id);
@@ -100,7 +106,7 @@ class DepartmentsController extends Controller {
     public function destroy(string $id): JsonResponse {
         $department = Departments::find($id);
 
-        if(!$department){
+        if (!$department) {
             return response()->json([
                 'message' => 'El departamento solicitado no ha podido encontrarse',
                 'success' => false

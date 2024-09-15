@@ -1,5 +1,5 @@
-import {showAlert, showSuccessAlert, showErrorAlert, showWarningAlert} from './utils/alert.js'
-import {apiRequest} from './utils/api.js'
+import {showAlert, showSuccessAlert, showErrorAlert, showWarningAlert} from '../utils/alert.js'
+import {apiRequest} from '../utils/api.js'
 
 const headers = {
     'Content-Type': 'application/json',
@@ -52,10 +52,23 @@ function handleEdit(id) {
 
     apiRequest(`/api/appointments/editar/${id}`, 'PUT', body, headers)
         .then(response => {
-            response.json().then(() => {
+            response.json().then(data => {
+                console.log(data);
+
+                if(!data.success){
+                    if (data.error) {
+                        if (data.error.time && data.error.time[0].includes("cita registrada")) {
+                            showWarningAlert('Oops...', 'Ya existe una cita registrada en esta fecha y hora, o en el rango de una hora.');
+                        } else {
+                            showErrorAlert('Error', 'No se pudo actualizar la cita.');
+                        }
+                    }
+                    return;
+                }
+
                 showSuccessAlert('Éxito', '¡Cita actualizada exitosamente!')
                     .then(() => {
-                        window.location.href = '/dashboard/citas';
+                        window.location.href = '/citas';
                     });
             });
         })
@@ -80,10 +93,10 @@ function handleDelete(id) {
             if (result.isConfirmed) {
                 apiRequest(`/api/appointments/eliminar/${id}`, 'DELETE', null, headers)
                     .then(response => {
-                        response.json().then(() => {
+                        response.json().then(data => {
                             showSuccessAlert('Eliminando...', 'Cita eliminada correctamente.')
                                 .then(() => {
-                                    window.location.href = '/dashboard/citas';
+                                    window.location.href = '/citas';
                                 });
                         });
                     }).catch(error => console.error(error));
@@ -116,12 +129,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         const name = document.getElementById('name');
                         const date = document.getElementById('date');
                         const time = document.getElementById('time');
-                        const number_of_participants = document.getElementById('number_of_assistants');
+                        const number_of_assistants = document.getElementById('number_of_assistants');
 
                         if (name) name.value = item.name;
                         date.value = item.date;
                         time.value = item.time;
-                        number_of_participants.value = item.number_of_participants;
+                        number_of_assistants.value = item.number_of_assistants;
 
                         const actionsButtons = document.getElementById('actionsButtons');
                         actionsButtons.classList.add('row');

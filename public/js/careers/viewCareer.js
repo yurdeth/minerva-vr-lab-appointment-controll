@@ -8,7 +8,8 @@ const headers = {
     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 };
 
-const department = document.getElementById('department_name');
+const career = document.getElementById('career');
+const department = document.getElementById('department');
 const actionsButtons = document.getElementById('actionsButtons');
 
 /**
@@ -26,6 +27,10 @@ function getQueryParam(name) {
  * @param {number} id - El ID del usuario a editar.
  */
 function handleEdit(id) {
+    if (!career.value) {
+        showErrorAlert('Error', 'Por favor, ingrese el nombre de la carrera');
+        return;
+    }
 
     if (!department.value) {
         showErrorAlert('Error', 'Por favor, seleccione un departamento');
@@ -33,26 +38,35 @@ function handleEdit(id) {
     }
 
     const body = {
-        department_name: department.value
+        career_name: career.value,
+        department_id: department.value
     }
 
-    apiRequest(`/api/departments/editar/${id}`, 'PUT', body, headers)
+    apiRequest(`/api/careers/editar/${id}`, 'PUT', body, headers)
         .then(response => {
             response.json().then(data => {
+                console.log(data);
+
                 if(!data.success){
-                    if (data.message.includes('departamento')){
-                        showErrorAlert('Error', 'Ingrese el nombre del departamento');
+                    if (data.message.includes('carrera no encontrada')){
+                        showErrorAlert('Error', 'Ingrese el nombre de la carrera');
+                        return;
+                    }
+
+                    if(data.message.includes('departamento')){
+                        showErrorAlert('Error', 'Seleccione un departamento');
                         return;
                     }
 
                     else{
                         showErrorAlert('Error', data.message);
+                        return;
                     }
                 }
 
-                showSuccessAlert('Operación completada', 'Departamento actualizado correctamente')
+                showSuccessAlert('Operación completada', 'Carrera actualizada correctamente')
                     .then(() => {
-                        window.location.href = '/dashboard/departamentos';
+                        window.location.href = '/dashboard/carreras';
                     });
             });
         })
@@ -61,7 +75,7 @@ function handleEdit(id) {
 
 /**
  * Maneja la eliminación de un usuario.
- * @param {number} id - El ID del departamento a eliminar.
+ * @param {number} id - El ID de la carrera a eliminar.
  */
 function handleDelete(id) {
     showAlert(
@@ -73,7 +87,7 @@ function handleDelete(id) {
         'Cancelar')
         .then(result => {
             if (result.isConfirmed) {
-                apiRequest(`/api/departments/eliminar/${id}`, 'DELETE', null, headers)
+                apiRequest(`/api/careers/eliminar/${id}`, 'DELETE', null, headers)
                     .then(response => {
                         response.json().then(data => {
                             if (!data.success){
@@ -83,7 +97,7 @@ function handleDelete(id) {
 
                             showSuccessAlert('Operación completada', 'Usuario eliminado correctamente')
                                 .then(() => {
-                                    window.location.href = '/dashboard/departamentos/';
+                                    window.location.href = '/dashboard/carreras';
                                 });
                         })
                     }).catch(error => console.error(error));
@@ -93,28 +107,29 @@ function handleDelete(id) {
         });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function (){
     let id = getQueryParam('id');
     if (!id) {
         let urlParts = window.location.pathname.split('/');
         id = urlParts[urlParts.length - 1];
     }
 
-    apiRequest(`/api/departments/ver/${id}`, 'GET', null, headers)
+    apiRequest(`/api/careers/ver/${id}`, 'GET', null, headers)
         .then(response => {
             response.json().then(data => {
 
                 if (!data || data.length === 0) {
-                    showErrorAlert('Error', 'No se ha encontrado el departamento solicitado')
+                    showErrorAlert('Oops...', 'No se encontraron datos de la carrera.')
                         .then(() => {
-                            window.location.href = '/dashboard/departamentos/';
+                            window.location.href = '/dashboard/carreras';
                         });
                     return;
                 }
 
-                department.value = data[0].department_name;
-
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                career.value = data[0].career_name;
+
+                department.value = data[0].department_id;
 
                 actionsButtons.innerHTML = `
                     <div class="d-flex justify-content-center gap-3 mt-3">

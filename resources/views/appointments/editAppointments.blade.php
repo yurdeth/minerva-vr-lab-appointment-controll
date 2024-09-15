@@ -22,6 +22,8 @@
                         <input type="time" class="form-control" id="time" name="time" style="padding-left: 30px;">
                     </div>
 
+                    <div class="form-group position-relative p-2 text-center" id="loadAvailableSchedules"></div>
+
                     <div class="form-group position-relative p-2">
                         <p class="text-start">Número de Asistentes</p>
                         <input type="number" class="form-control" id="number_of_assistants" name="number_of_assistants"
@@ -42,8 +44,17 @@
         </div>
     </div>
 
-    <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
-    <script type="module" src="{{asset("js/utils/api.js")}}"></script>
-    <script type="module" src="{{ asset('js/viewAppointment.js') }}"></script>
+    <script defer type="module" src="{{asset("js/utils/alert.js")}}"></script>
+    <script defer type="module" src="{{asset("js/utils/api.js")}}"></script>
+    <script defer type="module" src="{{ asset('js/appointments/viewAppointment.js') }}"></script>
+    <script defer src="{{ asset('js/appointments/showAvailableShedules.js') }}"></script>
+
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function (){
+            setTimeout(() => {
+                showAvailableShedules();
+            }, 1000);
+        });
+    </script>
 
 @endsection

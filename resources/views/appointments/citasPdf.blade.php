@@ -32,7 +32,7 @@
                         <td>{{ $appointment->career_name }}</td>
                         <td>{{ $appointment->date }}</td>
                         <td>{{ $appointment->time }}</td>
-                        <td>{{ $appointment->number_of_participants }}</td>
+                        <td>{{ $appointment->number_of_assistants }}</td>
                     </tr>
                 @endforeach
             </tbody>

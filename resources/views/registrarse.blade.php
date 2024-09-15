@@ -24,7 +24,7 @@
                     @csrf
 
                     <div class="form-group position-relative p-2">
-                        <input type="text" class="form-control" id="nombre" name="name" placeholder="Nombre"
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Nombre"
                                style="padding-left: 30px;">
                         <i class="fas fa-user position-absolute"
                            style="top: 50%; transform: translateY(-50%); left: 10px; padding-left: 5px;"></i>
@@ -69,7 +69,7 @@
                         Registrarse
                     </button>
 
-                    <p class="mt-3"><strong>¿Ya tienes una cuenta?</strong> <a href="{{ route('iniciar_sesion') }}"
+                    <p class="mt-3"><strong>¿Ya tienes una cuenta?</strong> <a href="{{ route('iniciarSesion') }}"
                                                                            style="text-decoration: none; color: #660D04;">
                             <strong>Iniciar sesión</strong> </a></p>
                 </form>
@@ -80,8 +80,10 @@
 
     </div>
 
-    <script src="{{ asset('js/departments.js') }}"></script>
-    <script src="{{ asset('js/careers.js') }}"></script>
-    <script src="{{ asset('js/register.js') }}"></script>
+    <script type="module" src="{{ asset('js/loadDepartments.js') }}"></script>
+    <script type="module" src="{{ asset('js/loadCareers.js') }}"></script>
+    <script type="module" src="{{ asset('js/register.js') }}"></script>
+    <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
+    <script type="module" src="{{asset("js/utils/api.js")}}"></script>
 
 @endsection

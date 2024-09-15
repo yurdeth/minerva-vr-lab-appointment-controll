@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Careers;
-use App\Http\Requests\StoreCareersRequest;
-use App\Http\Requests\UpdateCareersRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+
+use App\Services\ValidationService;
+use App\Services\ValidateUpdateService;
+use App\Enum\ValidationTypeEnum;
 
 class CareersController extends Controller {
     /**
@@ -21,16 +23,15 @@ class CareersController extends Controller {
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create() {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request): JsonResponse {
+        $validationService = new ValidationService($request, ValidationTypeEnum::CAREER);
+        $response = $validationService->ValidateRequest();
+        if ($response) {
+            return $response;
+        }
+
         $validate = Validator::make($request->all(), [
             'career_name' => 'required|string|unique:careers,career_name',
             'department_id' => 'required|integer'
@@ -82,29 +83,20 @@ class CareersController extends Controller {
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Careers $careers) {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request) {
-
-        if(!$request->career_name){
-            return response()->json([
-                'message' => 'Error: no se ha proporcionado el nombre de la carrera',
-                'success' => false
-            ]);
-        }
-
         if(!$request->department_id){
             return response()->json([
                 'message' => 'Error: no se ha proporcionado un departamento',
                 'success' => false
             ]);
+        }
+
+        $validationService = new ValidateUpdateService($request, ValidationTypeEnum::CAREER);
+        $response = $validationService->ValidateRequest();
+        if ($response) {
+            return $response;
         }
 
         $career = Careers::find($request->id);

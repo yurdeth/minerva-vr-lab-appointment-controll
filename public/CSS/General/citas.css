@@ -5,6 +5,49 @@
     font-family: "Raleway", sans-serif;
 }
 
+.pagination-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px; /* Aumenté el padding para hacer más evidente */
+    max-width: 300px; /* Ajusta el ancho máximo según necesites */
+    margin: 8px auto; /* Esto centrará el contenedor */
+}
+/* .pagination-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 5px;
+    width: max-content;
+    margin-top: 8px;
+} */
+
+.btn-arrow {
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    color: #ff4a4a;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.btn-arrow:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.page-number {
+    font-size: 18px;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
 /* Contenedor principal */
 .container-xl{
     margin-top: 50px;
@@ -18,6 +61,7 @@
 .opcionesCitas{
     display: flex;
     justify-content: flex-start;
+    margin-bottom: 19px;
 }
 
 .col-auto{
@@ -98,12 +142,13 @@
 .busquedaCitas {
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin-top: 0px;
 }
 
 #searchForm {
     width: 100%;
     max-width: 400px;
+    margin-top: -7px;
 }
 
 .input-group {
@@ -220,5 +265,36 @@
         width: 100%;
         text-align: center;
     }
+}
+
+@media (max-width: 800px){
+
+    .card{
+        width: 90%;
+    }
+
+    .table-responsive {
+        width: 90%;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 768px){
+    .container-xl {
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    .opcionesCitas {
+
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 1px;
+    }
+
+    .opcionesCitas > .col-auto{
+        width: auto;
+    }
+
 }
 

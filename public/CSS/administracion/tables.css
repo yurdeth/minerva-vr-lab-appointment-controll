@@ -1,3 +1,46 @@
+.pagination-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px; /* Aumenté el padding para hacer más evidente */
+    max-width: 300px; /* Ajusta el ancho máximo según necesites */
+    margin: 8px auto; /* Esto centrará el contenedor */
+}
+/* .pagination-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 5px;
+    width: max-content;
+    margin-top: 8px;
+} */
+
+.btn-arrow {
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    color: #ff4a4a;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.btn-arrow:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.page-number {
+    font-size: 18px;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
 /* Estilo para las tablas */
 .table {
     width: 100%;

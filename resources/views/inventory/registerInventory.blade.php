@@ -1,4 +1,4 @@
-@extends('Administración.dashboard')
+@extends('administration.dashboard')
 
 {{--Section para poder trabajar con layout --}}
 
@@ -43,7 +43,7 @@
                     </select>
                 </div>
 
-                <div class="col"> </div>
+                <div class="col"></div>
 
                 <div class="buttonContainer">
                     <input type="submit" value="Registrar" class="btn-success" id="submit">
@@ -55,5 +55,5 @@
 
     <script type="module" src="{{asset("js/getResponsePromise.js")}}"></script>
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
-    <script type="module" src="{{ asset("js/makeOptions.js") }}"></script>
+    <script type="module" src="{{ asset("js/inventory/makeOptions.js") }}"></script>
 @endsection

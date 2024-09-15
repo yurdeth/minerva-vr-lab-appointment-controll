@@ -1,4 +1,4 @@
-@extends('Administración.dashboard')
+@extends('administration.dashboard')
 
 {{--Section para poder trabajar con layout --}}
 
@@ -28,7 +28,8 @@
 
                 <div class="col">
                     <p>Nombre de la carrera</p>
-                    <input type="text" name="tipo_carrera" class="form-control" id="career" placeholder="Ingrese tipo de carrera" style="width: 400px; padding: 10px;">
+                    <input type="text" name="tipo_carrera" class="form-control" id="career"
+                           placeholder="Ingrese tipo de carrera" style="width: 400px; padding: 10px;">
                 </div>
 
                 <div id="actionsButtons" class="row"></div>
@@ -37,9 +38,9 @@
         </form>
     </div>
 
-    <script src="{{ asset('js/departments.js') }}"></script>
-    <script src="{{ asset('js/careers.js') }}"></script>
+    <script src="{{ asset('js/loadDepartments.js') }}"></script>
+    <script src="{{ asset('js/loadCareers.js') }}"></script>
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
-    <script type="module" src="{{asset("js/careers/view_career.js")}}"></script>
+    <script type="module" src="{{asset("js/careers/viewCareer.js")}}"></script>
 @endsection

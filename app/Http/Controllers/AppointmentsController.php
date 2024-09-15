@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointments;
-use App\Models\Participants;
 use App\Rules\AppointmentConflict;
 use Exception;
 use Illuminate\Http\Request;
@@ -25,7 +24,7 @@ class AppointmentsController extends Controller {
     //method to generate pdf
     public function pdf(){
         $appointments = (new Appointments)->GetAppointments();
-        $pdf = Pdf::loadView('citaspdf',compact('appointments'));
+        $pdf = Pdf::loadView('appointments.citasPdf',compact('appointments'));
         return $pdf->stream();
     }
 
@@ -35,7 +34,7 @@ class AppointmentsController extends Controller {
     public function store(Request $request) {
         $validate = Validator::make($request->all(), [
             "date" => "required|date|after:today",
-            "time" => ["required", new AppointmentConflict($request->date, $request->time)],
+            "time" => ["required", new AppointmentConflict(null, $request->date, $request->time)],
             "number_of_assistants" => "required",
         ]);
 
@@ -50,15 +49,11 @@ class AppointmentsController extends Controller {
         $appointment = Appointments::create([
             'date' => $request->date,
             'time' => $request->time,
+            'number_of_assistants' => $request->number_of_assistants,
             'user_id' => Auth::id(),
         ]);
 
-        $participants = Participants::create([
-            'number_of_participants' => $request->number_of_assistants,
-            'appointment_id' => $appointment->id
-        ]);
-
-        if (!$appointment || !$participants) {
+        if (!$appointment) {
             return response()->json([
                 "message" => "Error al crear el registro",
                 "success" => false,
@@ -66,7 +61,6 @@ class AppointmentsController extends Controller {
         }
 
         $appointment->save();
-        $participants->save();
 
         if(Auth::id() == 1){
             $redirectTo = '/dashboard/citas';
@@ -105,17 +99,55 @@ class AppointmentsController extends Controller {
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id) {
+        if(!$id){
+            return response()->json([
+                'message' => 'Error: no ID was provided',
+                'success' => false
+            ], 404);
+        }
+
         $appointment = Appointments::find($id);
-        $participants = Participants::where('appointment_id', $appointment->id)->first();
+
+        if(!$appointment){
+            return response()->json([
+                'message' => 'Error: appointment not found',
+                'success' => false
+            ], 404);
+        }
+
+        $validate = Validator::make($request->all(), [
+            "date" => "required|date|after:today",
+            "time" => ["required", new AppointmentConflict($request, $request->date, $request->time)],
+            "number_of_assistants" => "required",
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                "message" => "Error en los datos",
+                "error" => $validate->errors(),
+                "success" => false,
+            ]);
+        }
+
+        $appointment = Appointments::find($id);
 
         $appointment->date = $request->date;
         $appointment->time = $request->time;
-        $participants->number_of_participants = $request->number_of_assistants;
+        $appointment->number_of_assistants = $request->number_of_assistants;
 
         $appointment->save();
-        $participants->save();
 
-        return redirect()->route('citas-ver');
+        if(Auth::id() == 1){
+            $redirectTo = '/dashboard/citas';
+        } else{
+            $redirectTo = '/citas';
+        }
+
+        return response()->json([
+            "message" => "Cita registrada",
+            "redirect_to" => $redirectTo,
+            "success" => true,
+        ]);
     }
 
     /**

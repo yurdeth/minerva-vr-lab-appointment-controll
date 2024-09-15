@@ -1,5 +1,5 @@
-import {showSuccessAlert, showErrorAlert} from './utils/alert.js'
-import {apiRequest} from "./utils/api.js";
+import {showSuccessAlert, showErrorAlert} from '../utils/alert.js'
+import {apiRequest} from "../utils/api.js";
 
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelector("form").addEventListener("submit", function (event) {
@@ -62,20 +62,25 @@ document.addEventListener('DOMContentLoaded', function () {
         apiRequest('/api/appointments', 'POST', body, headers)
             .then(response => {
                 response.json().then(data => {
-                    if(data.error){
-                        if (data.error.time[0].includes("cita registrada")) {
+                    if (data.error) {
+                        console.error(data.error);
+
+                        if (data.error.time && data.error.time[0].includes("cita registrada")) {
                             showErrorAlert('Oops...',
                                 'Ya existe una cita registrada en esta fecha y hora, o en el rango de una hora (cada sesión dura una hora)');
                             return;
                         }
+
+                        if (data.error.date && data.error.date[0].includes("after today")) {
+                            showErrorAlert('Oops...',
+                                'La cita debe ser una fecha posterior a hoy');
+                            return;
+                        }
                     }
 
-                    showSuccessAlert('¡Listo!', 'Tu cita ha sido registrada exitosamente.');
-                    if (response.ok) {
-                        setTimeout(() => {
-                            window.location.href = data.redirect_to;
-                        }, 1000);
-                    }
+                    showSuccessAlert('¡Listo!', 'Tu cita ha sido registrada exitosamente.').then(() => {
+                        window.location.href = data.redirect_to;
+                    }).catch(error => console.error(error));
                 })
             })
             .catch(error => {

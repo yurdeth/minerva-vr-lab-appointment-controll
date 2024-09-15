@@ -4,22 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Rules\EmailUniqueIgnoreCase;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Rules\OnlyUesMail;
 
+use App\Services\ValidationService;
+use App\Enum\ValidationTypeEnum;
+
 class AuthController extends Controller {
-    public function signin() {
-        return redirect()->route('iniciar_sesion');
-    }
 
-    public function signup() {
-        return redirect()->route('registrarse');
-    }
+    public function register(Request $request): JsonResponse {
+        $validationService = new ValidationService($request, ValidationTypeEnum::REGISTER_USER);
+        $response = $validationService->ValidateRequest();
+        if ($response) {
+            return $response;
+        }
 
-    public function register(Request $request) {
         $validate = Validator::make($request->all(), [
             "name" => "required|string",
             "email" => [
@@ -68,7 +72,7 @@ class AuthController extends Controller {
         ], 201);
     }
 
-    public function login(Request $request) {
+    public function login(Request $request): JsonResponse|RedirectResponse {
         // Campos esperados en la petición
         $credentials = $request->only('email', 'password');
 
@@ -95,8 +99,8 @@ class AuthController extends Controller {
 
         }
 
-        if(!$request->email || !$request->password) {
-            return redirect()->route('iniciar_sesion')->with('error', 'Por favor, ingrese sus credenciales.');
+        if (!$request->email || !$request->password) {
+            return redirect()->route('iniciarSesion')->with('error', 'Por favor, ingrese sus credenciales.');
         }
 
         return response()->json([
@@ -105,17 +109,12 @@ class AuthController extends Controller {
         ], 401);
     }
 
-    public function logout(Request $request) {
+    public function logout(Request $request): RedirectResponse {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        /*$data = [
-            "message" => "Sesión cerrada",
-            "redirect_url" => route("inicio"),
-            "success" => true,
-        ];*/
-
         return redirect()->route("inicio");
     }
+
 }

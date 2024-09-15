@@ -14,16 +14,17 @@ use App\Http\Controllers\ExportController;
 
 // ********************************Rutas para rutas no definidas*************************************
 Route::fallback(function () {
-    return redirect()->route('iniciar_sesion');
+    return redirect()->route('iniciarSesion');
 });
 
 // ***************************************Rutas públicas*********************************************
+    //Pruebas de rutas inicio con nombres repetidos
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('HomeVR');
     }
     return view('inicio');
-})->name('inicio');
+})->name('inicio.index');
 
 Route::get('/inicio', function () {
     if (Auth::check()) {
@@ -39,12 +40,12 @@ Route::get('/registrarse', function () {
     return view("registrarse");
 })->name('registrarse');
 
-Route::get('/iniciar_sesion', function () {
+Route::get('/iniciar-sesion', function () {
     if (Auth::check()) {
         return redirect()->route('HomeVR');
     }
-    return view("iniciar_sesion");
-})->name('iniciar_sesion');
+    return view("iniciarSesion");
+})->name('iniciarSesion');
 
 Route::post('/signin', [AuthController::class, 'login'])->name("signin");
 Route::post('/signup', [AuthController::class, 'register'])->name("signup");
@@ -52,7 +53,9 @@ Route::post('/signup', [AuthController::class, 'register'])->name("signup");
 // ***************************************Rutas para usuarios*********************************************
 Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 
-    Route::post("logout", [AuthController::class, "logout"])->name("logout");
+
+    //Pruebas de rutas logout con nombres repetidos
+    Route::post("logout", [AuthController::class, "logout"])->name("logout.post");
     Route::get("logout", [AuthController::class, "logout"])->name("logout");
 
     Route::get('/home', function () {
@@ -60,7 +63,7 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
     })->name('HomeVR');
 
     Route::get('/profile', function () {
-        return view('editUser');
+        return view('users.editUser');
     })->name('profile');
 });
 
@@ -86,19 +89,19 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
 // ***************************************Rutas para citas*********************************************
 Route::middleware(['auth', NoBrowserCache::class])->group(function () {
     Route::get('/citas', function () {
-        return view('appointments');
+        return view('appointments.appointments');
     })->name('citas-ver');
 
     Route::get('/citas/index', function () {
-        return view('appointments');
+        return view('appointments.appointments');
     })->name('citas-ver-index');
 
     Route::get('/citas/nueva', function () {
-        return view('registro_cita');
+        return view('appointments.addAppointment');
     })->name('agendar');
 
     Route::get('/citas/ver/{id}', function () {
-        return view('editAppointments');
+        return view('appointments.editAppointments');
     })->name('citas-editar');
 
     Route::get('/export',[ExportController::class, 'export'])->name('export');
@@ -109,20 +112,20 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
 Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])->group(function () {
 
     Route::get('/dashboard', function () {
-        return view('Administración.dashboard');
+        return view('administration.dashboard');
     })->name('dashboard');
 
     Route::get('/dashboard/usuarios', function () {
-        return view('users');
+        return view('users.users');
     })->name('usuarios');
 
     Route::get('/usuarios/ver/{id}', function () {
-        return view('editUser');
+        return view('users.editUser');
     })->name('usuarios-editar');
 
     Route::get('/dashboard/citas/', function () {
         $dashboard = true;
-        return view('appointments', compact("dashboard"));
+        return view('appointments.appointments', compact("dashboard"));
     })->name('citas_dashboard');
 
     Route::get('/dashboard/carreras', function () {
@@ -130,19 +133,19 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
     })->name('carreras');
 
     Route::get('/dashboard/carreras/nueva/', function () {
-        return view('careers.add_career');
+        return view('careers.addCareer');
     })->name('carreras-agregar');
 
     Route::get('/dashboard/carreras/ver/{id}', function () {
-        return view('careers.edit_career');
+        return view('careers.editCareer');
     })->name('carreras-ver');
 
     Route::get('/dashboard/departamentos/', function () {
-        return view('careers.add_department');
+        return view('careers.addDepartment');
     })->name('departamentos-agregar');
 
     Route::get('/dashboard/departamentos/ver/{id}', function () {
-        return view('careers.edit_department');
+        return view('careers.editDepartment');
     })->name('departamentos-ver');
 });
 
