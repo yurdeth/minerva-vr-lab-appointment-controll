@@ -6,8 +6,8 @@ const navbar = document.querySelector('.navbar');
 const footer = document.getElementById('FooterCambio');
 const buttons = document.querySelectorAll('.nav-item button');
 const body = document.body;
-const modoMinerva = 'IMG/Minerva.png';
-const modoVR = 'IMG/Lentes.png';
+const modoMinerva = '../IMG/Minerva.png';
+const modoVR = '../IMG/Lentes.png';
 
 //Definimos una función que nos ayude a cambiar el tema establecido por otro
 function newTema(){

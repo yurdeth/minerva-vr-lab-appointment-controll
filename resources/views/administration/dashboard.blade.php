@@ -75,6 +75,11 @@
                         <span class="title">Salir</span>
                     </a>
                 </li>
+                <li>
+                    <button type="button" class="btn" id="Tema">
+                        <img class="lentes" src="{{ asset('IMG/Minerva.png') }}" alt="Logo">
+                     </button>
+                </li>
             </ul>
         </div>
         <br><br>
