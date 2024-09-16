@@ -44,3 +44,12 @@
     font-size: 16px;
 }
 
+/*Parte del modo minerva de este style*/
+.fondos .custom-card > .card-body{
+    background-color: #f5f7fa;
+}
+
+.fondos .video {
+    border: 2px solid #660D04;
+}
+

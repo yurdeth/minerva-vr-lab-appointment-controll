@@ -57,6 +57,26 @@ button:hover{
     border: 1px solid white;
 }
 
+/*Para el button de cambio de modo o tema*/
+.btn{
+    width: 60px;
+    padding: 0;
+}
+.lentes{
+    width: 40px;
+    object-fit: cover;
+}
+
+.nav-item >.btn:hover{
+    cursor: pointer;
+    background-color: #4874AB;
+    border: 1px solid white;
+}
+
+.btn:hover .lentes {
+    filter: brightness(0.8);
+}
+
 /*Estilo del Footer*/
 footer{
     background-color: #123A6B;
@@ -138,6 +158,47 @@ section{
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(51, 152, 206, 0.419), 0 6px 20px rgba(51, 152, 206, 0.419);
 }
+
+/*=================================================================
+  Parte donde se trabaja el cambio de modo
+*/
+.Temas {
+    background-color: #660D04;
+    color: #fff;
+}
+
+.fondos {
+    background-color: white !important;
+    color: #1c1b1b;
+}
+
+.fondos .mensaje > h1 {
+    color: #1c1b1b !important;
+}
+
+.fondos .mensaje2 > h3{
+    color: #1c1b1b !important;
+}
+
+.fondos .fotosSlide{
+    background-color: white;
+}
+
+.Temas .nav-item button:hover {
+    background-color: #911f12;
+}
+
+.Temas .nav-item:hover{
+    background-color: #911f12;
+}
+
+.Temas button:hover{
+    background-color: #911f12;
+}
+
+
+
+
 
 
 

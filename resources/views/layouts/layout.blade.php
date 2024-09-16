@@ -75,8 +75,11 @@
                                     </button>
                                     <button>
                                         <a class="nav-link" href="{{ route('profile', ['id' => Auth::user()->id]) }}">
-                                        <span class="navbar-text" style="color: white">{{ Auth::user()->name }}</span>
+                                            <span class="navbar-text" style="color: white">{{ Auth::user()->name }}</span>
                                         </a>
+                                    </button>
+                                    <button type="button" class="btn" id="Tema">
+                                        <img class="lentes" src="{{ asset('IMG/Minerva.png') }}" alt="Logo">
                                     </button>
                         @else
                             <li class="nav-item">
@@ -89,6 +92,12 @@
                                     <a class="nav-link text-light" href="{{ route('registrarse') }}">Registrarse</a>
                                 </button>
                             </li>
+                             <!--Button para cambiar el color de la pagina-->
+                             <li class="nav-item">
+                                <button type="button" class="btn" id="Tema">
+                                    <img class="lentes" src="{{ asset('IMG/Minerva.png') }}" alt="Logo">
+                                </button>
+                             </li>
                         @endauth
                     </ul>
                  </div>
@@ -102,7 +111,7 @@
     @yield('content')
 
     <!-- Footer de la página-->
-    <footer class="pt-5 pb-4">
+    <footer class="pt-5 pb-4" id="FooterCambio">
         <div class="container text-center text-md-start">
             <div class="row text-center text-md-start">
 
@@ -162,5 +171,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/1.1.6/choices.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{asset("js/main.js")}}"></script>
+    <script src="{{asset("js/themes/temas.js")}}"></script>
 </body>
 </html>
