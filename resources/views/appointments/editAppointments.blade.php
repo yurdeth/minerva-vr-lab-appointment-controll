@@ -2,6 +2,35 @@
 
 @section('content')
 
+<style>
+    .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+    padding: 8px 18px;
+    cursor: pointer;
+    border-radius: 3px;
+    border: none;
+    text-decoration: none;
+    width: 100%;
+    display: block;
+    margin-bottom: 5px;
+}
+
+    .btn-danger {
+    background-color: #d33;
+    border-color: #f65e3f;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    cursor: pointer;
+    border-radius: 3px;
+    width: 100%;
+    display: block;
+    margin-bottom: 5px;
+}
+</style>
+
     <div class="container-sm" style="margin-top: 70px; margin-bottom: 70px; max-width: 950px;">
         <div class="row">
             <div class="col-2"></div>
