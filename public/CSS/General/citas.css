@@ -60,8 +60,11 @@
 
 .opcionesCitas{
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
     margin-bottom: 19px;
+    gap: 10px;
 }
 
 .col-auto{
@@ -115,6 +118,9 @@
     padding: 8px 18px;
     cursor: pointer;
     border-radius: 3px;
+    width: 100%;
+    display: block;
+    margin-bottom: 5px;
 }
 
 .btn-danger:hover {
@@ -131,6 +137,9 @@
     border-radius: 3px;
     border: none;
     text-decoration: none;
+    width: 100%;
+    display: block;
+    margin-bottom: 5px;
 }
 
 .btn-primary:hover {
@@ -158,6 +167,7 @@
 
 #searchInput {
     flex: 1;
+    width: 300px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px 0 0 5px;

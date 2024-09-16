@@ -37,7 +37,9 @@ if (!isset($dashboard)) {
                 <form action="" id="searchForm">
                     <div class="input-group">
                         <input type="text" id="searchInput" class="form-control" placeholder=" Buscar...">
-                        <button type="submit" class="btn-primary">Buscar</button>
+                        <div style="width: 100px;">
+                            <button type="submit" class="btn-info">Buscar</button>
+                        </div>
                     </div>
                 </form>
             </div>
