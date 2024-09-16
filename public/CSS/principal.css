@@ -3,28 +3,53 @@
     font-family: "Raleway", sans-serif;
 }
 
-.video{
-    width: 36rem;
+/*Parte del home del sistema*/
+.custom-card {
+    max-width: 550px;
+    margin: auto;
 }
 
-.card{
+.custom-card > .card-body{
+    background-color: #E0EEFF;
+    backdrop-filter: blur(10px);
+    border: 2px solid gray;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(51, 152, 206, 0.419), 0 6px 20px rgba(51, 152, 206, 0.419);
+}
+
+.video {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    border: 2px solid #123A6B;
+}
+
+.informacion > .card{
     margin-top: 18px;
-    width: 40rem;
     border: solid 2px grey;
     border-radius: 4px;
 }
 
-.card-body> .card-title{
+.informacion >.card > .card-body> .card-title{
     text-align: left;
     color: rgb(126, 121, 121);
 }
 
-.card-body>  p{
+.informacion >.card > .card-body>  p{
     text-align: justify;
 }
 
-.card-body{
+.informacion >.card > .card-body{
     background-color: white;
     font-size: 16px;
+}
+
+/*Parte del modo minerva de este style*/
+.fondos .custom-card > .card-body{
+    background-color: #f5f7fa;
+}
+
+.fondos .video {
+    border: 2px solid #660D04;
 }
 
