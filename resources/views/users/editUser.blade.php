@@ -55,7 +55,7 @@
                             <div class="mb-3">
                                 <label for="password" class="form-label">Contraseña: </label>
                                 <input type="password" class="form-control" id="password" name="password"
-                                       placeholder="Ingrese la nueva o la anterior">
+                                       placeholder="Ingrese su nueva contraseña">
                             </div>
 
                             <div class="mb-3">

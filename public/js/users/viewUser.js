@@ -29,30 +29,27 @@ function handleEdit(id) {
         return;
     }
 
-    if (password.value === '' || password_confirmation.value === '') {
-        showWarningAlert('error', 'Por favor, ingrese la contraseña.');
-        return;
-    }
+    if(password.value !== "" || password_confirmation.value !== "") {
+        if (password.value !== password_confirmation.value) {
+            showWarningAlert('error', 'Las contraseñas no coinciden.');
+            return;
+        }
 
-    if (password.value !== password_confirmation.value) {
-        showWarningAlert('error', 'Las contraseñas no coinciden.');
-        return;
-    }
+        if (password.value.length < 8) {
+            showWarningAlert('error', 'La contraseña debe tener al menos 8 caracteres.');
+            return;
+        }
 
-    if (password.value.length < 8) {
-        showWarningAlert('error', 'La contraseña debe tener al menos 8 caracteres.');
-        return;
-    }
-
-    if (password_confirmation.value.length < 8) {
-        showWarningAlert('error', 'La confirmación de la contraseña debe tener al menos 8 caracteres.');
-        return;
+        if (password_confirmation.value.length < 8) {
+            showWarningAlert('error', 'La confirmación de la contraseña debe tener al menos 8 caracteres.');
+            return;
+        }
     }
 
     const body = {
         name: name.value,
         email: email.value,
-        career: career.value,
+        career: career.options[career.selectedIndex].value,
         password: password.value,
         password_confirmation: password_confirmation.value
     }
@@ -73,7 +70,7 @@ function handleEdit(id) {
                     '¡Perfil actualizado!',
                     'El perfil se ha actualizado correctamente.')
                     .then(() => {
-                        window.location.href = '/dashboard/usuarios';
+                        window.location.href = data.redirectTo;
                     });
             })
         })
@@ -131,9 +128,6 @@ document.addEventListener('DOMContentLoaded', function () {
     apiRequest(`/api/users/ver/${id}`, 'GET', null, headers)
         .then(response => response.json())
         .then(data => {
-
-            console.log(data);
-
             if (!data || !data.success) {
                 showErrorAlert('Oops...', 'No se encontraron datos del usuario.')
                     .then(() => {
@@ -155,16 +149,23 @@ document.addEventListener('DOMContentLoaded', function () {
             name.value = user.name;
             email.value = user.email;
             department_name.value = user.department_id;
+            career.innerHTML = '';
+
+            let option = document.createElement('option');
+            option.value = '';
+            option.text = 'Seleccione una carrera';
+            career.appendChild(option);
 
             apiRequest(`/api/careers/${user.department_id}`, 'GET', null, headers)
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(d => {
                         let option = document.createElement('option');
-                        option.value = user.career_id;
-                        option.text = user.career_name;
+                        option.value = d.id;
+                        option.text = d.career_name;
                         career.appendChild(option);
                     });
+                    career.value = user.career_id;
                 })
                 .catch((error) => {
                     console.error('Error:', error);

@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Rules\EmailUniqueIgnoreCase;
 use App\Rules\OnlyUesMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+
+use App\Http\Controllers\AuthController;
 
 class UsersController extends Controller {
     /**
@@ -92,7 +93,7 @@ class UsersController extends Controller {
                 "string",
                 new OnlyUesMail(),
             ],
-            "password" => "confirmed|min:8",
+            "password" => "nullable|string|min:8|confirmed",
             "career" => "required",
         ]);
 
@@ -107,17 +108,19 @@ class UsersController extends Controller {
         $user->name = $request->name;
         $user->email = $request->email;
         $user->career_id = $request->career;
-        $user->password = Hash::make($request->password);
         $user->roles_id = 2;
+
+        if($request->password) {
+            $user->password = Hash::make($request->password);
+        }
 
         $user->save();
 
-        if (Auth::user()->roles_id == 1) {
-            return redirect('usuarios');
-        } else {
-            $authController = new AuthController();
-            return $authController->logout($request);
-        }
+        return response()->json([
+            "message" => "Usuario actualizado",
+            "success" => true,
+            "redirectTo" => "/home"
+        ]);
     }
 
     /**
