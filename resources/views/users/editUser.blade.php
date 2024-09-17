@@ -11,6 +11,33 @@
 @section('content')
     @vite(['resources/js/app.js'])
 
+    <style>
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            padding: 8px 18px;
+            cursor: pointer;
+            border-radius: 3px;
+            border: none #007bff;
+            text-decoration: none;
+            width: 100%;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .btn-danger {
+            background-color: #d33;
+            color: white;
+            border: none #f65e3f;
+            padding: 8px 18px;
+            cursor: pointer;
+            border-radius: 3px;
+            width: 100%;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+
     <div class="container-xl" style="margin-top: 50px; margin-bottom: 70px;">
 
         <div class="row justify-content-center">
