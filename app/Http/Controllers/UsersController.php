@@ -40,7 +40,13 @@ class UsersController extends Controller {
      */
     public function show($id) {
         if (Auth::user()->id != $id && Auth::user()->roles_id != 1) {
-            return redirect()->route('HomeVR');
+            return response()->json([
+                "Auth ID" => Auth::user()->id,
+                "ID" => $id,
+                "message" => "Usuario no encontrado",
+                "success" => false,
+                "redirectTo" => route('HomeVR'),
+            ]);
         }
 
         $user = DB::table('users')
@@ -50,11 +56,17 @@ class UsersController extends Controller {
             ->select('users.id', 'users.name', 'users.email', 'users.career_id', 'careers.career_name', 'careers.department_id', 'departments.department_name')
             ->get();
 
-        if ($user) {
-            return response()->json($user);
-        } else {
-            return redirect()->route('usuarios');
+        if (!$user) {
+            return response()->json([
+                "message" => "Usuario no encontrado",
+                "success" => false,
+            ], 500);
         }
+
+        return response()->json([
+            "user" => $user,
+            "success" => true,
+        ]);
     }
 
     /**
