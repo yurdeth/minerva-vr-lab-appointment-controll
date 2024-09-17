@@ -161,8 +161,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(data => {
                     data.forEach(d => {
                         let option = document.createElement('option');
-                        option.value = d.id;
-                        option.text = d.career_name;
+                        option.value = user.career_id;
+                        option.text = user.career_name;
                         career.appendChild(option);
                     });
                 })
