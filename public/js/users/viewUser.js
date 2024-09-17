@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             console.log(data);
 
-            if(!data || !data.success){
+            if (!data || !data.success) {
                 showErrorAlert('Oops...', 'No se encontraron datos del usuario.')
                     .then(() => {
                         window.location.href = data.redirectTo;
@@ -155,7 +155,20 @@ document.addEventListener('DOMContentLoaded', function () {
             name.value = user.name;
             email.value = user.email;
             department_name.value = user.department_id;
-            career.value = user.career_id;
+
+            apiRequest(`/api/careers/${user.department_id}`, 'GET', null, headers)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(d => {
+                        let option = document.createElement('option');
+                        option.value = d.id;
+                        option.text = d.career_name;
+                        career.appendChild(option);
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
 
             const actionsButtons = document.getElementById('actionsButtons');
             actionsButtons.classList.add('row');

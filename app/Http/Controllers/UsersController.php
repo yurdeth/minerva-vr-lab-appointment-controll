@@ -41,9 +41,7 @@ class UsersController extends Controller {
     public function show($id) {
         if (Auth::user()->id != $id && Auth::user()->roles_id != 1) {
             return response()->json([
-                "Auth ID" => Auth::user()->id,
-                "ID" => $id,
-                "message" => "Usuario no encontrado",
+                "message" => "Usuario no encontrado", // No tienes permiso para ver este usuario
                 "success" => false,
                 "redirectTo" => route('HomeVR'),
             ]);
