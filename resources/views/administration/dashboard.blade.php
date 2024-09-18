@@ -19,7 +19,7 @@
         <ul>
             <li>
                 <div class="logo_container">
-                    <img class="logo" src="{{ asset('IMG/Logo FMO.png') }}" alt="Logo">
+                    <img class="logo" src="{{ asset('IMG/Logo.png') }}" alt="Logo">
                     <span class="logo_title"> Minerva VR Web</span>
                 </div>
             </li>
@@ -152,6 +152,6 @@
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/1.1.6/choices.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<script src="{{asset("js/themes/dashboardThemes.js")}}"></script>
 </body>
 </html>

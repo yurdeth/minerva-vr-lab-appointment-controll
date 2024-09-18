@@ -11,6 +11,33 @@
 @section('content')
     @vite(['resources/js/app.js'])
 
+    <style>
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            padding: 8px 18px;
+            cursor: pointer;
+            border-radius: 3px;
+            border: none #007bff;
+            text-decoration: none;
+            width: 100%;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .btn-danger {
+            background-color: #d33;
+            color: white;
+            border: none #f65e3f;
+            padding: 8px 18px;
+            cursor: pointer;
+            border-radius: 3px;
+            width: 100%;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+
     <div class="container-xl" style="margin-top: 50px; margin-bottom: 70px;">
 
         <div class="row justify-content-center">
@@ -55,7 +82,7 @@
                             <div class="mb-3">
                                 <label for="password" class="form-label">Contraseña: </label>
                                 <input type="password" class="form-control" id="password" name="password"
-                                       placeholder="Ingrese la nueva o la anterior">
+                                       placeholder="Ingrese su nueva contraseña">
                             </div>
 
                             <div class="mb-3">
@@ -78,9 +105,9 @@
 
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
-    <script type="module" src="{{ asset('js/users/viewUser.js') }}"></script>
     <script src="{{ asset('js/loadDepartments.js') }}"></script>
     <script src="{{ asset('js/loadCareers.js') }}"></script>
+    <script type="module" src="{{ asset('js/users/viewUser.js') }}"></script>
 
 @stop
 

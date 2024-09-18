@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Rules\EmailUniqueIgnoreCase;
 use App\Rules\OnlyUesMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+
+use App\Http\Controllers\AuthController;
 
 class UsersController extends Controller {
     /**
@@ -40,7 +41,11 @@ class UsersController extends Controller {
      */
     public function show($id) {
         if (Auth::user()->id != $id && Auth::user()->roles_id != 1) {
-            return redirect()->route('HomeVR');
+            return response()->json([
+                "message" => "Usuario no encontrado", // No tienes permiso para ver este usuario
+                "success" => false,
+                "redirectTo" => route('HomeVR'),
+            ]);
         }
 
         $user = DB::table('users')
@@ -50,11 +55,17 @@ class UsersController extends Controller {
             ->select('users.id', 'users.name', 'users.email', 'users.career_id', 'careers.career_name', 'careers.department_id', 'departments.department_name')
             ->get();
 
-        if ($user) {
-            return response()->json($user);
-        } else {
-            return redirect()->route('usuarios');
+        if (!$user) {
+            return response()->json([
+                "message" => "Usuario no encontrado",
+                "success" => false,
+            ], 500);
         }
+
+        return response()->json([
+            "user" => $user,
+            "success" => true,
+        ]);
     }
 
     /**
@@ -82,7 +93,7 @@ class UsersController extends Controller {
                 "string",
                 new OnlyUesMail(),
             ],
-            "password" => "confirmed|min:8",
+            "password" => "nullable|string|min:8|confirmed",
             "career" => "required",
         ]);
 
@@ -97,17 +108,19 @@ class UsersController extends Controller {
         $user->name = $request->name;
         $user->email = $request->email;
         $user->career_id = $request->career;
-        $user->password = Hash::make($request->password);
         $user->roles_id = 2;
+
+        if($request->password) {
+            $user->password = Hash::make($request->password);
+        }
 
         $user->save();
 
-        if (Auth::user()->roles_id == 1) {
-            return redirect('usuarios');
-        } else {
-            $authController = new AuthController();
-            return $authController->logout($request);
-        }
+        return response()->json([
+            "message" => "Usuario actualizado",
+            "success" => true,
+            "redirectTo" => "/home"
+        ]);
     }
 
     /**
