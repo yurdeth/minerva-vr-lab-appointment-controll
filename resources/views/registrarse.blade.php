@@ -6,11 +6,11 @@
 
     <!-- <div class="row justify-content-center align-items-center" style="height: 100vh;"> -->
     <div class="container-sm"
-         style="margin-top: 70px; margin-bottom: 70px; border: 2px solid #660D04; border-radius: 4px; max-width: 950px;">
+         style="margin-top: 70px; margin-bottom: 70px; border: 2px solid #242525; border-radius: 4px; max-width: 950px;">
 
         <div class="row">
 
-            <div class="col-6 d-flex align-items-center text-white p-5 text-center" style="background-color: #660D04;">
+            <div class="col-6 d-flex align-items-center text-white p-5 text-center" id="contenedorImagen">
                 <div class="mx-auto">
                     <h2>MINERVA VR <br>LAB</h2>
                     <img class="logo" src="{{ asset('IMG/Logo.png') }}" alt="Logo" style="width: 100px; height: 120px;">
@@ -65,7 +65,7 @@
                     </div>
 
                     <button type="submit" class="btn text-white m-2 form-control" id="submitButton"
-                            style="background-color: #660D04;">
+                            style="background-color: #242525;">
                         Registrarse
                     </button>
 
