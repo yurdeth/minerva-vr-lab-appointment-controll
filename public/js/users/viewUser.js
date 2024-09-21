@@ -57,9 +57,21 @@ function handleEdit(id) {
     apiRequest(`/api/users/editar/${id}`, 'PUT', body, headers)
         .then(response => {
             response.json().then(data => {
-                if (data.error) {
-                    if (data.error.career[0].includes("The career field is required")) {
-                        showErrorAlert('Oops...', 'Por favor, selecciona la carrera').then(() => {
+
+                console.log(data);
+
+                if(!data.success){
+                    if (data.error) {
+                        if (data.error.career[0].includes("The career field is required")) {
+                            showErrorAlert('Oops...', 'Por favor, selecciona la carrera').then(() => {
+                                document.getElementById('career').focus();
+                            });
+                            return;
+                        }
+                    }
+
+                    else{
+                        showErrorAlert('Oops...', data.message).then(() => {
                             document.getElementById('career').focus();
                         });
                         return;

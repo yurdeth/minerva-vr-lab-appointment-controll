@@ -160,8 +160,32 @@ section{
 }
 
 /*=================================================================
-  Parte donde se trabaja el cambio de modo
+Parte donde se trabaja el cambio de modo
 */
+/*Parte de cambio de modo en el login*/
+.contenedor-minerva {
+    background-color: #660D04;
+}
+
+.contenedor-vr {
+    background-color: #123A6B;
+}
+
+.logo-fmo {
+    width: 110px;
+    height: 130px;
+}
+
+.logo-vr {
+    width: 260px;
+    height: 260px;
+}
+
+#submitButton{
+    background-color: #242525;
+}
+
+/*Parte de cambio de modo en otras vistas*/
 .Temas {
     background-color: #660D04;
     color: #fff;

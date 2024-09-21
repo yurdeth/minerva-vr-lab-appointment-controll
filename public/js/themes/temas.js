@@ -1,54 +1,70 @@
-//Archivo con la logica para cambiar los colores del sistema
+document.addEventListener('DOMContentLoaded', () => {
+    // Establecemos las constantes a emplear
+    const CambioTema = document.getElementById('Tema');
+    const navbar = document.querySelector('.navbar');
+    const footer = document.getElementById('FooterCambio');
+    const buttons = document.querySelectorAll('.nav-item button');
+    const contenedorImagen = document.getElementById('contenedorImagen');
+    const logoInicio = document.getElementById('logoInicio');
+    const body = document.body;
+    //Constantes con las rutas de las imagenes
+    const modoMinerva = '../IMG/Minerva.png';
+    const modoVR = '../IMG/Lentes.png';
+    const logoFMO = '../IMG/Logo FMO.png';
+    const logoVR = '../IMG/LogoLentes.png';
 
-//Establecemos las constantes a emplear
-const CambioTema = document.getElementById('Tema');
-const navbar = document.querySelector('.navbar');
-const footer = document.getElementById('FooterCambio');
-const buttons = document.querySelectorAll('.nav-item button');
-const body = document.body;
-const modoMinerva = '../IMG/Minerva.png';
-const modoVR = '../IMG/Lentes.png';
+    // Definimos una función que nos ayude a cambiar el tema establecido por otro
+    function newTema() {
+        // Obtenemos el tema guardado en localStorage, por defecto es 'vr'
+        const temaGuardado = localStorage.getItem('tema') || 'vr';
+        const isMinerva = temaGuardado === 'minerva'; // Verificamos si el tema guardado es 'minerva'
 
-//Definimos una función que nos ayude a cambiar el tema establecido por otro
-function newTema(){
-    const temaGuardado = localStorage.getItem('tema'); //Nos ayuda a obtener el tema guardado en localstorage
-    //Verificamos si el tema guardado es 'minerva'
-    if (temaGuardado === 'minerva') {
-        navbar.classList.add('Temas');
-        body.classList.add('fondos');
-        buttons.forEach(button => button.classList.add('Temas'));
-        footer.classList.add('Temas');
-        CambioTema.innerHTML = `<img class="Lentes" src="${modoVR}" alt="Lentes" style="width: 40px; height: 40px;">`;
-    } else {
-        navbar.classList.remove('Temas');
-        body.classList.remove('fondos');
-        buttons.forEach(button => button.classList.remove('Temas'));
-        footer.classList.remove('Temas');
-        CambioTema.innerHTML = `<img class="minerva" src="${modoMinerva}" alt="Lentes" style="width: 40px; height: 40px;">`;
+        // Cambiamos las clases de los elementos según el tema
+        navbar.classList.toggle('Temas', isMinerva);
+        body.classList.toggle('fondos', isMinerva);
+        buttons.forEach(button => button.classList.toggle('Temas', isMinerva));
+        footer.classList.toggle('Temas', isMinerva);
+         //Condicional para verificar que el elemento contenedorImagen existe antes de intentar cambiar sus clases.
+        if (contenedorImagen) {
+            contenedorImagen.classList.toggle('contenedor-minerva', isMinerva);
+            contenedorImagen.classList.toggle('contenedor-vr', !isMinerva);
+        }
+        //condicional para verificar que el elemento logoInicio existe antes de intentar cambiar su fuente y clase
+        if (logoInicio) {
+            logoInicio.src = isMinerva ? logoFMO : logoVR;
+            logoInicio.className = isMinerva ? 'logo-fmo' : 'logo-vr';
+        }
+
+        // Cambiamos la imagen del botón de cambio de tema con clases específicas
+        CambioTema.innerHTML = `<img class="${isMinerva ? 'Lentes' : 'minerva'}" src="${isMinerva ? modoVR : modoMinerva}" alt="Lentes" style="width: 40px; height: 40px;">`;
     }
-}
 
-//Indicamos que se aplique el tema al cargar la pagina
-newTema();
+    // Aplicamos el tema al cargar la página
+    newTema();
 
-//Evento antes del cambio
-CambioTema.addEventListener("click", () => {
-    navbar.classList.toggle("Temas");
-    body.classList.toggle("fondos");
-    buttons.forEach(button => button.classList.toggle('Temas'));
-    footer.classList.toggle('Temas');
+    // Evento para cambiar el tema al hacer clic en el botón
+    CambioTema.addEventListener("click", () => {
+        // Alternamos las clases de los elementos según el tema
+        const isMinerva = navbar.classList.toggle('Temas');
+        body.classList.toggle('fondos', isMinerva);
+        buttons.forEach(button => button.classList.toggle('Temas', isMinerva));
+        footer.classList.toggle('Temas', isMinerva);
+        //Condicional para verificar que el elemento contenedorImagen existe antes de intentar cambiar sus clases.
+        if (contenedorImagen) {
+            contenedorImagen.classList.toggle('contenedor-minerva', isMinerva);
+            contenedorImagen.classList.toggle('contenedor-vr', !isMinerva);
+        }
+        //condicional para verificar que el elemento logoInicio existe antes de intentar cambiar su fuente y clase
+        if (logoInicio) {
+            logoInicio.src = isMinerva ? logoFMO : logoVR;
+            logoInicio.className = isMinerva ? 'logo-fmo' : 'logo-vr';
+        }
 
-    //Indicamos el cambio de icono(IMG) según el modo en el que se encuentre la pagina
-    const miverIcon = `<img class="minerva" src="${modoMinerva}" alt="Lentes" style="width: 40px; height: 40px;">`;
-    const vrIcon = `<img class="Lentes" src="${modoVR}" alt="Lentes" style="width: 40px; height: 40px;">`;
+        // Cambiamos la imagen del botón de cambio de tema con clases específicas
+        const icon = isMinerva ? modoVR : modoMinerva;
+        CambioTema.innerHTML = `<img class="${isMinerva ? 'Lentes' : 'minerva'}" src="${icon}" alt="Lentes" style="width: 40px; height: 40px;">`;
 
-    // Si las clases están presentes, cambiamos la IMG a modo VR y guardamos el estado
-    if (navbar.classList.contains("Temas") && body.classList.contains("fondos")) {
-        CambioTema.innerHTML = vrIcon;
-        localStorage.setItem('tema', 'minerva'); // Guardar el estado en localStorage
-    } else {
-         // Si no, cambiamos la IMG a modo Minerva y guardamos el estado
-        CambioTema.innerHTML = miverIcon;
-        localStorage.setItem('tema', 'vr'); // Guardar el estado en localStorage
-    }
+        // Guardamos el estado del tema en localStorage
+        localStorage.setItem('tema', isMinerva ? 'minerva' : 'vr');
+    });
 });

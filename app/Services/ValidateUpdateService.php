@@ -18,9 +18,6 @@ class ValidateUpdateService extends ValidationService {
     }
 
     public function ValidateRequest(): ?JsonResponse {
-        /*if ($this->validationType == ValidationTypeEnum::REGISTER_USER) {
-            return $this->validateRegister();
-        }*/
 
         if ($this->validationType == ValidationTypeEnum::DEPARTMENT) {
             return $this->validateDepartmentName($this->request->department_name);

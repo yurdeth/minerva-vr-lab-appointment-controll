@@ -7,15 +7,14 @@
 <br>
 
     <div class="container-sm"
-         style="margin-top: 70px; margin-bottom: 70px; border: 2px solid #660D04; border-radius: 4px; max-width: 950px; height: 400px;">
+         style="margin-top: 70px; margin-bottom: 70px; border: 2px solid #242525; border-radius: 4px; max-width: 950px; height: 400px;">
 
         <div class="row">
 
-            <div class="col-6 d-flex align-items-center text-white p-5 text-center" style="background-color: #660D04; height: 396px;">
+            <div class="col-6 d-flex align-items-center text-white p-5 text-center" id="contenedorImagen" style=" height: 396px;">
                 <div class="mx-auto">
-                    <img class="logo m-2" src="{{ asset('IMG/Logo FMO.png') }}" alt="Logo"
-                         style="width: 100px; height: 120px;">
-                    <h2>FACULTAD MULTIDISPLINARIA ORIENTAL</h2>
+                    <img class="logoInicio m-2" src="{{ asset('IMG/LogoLentes.png') }}" alt="Logo" id="logoInicio">
+                    <h2>FACULTAD MULTIDISCIPLINARIA ORIENTAL</h2>
                 </div>
             </div>
 
@@ -40,8 +39,7 @@
                            style="top: 50%; transform: translateY(-50%); left: 10px; padding-left: 5px;"></i>
                     </div>
 
-                    <button type="submit" class="btn text-white m-2 form-control" id="submitButton"
-                            style="background-color: #660D04;">
+                    <button type="submit" class="btn text-white m-2 form-control" id="submitButton">
                         Ingresar
                     </button>
 
