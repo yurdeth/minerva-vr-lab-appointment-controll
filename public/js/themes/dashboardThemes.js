@@ -6,12 +6,12 @@ const sideBar = document.querySelector('.menuVertical');
 const navbar = document.querySelector('.navHorizontal');
 const data = document.querySelector('.datos');
 const body = document.body;
-const modoMinerva = '../IMG/Minerva.png';
-const modoVR = '../IMG/Lentes.png';
+const modoMinerva = '/IMG/Minerva.png';
+const modoVR = '/IMG/Lentes.png';
 
 //Funcion para cambiar la paleta de colores del dashboard
 function newColor(){
-    const temaGuardado = localStorage.getItem('paleta'); //Nos ayuda a obtener el tema guardado en localstorage
+    const temaGuardado = localStorage.getItem('tema'); //Nos ayuda a obtener el tema guardado en localstorage
     //Verificamos si el tema guardado es 'minerva'
     if (temaGuardado === 'minerva') {
         sideBar.classList.add('Temas');
@@ -45,11 +45,11 @@ CambioPaleta.addEventListener("click", () => {
     // Si las clases están presentes, cambiamos la IMG a modo VR y guardamos el estado
     if (sideBar.classList.contains("Temas") && body.classList.contains("fondos")) {
         CambioPaleta.innerHTML = vrIcon;
-        localStorage.setItem('paleta', 'minerva'); // Guardar el estado en localStorage
+        localStorage.setItem('tema', 'minerva'); // Guardar el estado en localStorage
     } else {
          // Si no, cambiamos la IMG a modo Minerva y guardamos el estado
         CambioPaleta.innerHTML = miverIcon;
-        localStorage.setItem('paleta', 'vr'); // Guardar el estado en localStorage
+        localStorage.setItem('tema', 'vr'); // Guardar el estado en localStorage
     }
 });
 
