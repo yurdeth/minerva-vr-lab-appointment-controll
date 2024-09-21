@@ -17,7 +17,7 @@ class ValidationService {
     }
 
     public function ValidateRequest(): ?JsonResponse {
-        if ($this->validationType == ValidationTypeEnum::REGISTER_USER) {
+        if ($this->validationType == ValidationTypeEnum::REGISTER_USER || $this->validationType == ValidationTypeEnum::UPDATE_USER) {
             return $this->validateRegister();
         }
 
@@ -40,7 +40,8 @@ class ValidationService {
     }
 
     protected function validateRegister(): ?JsonResponse {
-        if (!$this->request->name && !$this->request->email && !$this->request->career && !$this->request->password && !$this->request->password_confirmation) {
+        if (!$this->request->name && !$this->request->email && !$this->request->career &&
+            !$this->request->password && !$this->request->password_confirmation) {
             return $this->errorResponse("Todos los campos son requeridos");
         }
 
@@ -48,12 +49,13 @@ class ValidationService {
             return $this->errorResponse("El nombre es requerido");
         }
 
-        if (is_numeric($this->request->name)) {
-            return $this->errorResponse("El nombre no puede ser un valor numérico");
+        // No permitir numeros en el campo nombre en ningun lado:
+        if (!preg_match("/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/", $this->request->name)) {
+            return $this->errorResponse("No se permite el uso de números ni caracteres especiales en el nombre");
         }
 
-        if (!preg_match("/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]*$/", $this->request->name)) {
-            return $this->errorResponse("No se permite el uso de números ni caracteres especiales en el nombre");
+        if (is_numeric($this->request->name)) {
+            return $this->errorResponse("El nombre no puede ser un valor numérico");
         }
 
         if (strlen($this->request->name) < 3) {
@@ -88,12 +90,14 @@ class ValidationService {
             return $this->errorResponse("Seleccione su carrera");
         }
 
-        if (!$this->request->password) {
-            return $this->errorResponse("La contraseña es requerido");
-        }
+        if($this->validationType != ValidationTypeEnum::UPDATE_USER){
+            if (!$this->request->password) {
+                return $this->errorResponse("La contraseña es requerido");
+            }
 
-        if (!$this->request->password_confirmation) {
-            return $this->errorResponse("La confirmación de la contraseña es requerida");
+            if (!$this->request->password_confirmation) {
+                return $this->errorResponse("La confirmación de la contraseña es requerida");
+            }
         }
 
         if ($this->request->password != $this->request->password_confirmation) {

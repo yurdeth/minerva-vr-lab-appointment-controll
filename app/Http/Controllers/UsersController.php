@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\ValidationTypeEnum;
 use App\Models\User;
 use App\Rules\OnlyUesMail;
+use App\Services\ValidationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -76,6 +78,12 @@ class UsersController extends Controller {
             return redirect()->route('HomeVR');
         }
 
+        $validationService = new ValidationService($request, ValidationTypeEnum::UPDATE_USER);
+        $response = $validationService->ValidateRequest();
+        if ($response) {
+            return $response;
+        }
+
         // Actualizar los datos del usuario
         $user = User::find($id);
 
@@ -116,10 +124,16 @@ class UsersController extends Controller {
 
         $user->save();
 
+        if(Auth::id() == 1){
+            $redirectTo = '/dashboard/usuarios';
+        } else{
+            $redirectTo = '/home';
+        }
+
         return response()->json([
             "message" => "Usuario actualizado",
             "success" => true,
-            "redirectTo" => "/home"
+            "redirectTo" => $redirectTo
         ]);
     }
 
