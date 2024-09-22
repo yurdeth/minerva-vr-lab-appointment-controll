@@ -1,77 +1,42 @@
+import {apiRequest} from './utils/api.js'
+import {showErrorAlert, showSuccessAlert} from './utils/alert.js'
+
+const headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Evitar que el formulario se envíe de forma convencional
+        event.preventDefault();
 
-        // Realizar la solicitud de inicio de sesión de forma tradicional
-        let form = event.target;
-        let formData = new FormData(form);
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
 
-        if (formData.get('email') === '') {
-            Swal.fire({
-                icon: 'error',
-                iconColor: '#660D04',
-                title: 'Oops...',
-                text: 'Por favor, ingrese su correo electrónico',
-                confirmButtonColor: '#660D04',
-            });
-            return;
-        }
+        const body = {
+            email: email,
+            password: password
+        };
 
-        if (formData.get('password') === '') {
-            Swal.fire({
-                icon: 'error',
-                iconColor: '#660D04',
-                title: 'Oops...',
-                text: 'Por favor, ingrese su contraseña',
-                confirmButtonColor: '#660D04',
-            });
-            return;
-        }
-
-        fetch(form.action, {
-            method: form.method,
-            body: formData
-        })
+        apiRequest('/signin', 'POST', body, headers)
             .then(function(response) {
-                if (!response.ok) {
-                    return response.json().then(function(data) {
-                        throw new Error(data.message || 'Error en la solicitud');
-                    });
-                }
-                return response.json();
-            })
-            .then(function(data) {
-                if (data.success) {
-                    // Manejar la respuesta del servidor según sea necesario
-                    localStorage.setItem('token', data.token);
+                response.json().then(data => {
+                    console.log(data);
 
-                    // Redireccionar al usuario a la página de inicio
-                    window.location.href = data.redirect_to;
-                } else {
-                    throw new Error(data.message || 'Error en la solicitud');
-                }
+                    if(!data.success){
+                        showErrorAlert('Error', data.message);
+                        return;
+                    }
+
+                    localStorage.setItem('token', data.token);
+                    window.location.href = data.redirectTo;
+
+                });
             })
             .catch(function(error) {
-                // Manejar el error de la solicitud
                 console.error('Error: ', error);
-
-                if(error.message === 'Credenciales erróneas') {
-                    Swal.fire({
-                        icon: 'error',
-                        iconColor: '#660D04',
-                        title: 'Oops...',
-                        text: "Credenciales erróneas",
-                        confirmButtonColor: '#660D04',
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        iconColor: '#660D04',
-                        title: 'Oops...',
-                        text: error.message,
-                        confirmButtonColor: '#660D04',
-                    });
-                }
             });
     });
 });
