@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ResourcesController extends Controller {
@@ -122,13 +123,30 @@ class ResourcesController extends Controller {
             ]);
         }
 
-        $validator = Validator::make($request->all(), [
-                "fixed_asset_code" => "required", // Número de activo fijo
-                "resource_type_id" => "required|exists:resource_types,id",
-                "status_id" => "required|exists:statuses,id",
-                "room_id" => "required|exists:room,id",
-            ]
-        );
+        $exists = DB::table('resources')
+            ->select('fixed_asset_code')
+            ->where('id', $id)
+            ->where('fixed_asset_code', $request->fixed_asset_code)
+            ->exists();
+
+        if ($exists) {
+            $validator = Validator::make($request->all(), [
+                    "fixed_asset_code" => "required", // Número de activo fijo
+                    "resource_type_id" => "required|exists:resource_types,id",
+                    "status_id" => "required|exists:statuses,id",
+                    "room_id" => "required|exists:room,id",
+                ]
+            );
+        }
+        else{
+            $validator = Validator::make($request->all(), [
+                    "fixed_asset_code" => "required|unique:resources,fixed_asset_code", // Número de activo fijo
+                    "resource_type_id" => "required|exists:resource_types,id",
+                    "status_id" => "required|exists:statuses,id",
+                    "room_id" => "required|exists:room,id",
+                ]
+            );
+        }
 
         if ($validator->fails()) {
             $data = [
