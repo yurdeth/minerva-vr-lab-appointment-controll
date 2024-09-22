@@ -76,6 +76,20 @@ class AuthController extends Controller {
         // Campos esperados en la petición
         $credentials = $request->only('email', 'password');
 
+        if (!$request->email){
+            return response()->json([
+                "message" => "Por favor, ingrese su correo",
+                "success" => false,
+            ]);
+        }
+
+        if (!$request->password){
+            return response()->json([
+                "message" => "Por favor, ingrese su contraseña",
+                "success" => false,
+            ]);
+        }
+
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             Auth::login($user);
@@ -100,12 +114,17 @@ class AuthController extends Controller {
         }
 
         if (!$request->email || !$request->password) {
-            return redirect()->route('iniciarSesion')->with('error', 'Por favor, ingrese sus credenciales.');
+            return response()->json([
+                "message" => "Faltan credenciales",
+                "success" => false,
+                "redirect_to" => route("login"),
+            ], 401);
         }
 
         return response()->json([
             "message" => "Credenciales erróneas",
             "success" => false,
+            "redirect_to" => route("login"),
         ], 401);
     }
 
