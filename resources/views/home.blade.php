@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-    <link rel="stylesheet" href="{{ asset('CSS/Principal.css')}}">
+    <link rel="stylesheet" href="{{ asset('CSS/principal.css')}}">
     <!--Contenido de Home-->
     <section>
         <!--Contenedor principal-->
