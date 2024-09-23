@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Minerva VR Web</title>
     <!--Links empleados-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/choices.js/1.1.6/styles/css/choices.min.css">
@@ -15,10 +16,10 @@
           integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
-    @vite(['resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('CSS/home.css')}}">
     <link rel="stylesheet" href="{{ asset('CSS/floating-span.css')}}">
     <link rel="icon" href="{{ asset('IMG/LogoUES.png') }}">
+    @vite(['resources/js/app.js'])
 </head>
 <body>
     <div class="mb-4" id="app">
