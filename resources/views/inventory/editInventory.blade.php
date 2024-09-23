@@ -1,7 +1,7 @@
 @extends('administration.dashboard')
 
 @section('content')
-    <link rel="stylesheet" href="{{ asset('CSS/administracion/inventario.css')}}">
+    <link rel="stylesheet" href="{{ asset('CSS/administracion/Inventario.css')}}">
     <!--Titulo de la vista -->
     <div class="container-fluid">
         <div class="title">

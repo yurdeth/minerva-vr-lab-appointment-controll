@@ -24,10 +24,11 @@
                            placeholder="Ingrese el nombre del departamento"
                            style="width: 400px; padding: 10px;">
                 </div>
+                <br>
 
                 <div class="buttonContainer">
                     <input type="button" value="Registrar Departamento" class="btn-success" id="submitButton">
-                </div>
+                </div><br>
 
                 <div class="card-body">
                     <div class="table-responsive" style="height: 100%; width: 100%;">
