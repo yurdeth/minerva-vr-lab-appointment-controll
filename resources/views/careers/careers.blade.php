@@ -68,7 +68,7 @@
 
     </style>
 
-    <link rel="stylesheet" href="{{ asset('CSS/administracion/inventario.css')}}">
+    <link rel="stylesheet" href="{{ asset('CSS/administracion/Inventario.css')}}">
     <link rel="stylesheet" href="{{ asset('CSS/administracion/tables.css')}}">
 
     <div class="container-xl custom-flex" style="margin-bottom: 20px;">

@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <link rel="stylesheet" href="{{ asset('CSS/administracion/inventario.css')}}">
+    <link rel="stylesheet" href="{{ asset('CSS/administracion/Inventario.css')}}">
     <link rel="stylesheet" href="{{ asset('CSS/administracion/tables.css')}}">
 
     <!--Titulo de la vista -->
