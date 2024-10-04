@@ -61,6 +61,10 @@ class ValidateUpdateService extends ValidationService {
             return $response;
         }
 
+        if (strlen($this->request->career_name) > 0 && strlen(trim($this->request->career_name)) == 0){
+            return $this->errorResponse("Ingrese el nombre de la carrera");
+        }
+
         return $this->careerExists($careerName);
     }
 

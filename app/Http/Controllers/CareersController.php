@@ -93,6 +93,13 @@ class CareersController extends Controller {
             ]);
         }
 
+        if(!$request->career_name){
+            return response()->json([
+                'message' => 'Error: no se ha proporcionado un nombre de carrera',
+                'success' => false
+            ]);
+        }
+
         $validationService = new ValidateUpdateService($request, ValidationTypeEnum::CAREER);
         $response = $validationService->ValidateRequest();
         if ($response) {
