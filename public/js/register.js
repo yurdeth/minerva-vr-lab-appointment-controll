@@ -1,22 +1,30 @@
 import {apiRequest} from './utils/api.js'
 import {showErrorAlert, showSuccessAlert} from './utils/alert.js'
 
+const remoteApiURL = process.env.REMOTE_API_URL;
+const secret = process.env.API_COMMON_SECRET;
+
 const headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
     'Authorization': `Bearer ${localStorage.getItem('token')}`,
-    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    'x-api-key': secret
 };
 
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelector('form').addEventListener('submit', function (event) {
-        event.preventDefault(); // Evitar que el formulario se envíe de forma convencional
+const name = document.getElementById('name');
+const email = document.getElementById('email');
+const department = document.getElementById('department');
+const career = document.getElementById('career');
+const password = document.getElementById('password');
+const passwordConfirmation = document.getElementById('password_confirmation');
 
-        const name = document.getElementById('name');
-        const email = document.getElementById('email');
-        const career = document.getElementById('career');
-        const password = document.getElementById('password');
-        const passwordConfirmation = document.getElementById('password_confirmation');
+document.addEventListener('DOMContentLoaded', function () {
+
+    loadInfo();
+
+    document.getElementById('updateButton').addEventListener('click', function (event) {
+        event.preventDefault(); // Evitar que el formulario se envíe de forma convencional
 
         const body = {
             name: name.value,
@@ -89,7 +97,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     showSuccessAlert('Éxito', "Usuario registrado correctamente")
                         .then(() => {
+                            changeStatus();
                             localStorage.setItem('token', data.token);
+                            localStorage.removeItem('user_id');
                             window.location.href = data.redirect_to;
                         });
                 });
@@ -107,3 +117,75 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 });
+
+const loadInfo = () => {
+    const id = localStorage.getItem('user_id');
+
+    apiRequest(`${remoteApiURL}/users/${id}`, 'GET', null, headers)
+        .then(response => response.json().then(data => {
+            console.log(data);
+
+            if (!data || !data.success) {
+                showErrorAlert('Oops...', 'No se encontraron datos del usuario.')
+                    .then(() => {
+                        window.location.href = data.redirectTo;
+                    });
+                return;
+            }
+
+            let user = data.data;
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            const name = document.getElementById('name');
+            const email = document.getElementById('email');
+            const department_name = document.getElementById('department');
+            const career = document.getElementById('career');
+
+            name.value = user.name;
+            email.value = user.email;
+            department_name.value = user.department_id;
+            career.innerHTML = '';
+
+            let option = document.createElement('option');
+            option.value = '';
+            option.text = 'Seleccione una carrera';
+            career.appendChild(option);
+
+            apiRequest(`/api/careers/${user.department_id}`, 'GET', null, headers)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(d => {
+                        let option = document.createElement('option');
+                        option.value = d.id;
+                        option.text = d.career_name;
+                        career.appendChild(option);
+                    });
+                    career.value = user.career_id;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+
+        }))
+        .catch(error => {
+            console.log(error);
+        });
+
+}
+
+const changeStatus = () => {
+    const id = localStorage.getItem('user_id');
+
+    apiRequest(`${remoteApiURL}/users/${id}`, 'PUT', null, headers)
+        .then(response => response.json().then(data => {
+
+            if(!data.success){
+                showErrorAlert('Error', data.message);
+            }
+        }))
+        .catch(error => {
+            console.log(error);
+        });
+
+}
