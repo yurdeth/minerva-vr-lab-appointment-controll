@@ -17,7 +17,7 @@ class Careers extends Model {
         return DB::table('careers')
             ->join('departments', 'careers.department_id', '=', 'departments.id')
             ->select('careers.id', 'careers.career_name', 'departments.department_name')
-            ->orderBy('departments.department_name')
+            ->orderBy('departments.id')
             ->get();
     }
 
