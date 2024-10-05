@@ -180,7 +180,6 @@ const changeStatus = () => {
 
             if(!data.success){
                 showErrorAlert('Error', data.message);
-                return;
             }
         }))
         .catch(error => {
