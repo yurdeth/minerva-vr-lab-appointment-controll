@@ -2,12 +2,14 @@ import {apiRequest} from './utils/api.js'
 import {showErrorAlert, showSuccessAlert} from './utils/alert.js'
 
 const remoteApiURL = process.env.REMOTE_API_URL;
+const secret = process.env.API_COMMON_SECRET;
 
 const headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
     'Authorization': `Bearer ${localStorage.getItem('token')}`,
-    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    'x-api-key': secret
 };
 
 const name = document.getElementById('name');
