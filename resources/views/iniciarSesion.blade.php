@@ -44,9 +44,11 @@
                         Ingresar
                     </button>
 
-                    <p class="mt-3"><strong>¿No tienes cuenta?</strong> <a href="{{ route('registrarse') }}"
-                                                                           style="text-decoration: none; color: #660D04;">
-                            <strong>Regístrate</strong> </a></p>
+                    <p class="mt-3"><strong>¿No tienes cuenta?</strong>
+                        <a href="#" style="text-decoration: none; color: #660D04;">
+                            <strong>Contactar con un administrador</strong>
+                        </a>
+                    </p>
                 </form>
 
             </div>

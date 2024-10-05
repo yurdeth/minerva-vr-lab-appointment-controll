@@ -87,11 +87,11 @@
                                     <a class="nav-link text-light " href="{{ route('iniciarSesion') }}">Iniciar sesión</a>
                                 </button>
                             </li>
-                            <li class="nav-item">
+                            {{--<li class="nav-item">
                                 <button>
                                     <a class="nav-link text-light" href="{{ route('registrarse') }}">Registrarse</a>
                                 </button>
-                            </li>
+                            </li>--}}
                              <!--Button para cambiar el color de la pagina-->
                              <li class="nav-item">
                                 <button type="button" class="btn" id="Tema">

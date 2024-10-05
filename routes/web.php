@@ -18,7 +18,7 @@ Route::fallback(function () {
 });
 
 // ***************************************Rutas públicas*********************************************
-    //Pruebas de rutas inicio con nombres repetidos
+
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('HomeVR');
@@ -33,12 +33,12 @@ Route::get('/inicio', function () {
     return view('inicio');
 })->name('inicio');
 
-Route::get('/registrarse', function () {
+Route::get('/actualizar-informacion', function () {
     if (Auth::check()) {
         return redirect()->route('HomeVR');
     }
-    return view("registrarse");
-})->name('registrarse');
+    return view("updateInformation");
+})->name('actualizar-informacion');
 
 Route::get('/iniciar-sesion', function () {
     if (Auth::check()) {
