@@ -45,7 +45,7 @@
                     </button>
 
                     <p class="mt-3"><strong>¿No tienes cuenta?</strong>
-                        <a href="#" style="text-decoration: none; color: #660D04;">
+                        <a href="{{ route("contactar-administrador") }}" style="text-decoration: none; color: #660D04;">
                             <strong>Contactar con un administrador</strong>
                         </a>
                     </p>

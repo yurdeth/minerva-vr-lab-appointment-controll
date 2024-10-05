@@ -40,6 +40,13 @@ Route::get('/actualizar-informacion', function () {
     return view("updateInformation");
 })->name('actualizar-informacion');
 
+Route::get('/contactar-administrador', function () {
+    if (Auth::check()) {
+        return redirect()->route('HomeVR');
+    }
+    return view("contactAdmin");
+})->name('contactar-administrador');
+
 Route::get('/iniciar-sesion', function () {
     if (Auth::check()) {
         return redirect()->route('HomeVR');
