@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class Careers extends Model {
@@ -12,7 +13,7 @@ class Careers extends Model {
     protected $table = 'careers';
     protected $fillable = ['career_name', 'department_id'];
 
-    public function getCareers(): \Illuminate\Support\Collection {
+    public function getCareers(): Collection {
 
         return DB::table('careers')
             ->join('departments', 'careers.department_id', '=', 'departments.id')

@@ -28,14 +28,14 @@
 
                     <div class="form-group position-relative p-2">
                         <input type="email" class="form-control" id="email" name="email"
-                               placeholder="Ingresa tu correo electrónico" style="padding-left: 30px;">
+                               placeholder="Ingresa tu correo electrónico" style="padding-left: 30px;" required>
                         <i class="fas fa-envelope position-absolute"
                            style="top: 50%; transform: translateY(-50%); left: 10px; padding-left: 5px;"></i>
                     </div>
 
                     <div class="form-group position-relative p-2">
                         <input type="text" class="form-control" id="asunto" name="asunto"
-                               placeholder="Asunto..." style="padding-left: 30px;">
+                               placeholder="Asunto..." style="padding-left: 30px;" required>
                         <i class="fas fa-pencil-alt position-absolute"
                            style="top: 50%; transform: translateY(-50%); left: 10px; padding-left: 5px;"></i>
                     </div>

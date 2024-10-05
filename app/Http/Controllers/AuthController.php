@@ -76,6 +76,10 @@ class AuthController extends Controller {
         // Campos esperados en la petición
         $credentials = $request->only('email', 'password');
 
+        if(!$request->email && !$request->password){
+            return redirect()->route("iniciarSesion");
+        }
+
         if (!$request->email){
             return response()->json([
                 "message" => "Por favor, ingrese su correo",
