@@ -53,6 +53,12 @@
                     <span class="Opciones">Inventario</span>
                 </a>
             </li>
+            <li>
+                <a href="{{route("inventario")}}" onclick="cambiarMensaje('notificaciones')">
+                    <span><i class="fa-solid fa-bell"></i></span>
+                    <span class="Opciones">Notificaciones</span>
+                </a>
+            </li>
         </ul>
     </div>
     <!-- Fin del Menu Vertical -->
@@ -132,6 +138,8 @@
             case 'inventario':
                 mensaje = 'Inventario de Equipo';
                 break;
+            case 'notificaciones':
+                mensaje = 'Notificaciones';
             default:
                 mensaje = 'Bienvenido'; // Mensaje por defecto si la opción no coincide con ningúna
         }
