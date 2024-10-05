@@ -41,17 +41,19 @@
     <link rel="stylesheet" href="{{ asset('CSS/administracion/tables.css')}}">
     <link rel="stylesheet" href="{{ asset('CSS/administracion/responsiveInventory.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"/>
+          integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
     <div class="button-container">
-        <button class="custom-btn btn-access-key">
+        <a class="custom-btn btn-access-key" href="{{ route('solicitud-clave-default') }}"
+           style="text-decoration: none;">
             <i class="fa-solid fa-key"></i> Solicitud de clave de acceso
-        </button>
+        </a>
 
-        <button class="custom-btn btn-password-recovery">
+        <a class="custom-btn btn-access-key" href="{{ route('solicitud-recuperar-clave') }}"
+           style="text-decoration: none;">
             <i class="fa-solid fa-unlock-alt"></i> Solicitudes de recuperación de contraseña
-        </button>
+        </a>
     </div>
 
 @stop

@@ -154,6 +154,18 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
     Route::get('/dashboard/departamentos/ver/{id}', function () {
         return view('careers.editDepartment');
     })->name('departamentos-ver');
+
+    Route::get('/notificaciones', function (){
+        return view('notifications.notifications');
+    })->name('notificaciones');
+
+    Route::get('/notificaciones/claves-de-acceso', function (){
+        return view('notifications.accessPasswordRequesting');
+    })->name('solicitud-clave-default');
+
+    Route::get('/notificaciones/recuperacion-de-clave', function (){
+        return view('notifications.recoveringPasswordRequesting');
+    })->name('solicitud-recuperar-clave');
 });
 
 // ***************************************Iniciar credenciales admin*********************************************

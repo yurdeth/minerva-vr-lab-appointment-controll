@@ -54,7 +54,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{route("inventario")}}" onclick="cambiarMensaje('notificaciones')">
+                <a href="{{route("notificaciones")}}" onclick="cambiarMensaje('notificaciones')">
                     <span><i class="fa-solid fa-bell"></i></span>
                     <span class="Opciones">Notificaciones</span>
                 </a>

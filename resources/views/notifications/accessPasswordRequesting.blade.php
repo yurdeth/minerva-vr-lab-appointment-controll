@@ -52,7 +52,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
-            width: 45%; /* Ancho de los botones */
+            width: 38%; /* Ancho de los botones */
         }
 
         .custom-btn:hover {
@@ -82,11 +82,11 @@
     <link rel="stylesheet" href="{{ asset('CSS/administracion/tables.css')}}">
     <link rel="stylesheet" href="{{ asset('CSS/administracion/responsiveInventory.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"/>
+          integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
     <div class="col-6 bg-white p-5 text-center">
-        <h2 style="margin-top: 10px; margin-bottom: 10px;">Solicitud de Recuperacion de Contraseña</h2>
+        <h2 style="margin-top: 10px; margin-bottom: 10px;">Solicitud de Clave de Acceso</h2>
 
         <div class="form-container"> <!-- Contenedor para centrar los inputs -->
             <form method="post" action="{{ route('signin') }}">
@@ -95,7 +95,7 @@
                 <div class="form-group">
                     <div class="icon-input">
                         <input type="email" class="form-control" id="email" name="email"
-                               placeholder="Ingresa tu correo electrónico">
+                               placeholder="Ingresa tu correo electrónico" readonly>
                         <i class="fas fa-envelope"></i>
                     </div>
                 </div>
@@ -103,14 +103,14 @@
                 <div class="form-group">
                     <div class="icon-input">
                         <input type="text" class="form-control" id="asunto" name="asunto"
-                               placeholder="Asunto...">
+                               placeholder="Asunto..." readonly>
                         <i class="fas fa-pencil-alt"></i>
                     </div>
                 </div>
 
                 <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn custom-btn m-2" id="submitButton">
-                        Actualizar informacion
+                    <button type="button" class="btn custom-btn m-2" id="submitButton">
+                        Enviar Clave
                     </button>
 
                     <button type="button" class="btn custom-btn m-2" id="cancelButton">
