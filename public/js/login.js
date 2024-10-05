@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         if (email === adminEmail) {
-            login();
+            login(body);
         }else{
             fetch(`${remoteApiURL}/verifyUser?email=${email}&password=${password}`, {
                 method: 'GET',
