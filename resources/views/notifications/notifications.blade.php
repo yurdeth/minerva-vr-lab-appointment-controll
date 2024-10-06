@@ -54,7 +54,43 @@
            style="text-decoration: none;">
             <i class="fa-solid fa-unlock-alt"></i> Solicitudes de recuperación de contraseña
         </a>
+
+        <a class="custom-btn btn-access-key" href="{{ route('solicitud-recuperar-clave') }}"
+           style="text-decoration: none;">
+            <i class="fa-solid fa-random"></i> Otras solicitudes
+        </a>
     </div>
+
+    <div class="card-body">
+        <div class="table-responsive" style="height: 100%; width: 100%;">
+            <table class="table table-bordered text-center" id="notificationsTable"
+                   style="width: 100%; margin-bottom: 0;">
+                <thead class="table-avatar">
+                <tr>
+                    <th scope="col">Correo del solicitante</th>
+                    <th scope="col">Tipo de solicitud</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+                </thead>
+                <tbody id=""></tbody>
+            </table>
+        </div>
+
+        <!-- Contenedor para los botones de paginación -->
+        <div id="pagination" class="pagination-container">
+            <button id="prevPage" class="btn-arrow" disabled>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <span id="currentPage" class="page-number">1</span>
+            <button id="nextPage" class="btn-arrow">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+    </div>
+
+    <script src="{{ asset('js/notifications/showAllNotifications.js') }}" type="module"></script>
 
 @stop
 

@@ -15,9 +15,9 @@ class NotificationTypeSeeder extends Seeder {
      */
     public function run(): void {
         try {
-            NotificationType::create(['type' => 'Password recovering']);
-            NotificationType::create(['type' => 'Default password']);
-            NotificationType::create(['type' => 'Other']);
+            NotificationType::create(['type' => 'Recuperación de contraseña olvidada']);
+            NotificationType::create(['type' => 'Solicitud de clave de acceso por defecto']);
+            NotificationType::create(['type' => 'Otra']);
         } catch (Exception $e) {
             Log::error($e->getMessage());
             throw $e;

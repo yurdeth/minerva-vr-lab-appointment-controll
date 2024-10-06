@@ -4,6 +4,7 @@ use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CareersController;
 use App\Http\Controllers\DepartmentsController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\ResourceTypeController;
 use App\Http\Controllers\RoomController;
@@ -72,4 +73,8 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     Route::get('/departments/ver/{id}', [DepartmentsController::class, 'show'])->name("departments.show");
     Route::put('/departments/editar/{id}', [DepartmentsController::class, 'update'])->name("departments.update");
     Route::delete('/departments/eliminar/{id}', [DepartmentsController::class, 'destroy'])->name("departments.destroy");
+
+    // **************************************** Notificaciones ******************************************************
+    Route::get('/notifications', [NotificationsController::class, 'index'])->name("notifications.index");
+    Route::get('/count-notifications', [NotificationsController::class, 'countNotifications'])->name("notifications.count");
 });

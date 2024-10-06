@@ -57,6 +57,7 @@
                 <a href="{{route("notificaciones")}}" onclick="cambiarMensaje('notificaciones')">
                     <span><i class="fa-solid fa-bell"></i></span>
                     <span class="Opciones">Notificaciones</span>
+                    <span id="notification-count"></span>
                 </a>
             </li>
         </ul>
@@ -75,7 +76,7 @@
                     </a>
                 </li>
                 <li>
-{{--                    <button><a class="nav-link" href="{{ route("logout") }}">Cerrar Sesión</a></button>--}}
+                    {{--                    <button><a class="nav-link" href="{{ route("logout") }}">Cerrar Sesión</a></button>--}}
                     <a class="nav-link" href="{{ route("logout") }}">
                         <span><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
                         <span class="title">Salir</span>
@@ -84,7 +85,7 @@
                 <li>
                     <button type="button" class="btn" id="Tema">
                         <img class="lentes" src="{{ asset('IMG/Minerva.png') }}" alt="Logo">
-                     </button>
+                    </button>
                 </li>
             </ul>
         </div>
@@ -158,6 +159,7 @@
         }
     });
 </script>
+<script type="module" src="{{ asset('js/notifications/countAllNotifications.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/1.1.6/choices.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{asset("js/themes/dashboardThemes.js")}}"></script>

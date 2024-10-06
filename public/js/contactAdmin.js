@@ -65,7 +65,15 @@ document.addEventListener('DOMContentLoaded', function (event) {
             .then(data => {
                 console.log(data);
                 if (!data.success) {
+                    if (data.original){
+                        showErrorAlert('Error', data.original.message);
+                        return;
+                    }
                     if (data.error.from) {
+                        if (data.error.from.includes('correos universitarios')){
+                            showErrorAlert('Error', "Por favor, ingresa tu correo universitario");
+                            return;
+                        }
                         showErrorAlert('Error', "Por favor, ingresa tu correo electrónico.");
                         return;
                     }
@@ -75,6 +83,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
                     }
                     if (data.error.description) {
                         showErrorAlert('Error', "Por favor, agrega una descripción del problema.");
+                        return;
                     }
 
                     showErrorAlert('Error', 'Hubo un error al enviar el mensaje al administrador.');
