@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContactFormController;
 use App\Http\Controllers\StatusesController;
 use App\Http\Middleware\NoBrowserCache;
 use App\Models\User;
@@ -53,6 +54,11 @@ Route::get('/iniciar-sesion', function () {
     }
     return view("iniciarSesion");
 })->name('iniciarSesion');
+
+Route::post('/enviar-correo', [ContactFormController::class, 'sendEmail'])->name('enviarCorreo');
+Route::get('/mail-form', function (){
+    return view('email.contact');
+})->name('contact');
 
 Route::post('/signin', [AuthController::class, 'login'])->name("signin");
 Route::post('/signup', [AuthController::class, 'register'])->name("signup");

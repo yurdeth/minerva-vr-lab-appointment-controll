@@ -23,7 +23,7 @@
                 <br>
                 <h2>Contactar al Administrador</h2>
 
-                <form class="" method="post" action="{{ route("signin") }}">
+                <form class="" method="post" action="{{ route("enviarCorreo") }}">
                     @csrf
 
                     <div class="form-group position-relative p-2">
@@ -58,7 +58,7 @@
         <br>
     </div>
 
-    <script type="module" src="{{ asset('js/login.js') }}"></script>
+{{--    <script type="module" src="{{ asset('js/login.js') }}"></script>--}}
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
 
