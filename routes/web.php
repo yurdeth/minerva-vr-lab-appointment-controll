@@ -3,6 +3,7 @@
 use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContactFormController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\StatusesController;
 use App\Http\Middleware\NoBrowserCache;
 use App\Models\User;
@@ -48,6 +49,8 @@ Route::get('/contactar-administrador', function () {
     return view("contactAdmin");
 })->name('contactar-administrador');
 
+Route::post('/enviar-solicitud', [NotificationsController::class, 'store'])->name('enviar-solicitud');
+
 Route::get('/iniciar-sesion', function () {
     if (Auth::check()) {
         return redirect()->route('HomeVR');
@@ -56,6 +59,7 @@ Route::get('/iniciar-sesion', function () {
 })->name('iniciarSesion');
 
 Route::post('/enviar-correo', [ContactFormController::class, 'sendEmail'])->name('enviarCorreo');
+
 Route::get('/mail-form', function (){
     return view('email.contact');
 })->name('contact');

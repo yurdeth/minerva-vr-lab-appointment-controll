@@ -23,42 +23,44 @@
                 <br>
                 <h2>Contactar al Administrador</h2>
 
-                <form class="" method="post" action="{{ route("enviarCorreo") }}">
+                <form class="" method="post" action="{{ route("enviar-solicitud") }}">
                     @csrf
 
                     <div class="form-group position-relative p-2">
-                        <input type="email" class="form-control" id="email" name="email"
+                        <input type="email" class="form-control" id="email" name="from"
                                placeholder="Ingresa tu correo electrónico" style="padding-left: 30px;" required>
                         <i class="fas fa-envelope position-absolute"
                            style="top: 50%; transform: translateY(-50%); left: 10px; padding-left: 5px;"></i>
                     </div>
 
                     <div class="form-group position-relative p-2">
-                        <input type="text" class="form-control" id="asunto" name="asunto"
-                               placeholder="Asunto..." style="padding-left: 30px;" required>
-                        <i class="fas fa-pencil-alt position-absolute"
-                           style="top: 50%; transform: translateY(-50%); left: 10px; padding-left: 5px;"></i>
+                        <i class="fas fa-pencil-alt position-absolute" style="top: 50%; transform: translateY(-50%); left: 10px; padding-left: 5px;"></i>
+                        <select class="form-select" id="tipo" name="type_id" style="padding-left: 30px;" required>
+                            <option value="" selected disabled>Selecciona una opción</option>
+                            <option value="1">Recuperación de contraseña</option>
+                            <option value="2">Solicitar contraseña inicial</option>
+                            <option value="3">Otro</option>
+                        </select>
                     </div>
 
+                    <div id="other-option" class="form-group position-relative p-2"></div>
+
                     <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn text-white m-2 form-control" id="submitButton">
+                        <button type="button" class="btn btn-success text-white m-2 form-control" id="submitButton">
                             Enviar
                         </button>
 
-                        <button type="submit" class="btn text-white m-2 form-control" id="submitButton">
+                        <button type="button" class="btn btn-danger text-white m-2 form-control" id="cancelButton">
                             Cancelar
                         </button>
                     </div>
                 </form>
-
             </div>
-
         </div>
-
         <br>
     </div>
 
-{{--    <script type="module" src="{{ asset('js/login.js') }}"></script>--}}
+    <script type="module" src="{{ asset('js/contactAdmin.js') }}"></script>
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
 
