@@ -78,9 +78,15 @@
                                             <span class="navbar-text" style="color: white">{{ Auth::user()->name }}</span>
                                         </a>
                                     </button>
-                                    <button type="button" class="btn" id="Tema">
-                                        <img class="lentes" src="{{ asset('IMG/Minerva.png') }}" alt="Logo">
-                                    </button>
+                                    <label for="toggle" class="toggle" id="toggle">
+                                        <i class="rv">
+                                             <img class="lentes" src="{{ asset('IMG/Lentes.png') }}" alt="Logo">
+                                        </i>
+                                        <i class="minerva">
+                                            <img class="lentes" src="{{ asset('IMG/Minerva.png') }}" alt="Logo">
+                                        </i>
+                                        <span class="ball"></span>
+                                    </label>
                         @else
                             <li class="nav-item">
                                 <button>
@@ -94,9 +100,15 @@
                             </li>--}}
                              <!--Button para cambiar el color de la pagina-->
                              <li class="nav-item">
-                                <button type="button" class="btn" id="Tema">
-                                    <img class="lentes" src="{{ asset('IMG/Minerva.png') }}" alt="Logo">
-                                </button>
+                                <label for="toggle" class="toggle" id="toggle">
+                                    <i class="rv">
+                                        <img class="lentes" src="{{ asset('IMG/Lentes.png') }}" alt="Logo">
+                                    </i>
+                                        <i class="minerva">
+                                            <img class="lentes" src="{{ asset('IMG/Minerva.png') }}" alt="Logo">
+                                        </i>
+                                        <span class="ball"></span>
+                                </label>
                              </li>
                         @endauth
                     </ul>
