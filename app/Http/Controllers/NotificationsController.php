@@ -22,6 +22,7 @@ class NotificationsController extends Controller {
             ->from('notifications')
             ->join('notification_type', 'notifications.type_id', '=', 'notification_type.id')
             ->where('notifications.reviewed', false)
+            ->orderBy('notifications.id')
             ->get();
 
         if ($notifications->isEmpty()) {
@@ -126,6 +127,24 @@ class NotificationsController extends Controller {
 
         return response()->json([
             'message' => 'Notificación marcada como revisada',
+            'success' => true
+        ]);
+    }
+
+    public function destroy(string $id){
+        $notification = Notifications::find($id);
+
+        if(!$notification){
+            return response()->json([
+                'message' => 'Notificación no encontrada',
+                'success' => false
+            ]);
+        }
+
+        $notification->delete();
+
+        return response()->json([
+            'message' => 'Notificación eliminada',
             'success' => true
         ]);
     }

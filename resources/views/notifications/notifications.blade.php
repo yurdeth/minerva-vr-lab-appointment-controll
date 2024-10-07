@@ -2,7 +2,7 @@
 @section('title', 'Inventario')
 
 @section('content_header')
-    <h1>Datos de inventario</h1>
+    <h1>Notificaciones</h1>
 @stop
 
 @section('content')

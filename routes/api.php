@@ -80,6 +80,7 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     Route::get('/notifications/ver/{id}', [NotificationsController::class, 'show'])->name("notifications.show");
     Route::get('/count-notifications', [NotificationsController::class, 'countNotifications'])->name("notifications.count");
     Route::put('/notifications/editar/{id}', [NotificationsController::class, 'update'])->name("notifications.update");
+    Route::delete('/notifications/eliminar/{id}', [NotificationsController::class, 'destroy'])->name("notifications.destroy");
 
     // **************************************** Notificaciones ******************************************************
     Route::post('/sendmail', [ContactFormController::class, 'sendEmail'])->name('enviarCorreo');
