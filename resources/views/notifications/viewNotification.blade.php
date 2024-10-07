@@ -109,6 +109,7 @@
                 </div>
             </form>
             <div id="actionsButtons" class="row"></div>
+            <div id="passwordForms" class="row"></div>
         </div>
     </div>
 
