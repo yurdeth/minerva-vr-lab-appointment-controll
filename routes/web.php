@@ -58,12 +58,6 @@ Route::get('/iniciar-sesion', function () {
     return view("iniciarSesion");
 })->name('iniciarSesion');
 
-Route::post('/enviar-correo', [ContactFormController::class, 'sendEmail'])->name('enviarCorreo');
-
-Route::get('/mail-form', function (){
-    return view('email.contact');
-})->name('contact');
-
 Route::post('/signin', [AuthController::class, 'login'])->name("signin");
 Route::post('/signup', [AuthController::class, 'register'])->name("signup");
 
@@ -165,15 +159,19 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
         return view('careers.editDepartment');
     })->name('departamentos-ver');
 
-    Route::get('/notificaciones', function (){
+    Route::get('/dashboard/notificaciones', function (){
         return view('notifications.notifications');
     })->name('notificaciones');
 
-    Route::get('/notificaciones/claves-de-acceso', function (){
+    Route::get('/dashboard/notificaciones/ver/{id}', function (){
+        return view('notifications.viewNotification');
+    })->name('notificaciones-ver');
+
+    Route::get('/dashboard/notificaciones/claves-de-acceso', function (){
         return view('notifications.accessPasswordRequesting');
     })->name('solicitud-clave-default');
 
-    Route::get('/notificaciones/recuperacion-de-clave', function (){
+    Route::get('/dashboard/notificaciones/recuperacion-de-clave', function (){
         return view('notifications.recoveringPasswordRequesting');
     })->name('solicitud-recuperar-clave');
 });

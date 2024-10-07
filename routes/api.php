@@ -3,6 +3,7 @@
 use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CareersController;
+use App\Http\Controllers\ContactFormController;
 use App\Http\Controllers\DepartmentsController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ResourcesController;
@@ -76,5 +77,14 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
 
     // **************************************** Notificaciones ******************************************************
     Route::get('/notifications', [NotificationsController::class, 'index'])->name("notifications.index");
+    Route::get('/notifications/ver/{id}', [NotificationsController::class, 'show'])->name("notifications.show");
     Route::get('/count-notifications', [NotificationsController::class, 'countNotifications'])->name("notifications.count");
+    Route::put('/notifications/editar/{id}', [NotificationsController::class, 'update'])->name("notifications.update");
+
+    // **************************************** Notificaciones ******************************************************
+    Route::post('/sendmail', [ContactFormController::class, 'sendEmail'])->name('enviarCorreo');
+
+    Route::get('/mail-form', function (){
+        return view('email.contact');
+    })->name('contact');
 });

@@ -116,15 +116,11 @@ class ValidationService {
             return $this->errorResponse("El correo no puede ser un valor numérico");
         }
 
-        if(strlen(explode("@", $this->request->email)[0]) < 5) {
-            return $this->errorResponse("El correo no coincide con los formatos permitidos");
-        }
-
         if (!preg_match("/^[a-zA-ZñÑáéíóúÁÉÍÓÚ@.1234567890 ]*$/", $this->request->email)) {
             return $this->errorResponse("No se permite el uso de caracteres especiales en el correo");
         }
 
-        if (substr_count($this->request->email, '@') != 1) {
+        if (substr_count($this->request->email, '@') > 1) {
             return $this->errorResponse("El correo debe contener exactamente una arroba (@)");
         }
 

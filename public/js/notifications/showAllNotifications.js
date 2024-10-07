@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const actionTd = document.createElement('td');
                 // Usando innerHTML para crear el botón
-                actionTd.innerHTML = `<a class="btn btn-primary" href="/notificaciones/ver/${item.id}" ">Ver</a>`;
+                actionTd.innerHTML = `<a class="btn btn-primary" href="/dashboard/notificaciones/ver/${item.id}" ">Ver</a>`;
 
                 row.appendChild(actionTd);
                 tbody.appendChild(row);

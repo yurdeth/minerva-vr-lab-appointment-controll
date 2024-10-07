@@ -85,8 +85,49 @@ class NotificationsController extends Controller {
     }
 
     public function show($id) {
+        $notifications = DB::query()
+            ->select('notifications.id as id', 'notifications.from as from',
+                'notifications.description as description',
+                'notifications.reviewed as reviewed',
+                'notification_type.type as type',
+                'notification_type.id as type_id')
+            ->from('notifications')
+            ->join('notification_type', 'notifications.type_id', '=', 'notification_type.id')
+            ->where('notifications.reviewed', false)
+            ->where('notifications.id', $id)
+            ->get();
+
+        if ($notifications->isEmpty()) {
+            return response()->json([
+                'message' => 'No hay notificaciones',
+                'success' => false
+            ], 404);
+        }
+
+        return response()->json([
+            'notifications' => $notifications,
+            'success' => true
+        ]);
+    }
+
+    public function update($id): JsonResponse {
         $notification = Notifications::find($id);
-        return view('notifications.show', compact('notification'));
+
+        if (!$notification) {
+            return response()->json([
+                'message' => 'Notificación no encontrada',
+                'success' => false
+            ], 404);
+        }
+
+        $notification->update([
+            'reviewed' => true
+        ]);
+
+        return response()->json([
+            'message' => 'Notificación marcada como revisada',
+            'success' => true
+        ]);
     }
 
     public function countNotifications(): JsonResponse {

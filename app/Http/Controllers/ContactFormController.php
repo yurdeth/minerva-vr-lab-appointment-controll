@@ -3,18 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ContactFormMail;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class ContactFormController extends Controller {
-    public function sendEmail(): string {
+    public function sendEmail(Request $request): JsonResponse{
         $details = [
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
-            'message' => 'Este es un mensaje de prueba.'
+            'subject' => $request->subject,
+            'name' => 'Minerva RV Lab',
+            'email' => $request->email,
+            'message' => 'Contraseña de acceso: ' . $request->password
         ];
 
-        Mail::to('US21003@ues.edu.sv')->send(new ContactFormMail($details));
+        Mail::to($request->email)->send(new ContactFormMail($details));
 
-        return "Correo enviado correctamente";
+        return response()->json([
+            'message' => 'Correo enviado correctamente a: ' . $request->email,
+            'success' => true
+        ]);
     }
 }
