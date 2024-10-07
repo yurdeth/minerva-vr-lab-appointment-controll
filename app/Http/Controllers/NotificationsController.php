@@ -111,7 +111,7 @@ class NotificationsController extends Controller {
         ]);
     }
 
-    public function update($id): JsonResponse {
+    public function update(string $id): JsonResponse {
         $notification = Notifications::find($id);
 
         if (!$notification) {

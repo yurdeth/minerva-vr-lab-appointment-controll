@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         handleEditProfile(notification.id, notification.from, "Recuperación de contraseña");
                         break;
                     case 2:
-                        handleSendMail(notification.id, notification.from, "Solicitud de contraseña por defecto");
+                        sendDefaultPassword(notification.id, notification.from, "Solicitud de contraseña por defecto");
                         break;
                     default:
                         buttonMessage = 'Marcar como leída';
@@ -104,6 +104,7 @@ const getCredentials = async (email) => {
             headers: {...headers, 'x-api-key': secret}
         });
         const data = await response.json();
+        console.log(data);
 
         if (!data.success) {
             showAlert('Error', data.message);
@@ -117,33 +118,13 @@ const getCredentials = async (email) => {
     }
 };
 
-const getRemoteData = async (id) => {
-    try {
-        const response = await fetch(`${remoteApiURL}/users/${id}`, {
-            method: 'GET',
-            headers: {...headers, 'x-api-key': secret}
-        });
-        const data = await response.json();
-
-        if (!data.success) {
-            showAlert('Error', data.message);
-            return null;
-        }
-
-        return data;
-    } catch (error) {
-        console.error('Error:', error);
-        return null;
-    }
-};
-
-const handleSendMail = async (id, email, subject) => {
-    const password = await getCredentials(email).password;
+const sendDefaultPassword = async (notification_id, email, subject) => {
+    const password = await getCredentials(email);
 
     const body = {
         subject: subject,
         email: email,
-        password: password
+        password: password.password
     };
 
     if (!password) {
@@ -164,14 +145,50 @@ const handleSendMail = async (id, email, subject) => {
                 return;
             }
             showSuccessAlert('Correo enviado', data.message).then(() => {
-                markAsread(id);
+                markAsread(notification_id);
             });
             window.location.href = '/dashboard/notificaciones';
         }))
         .catch(error => console.error('Error:', error));
 };
 
+const sendRecoveredPassword = async (notification_id, email, subject, password) => {
+
+    const body = {
+        subject: subject,
+        email: email,
+        password: password.password
+    };
+
+    if (!password) {
+        showErrorAlert('Error', 'Usuario no encontrado.').then(() => {
+            window.location.href = '/dashboard/notificaciones';
+        });
+        return;
+    }
+
+    fetch(`/api/sendmail/`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(body)
+    })
+        .then(response => response.json().then(data => {
+            if (!data.success) {
+                showErrorAlert('Error', data.message);
+                return;
+            }
+            showSuccessAlert('Correo enviado', data.message).then((result) => {
+                if (result.isConfirmed) {
+                    markAsread(notification_id);
+                    stop();
+                }
+            });
+        }))
+        .catch(error => console.error('Error:', error));
+};
+
 const handleEditProfile = async (id, email, subject) => {
+
     const passwordForms = document.getElementById('passwordForms');
     passwordForms.innerHTML = "";
 
@@ -199,58 +216,73 @@ const handleEditProfile = async (id, email, subject) => {
     cancelButton.textContent = "Cancelar";
     passwordForms.appendChild(cancelButton);
 
-    let name = "";
-    let career = "";
+    recoverPasswordButton.addEventListener('click', function () {
+        getCredentials(email).then(data => {
+            if (!data.success) {
+                showErrorAlert('Error', 'Ocurrió un error al procesar la petición').then(() => {
+                    window.location.href = '/dashboard/notificaciones'
+                });
+            }
 
-    console.log(getRemoteData(id).then(data => {
-        if(!data.success){
-            showErrorAlert('Error', 'Ocurrió un error al procesar la petición').then(() => {
-                window.location.href = '/dashboard/notificaciones'
-            });
-        }
-        name = data.name;
-        career = data.career_id;
-    }));
+            let name = data.name;
+            let career_id = data.career_id;
 
-    const data = {
-        id: id,
-        email: email,
-        career_id: career,
-        name: name
-    };
-
-    validateNewPassword(newPassword.value, repeatPassword.value, data);
+            validateNewPassword(id, newPassword.value, repeatPassword.value, name, career_id, email);
+        })
+    });
 };
 
-function validateNewPassword(newPassword, repeatPassword, data) {
+async function validateNewPassword(notification_id, newPassword, repeatPassword, name, career_id, email) {
+    try {
+        const response = await fetch(`/api/users/ver/email/${email}`, {
+            method: 'GET',
+            headers: headers
+        });
+        const data = await response.json();
+        const id = data.user.id;
 
-    const body = {
-        name: data.name,
-        email: data.email,
-        password: newPassword,
-        passwordConfirmation: repeatPassword
+        console.log(id);
+
+        const body = {
+            id: id,
+            name: name,
+            email: email,
+            career: career_id,
+            password: newPassword,
+            password_confirmation: repeatPassword
+        };
+
+        const updateResponse = await fetch(`/api/users/editar/${body.id}`, {
+            method: 'PUT',
+            body: JSON.stringify(body),
+            headers: headers
+        });
+        const updateData = await updateResponse.json();
+        if (!updateData.success) {
+            showErrorAlert('Error', updateData.message);
+            return;
+        }
+
+        showSuccessAlert('Operación completada', updateData.message).then((result) => {
+            if (result.isConfirmed) {
+                sendRecoveredPassword(notification_id, body.email, "Recuperación de contraseña", body.password);
+                // window.location.href = '/dashboard/notificaciones';
+            }
+        });
+    } catch (error) {
+        console.error(error);
     }
-
-    apiRequest(`/api/users/editar/${data.id}`, 'PUT', body, headers)
-        .then(response => response.json().then(data => {
-            console.log(data);
-        }))
-        .catch(error => console.error(error));
 }
 
 const markAsread = (id) => {
-    fetch(`/api/notifications/editar/${id}`, {
-        method: 'PUT',
-        headers: headers,
-        body: JSON.stringify({read: true})
-    })
+    apiRequest(`/api/notifications/editar/${id}`, 'PUT', null, headers)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Error al actualizar la notificación');
             }
             return response.json().then(data => {
                 showSuccessAlert('Operación completada', data.message).then(() => {
-                    window.location.href = '/dashboard/notificaciones';
+                    // window.location.href = '/dashboard/notificaciones';
                 });
             })
         })

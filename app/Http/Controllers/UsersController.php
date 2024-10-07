@@ -70,6 +70,35 @@ class UsersController extends Controller {
         ]);
     }
 
+    public function showByEmail(Request $request) {
+        if (Auth::user()->roles_id != 1) {
+            return response()->json([
+                "message" => "No tienes permiso para ver este usuario",
+                "success" => false,
+                "redirectTo" => route('HomeVR'),
+            ]);
+        }
+
+        $user = DB::table('users')
+            ->where('users.email', $request->email)
+            ->join('careers', 'users.career_id', '=', 'careers.id')
+            ->join('departments', 'careers.department_id', '=', 'departments.id')
+            ->select('users.id', 'users.name', 'users.email', 'users.career_id', 'careers.career_name', 'careers.department_id', 'departments.department_name')
+            ->first();
+
+        if (!$user) {
+            return response()->json([
+                "message" => "Usuario no encontrado",
+                "success" => false,
+            ], 404);
+        }
+
+        return response()->json([
+            "user" => $user,
+            "success" => true,
+        ]);
+    }
+
     /**
      * Update the specified resource in storage.
      */

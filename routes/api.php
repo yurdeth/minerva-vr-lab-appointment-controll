@@ -44,7 +44,8 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     // **************************************** Usuarios ******************************************************
     Route::get('/users', [UsersController::class, "index"])->name('usuarios.index');
     Route::get("/users/ver/{id}", [UsersController::class, "show"])->name("users.show");
-    Route::put("/users/editar/{id}", [UsersController::class, "update"])->name("users.update");
+    Route::get("/users/ver/email/{email}", [UsersController::class, "showByEmail"])->name("users.showByEmail");
+    Route::put("/users/editar/{id}", [UsersController::class, "update"])->name("users.updateById");
     Route::delete("/users/eliminar/{id}", [UsersController::class, "destroy"])->name("users.destroy");
 
     // **************************************** Inventarios ******************************************************
@@ -85,7 +86,7 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     // **************************************** Notificaciones ******************************************************
     Route::post('/sendmail', [ContactFormController::class, 'sendEmail'])->name('enviarCorreo');
 
-    Route::get('/mail-form', function (){
+    Route::get('/mail-form', function () {
         return view('email.contact');
     })->name('contact');
 });

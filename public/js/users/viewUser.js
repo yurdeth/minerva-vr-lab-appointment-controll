@@ -29,7 +29,7 @@ function handleEdit(id) {
         return;
     }
 
-    if(password.value !== "" || password_confirmation.value !== "") {
+    if (password.value !== "" || password_confirmation.value !== "") {
         if (password.value !== password_confirmation.value) {
             showWarningAlert('error', 'Las contraseñas no coinciden.');
             return;
@@ -60,7 +60,7 @@ function handleEdit(id) {
 
                 console.log(data);
 
-                if(!data.success){
+                if (!data.success) {
                     if (data.error) {
                         if (data.error.career[0].includes("The career field is required")) {
                             showErrorAlert('Oops...', 'Por favor, selecciona la carrera').then(() => {
@@ -68,9 +68,7 @@ function handleEdit(id) {
                             });
                             return;
                         }
-                    }
-
-                    else{
+                    } else {
                         showErrorAlert('Oops...', data.message).then(() => {
                             document.getElementById('career').focus();
                         });
@@ -120,16 +118,17 @@ function handleDelete(id) {
         });
 }
 
+/**
+ * Obtiene el valor de un parámetro de la URL.
+ * @param {string} name - El nombre del parámetro.
+ * @returns {string|null} - El valor del parámetro o null si no se encuentra.
+ */
+function getQueryParam(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+}
+
 document.addEventListener('DOMContentLoaded', function () {
-    /**
-     * Obtiene el valor de un parámetro de la URL.
-     * @param {string} name - El nombre del parámetro.
-     * @returns {string|null} - El valor del parámetro o null si no se encuentra.
-     */
-    function getQueryParam(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
-    }
 
     let id = getQueryParam('id');
     if (!id) {
@@ -137,13 +136,21 @@ document.addEventListener('DOMContentLoaded', function () {
         id = urlParts[urlParts.length - 1];
     }
 
-    apiRequest(`/api/users/ver/${id}`, 'GET', null, headers)
+    let email = getQueryParam('email');
+    if (!email) {
+        console.error('Email not found in query parameters');
+    }
+
+    const param = id !== null ? id: email;
+
+    apiRequest(`/api/users/ver/${param}`, 'GET', null, headers)
         .then(response => response.json())
         .then(data => {
-            if (!data || !data.success) {
+            console.log(data);
+            if (!data || !data.success || data.user.length === 0) {
                 showErrorAlert('Oops...', 'No se encontraron datos del usuario.')
                     .then(() => {
-                        window.location.href = data.redirectTo;
+                        window.location.href = '/dashboard/';
                     });
                 return;
             }
