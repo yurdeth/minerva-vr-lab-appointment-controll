@@ -67,6 +67,7 @@
                    style="width: 100%; margin-bottom: 0;">
                 <thead class="table-avatar">
                 <tr>
+                    <th scope="col">#</th>
                     <th scope="col">Correo del solicitante</th>
                     <th scope="col">Tipo de solicitud</th>
                     <th scope="col">Descripción</th>
