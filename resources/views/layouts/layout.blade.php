@@ -28,7 +28,7 @@
                 <div class="logo_title">
                     <a class="navbar-brand text-light" href="{{ route("inicio") }}">
                         <img class="logo" src="{{ asset('IMG/Logo.png') }}" alt="Logo">
-                        Minerva VR Lab FMO
+                        Minerva RV Lab FMO
                     </a>
                 </div>
                 <!-- Button que aparece en dispositivos moviles-->
