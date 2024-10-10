@@ -126,8 +126,7 @@ const getCredentials = async (notification_id = null, email, subject = null) => 
             return null;
         }
 
-        let password = data;
-        sendMail(notification_id, email, subject, password);
+        sendMail(notification_id, email, subject, data.password);
     } catch (error) {
         console.error('Error:', error);
         return null;
