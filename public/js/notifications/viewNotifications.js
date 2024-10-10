@@ -3,6 +3,7 @@ import {showAlert, showErrorAlert, showSuccessAlert} from '../utils/alert.js';
 import {envVars} from '../envVars.js';
 
 const remoteApiURL = envVars().REMOTE_API_URL;
+const xKey = envVars().API_COMMON_SECRET;
 
 const headers = {
     'Content-Type': 'application/json',
@@ -80,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         handleEditProfile(notification.id, notification.from, "Recuperación de contraseña");
                         break;
                     case 2:
-                        sendDefaultPassword(notification.id, notification.from, "Solicitud de contraseña por defecto");
+                        getCredentials(notification.id, notification.from, "Solicitud de contraseña por defecto");
                         break;
                     default:
                         buttonMessage = 'Marcar como leída';
@@ -96,9 +97,8 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => console.error("Error: " + error));
 });
 
-const getCredentials = async (email) => {
+const getCredentials = async (notification_id = null, email, subject = null) => {
     try {
-
         let response = await fetch('/api/get-key', {
             method: 'GET',
             headers: headers
@@ -111,10 +111,7 @@ const getCredentials = async (email) => {
 
         // Obtener el JSON de la respuesta
         let data = await response.json();
-
-        // Extraer el xKey
-        const xKey = data.xKey;
-        console.log('xKey:', xKey);
+        console.log(data.xKey);
 
         response = await fetch(`${remoteApiURL}/findByMail?email=${email}`, {
             method: 'GET',
@@ -124,7 +121,7 @@ const getCredentials = async (email) => {
         console.log(data);
 
         if (!data.success) {
-            showAlert('Error', data.message);
+            showErrorAlert('Error', data.message);
             return null;
         }
 
@@ -135,77 +132,7 @@ const getCredentials = async (email) => {
     }
 };
 
-const sendDefaultPassword = async (notification_id, email, subject) => {
-    const password = await getCredentials(email);
-
-    const body = {
-        subject: subject,
-        email: email,
-        password: password.password
-    };
-
-    if (!password) {
-        showErrorAlert('Error', 'Usuario no encontrado.').then(() => {
-            window.location.href = '/dashboard/notificaciones';
-        });
-        return;
-    }
-
-    fetch(`/api/sendmail/`, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(body)
-    })
-        .then(response => response.json().then(data => {
-            if (!data.success) {
-                showErrorAlert('Error', data.message);
-                return;
-            }
-            showSuccessAlert('Correo enviado', data.message).then(() => {
-                markAsread(notification_id);
-            });
-            window.location.href = '/dashboard/notificaciones';
-        }))
-        .catch(error => console.error('Error:', error));
-};
-
-const sendRecoveredPassword = async (notification_id, email, subject, password) => {
-
-    const body = {
-        subject: subject,
-        email: email,
-        password: password.password
-    };
-
-    if (!password) {
-        showErrorAlert('Error', 'Usuario no encontrado.').then(() => {
-            window.location.href = '/dashboard/notificaciones';
-        });
-        return;
-    }
-
-    fetch(`/api/sendmail/`, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(body)
-    })
-        .then(response => response.json().then(data => {
-            if (!data.success) {
-                showErrorAlert('Error', data.message);
-                return;
-            }
-            showSuccessAlert('Correo enviado', data.message).then((result) => {
-                if (result.isConfirmed) {
-                    markAsread(notification_id);
-                    stop();
-                }
-            });
-        }))
-        .catch(error => console.error('Error:', error));
-};
-
 const handleEditProfile = async (id, email, subject) => {
-
     const passwordForms = document.getElementById('passwordForms');
     passwordForms.innerHTML = "";
 
@@ -234,22 +161,25 @@ const handleEditProfile = async (id, email, subject) => {
     passwordForms.appendChild(cancelButton);
 
     recoverPasswordButton.addEventListener('click', function () {
-        getCredentials(email).then(data => {
-            if (!data.success) {
-                showErrorAlert('Error', 'Ocurrió un error al procesar la petición').then(() => {
-                    window.location.href = '/dashboard/notificaciones'
-                });
-            }
+        apiRequest(`/api/users/ver/email/${email}`, 'GET', null, headers)
+            .then(response => response.json().then(data => {
+                console.log(data.user);
 
-            let name = data.name;
-            let career_id = data.career_id;
+                if (!data.success) {
+                    showErrorAlert('Error', 'Ocurrió un error al procesar la petición').then(() => {
+                        window.location.href = '/dashboard/notificaciones'
+                    });
+                }
 
-            validateNewPassword(id, newPassword.value, repeatPassword.value, name, career_id, email);
-        })
+                let name = data.user.name;
+                let career_id = data.user.career_id;
+
+                validateNewPassword(id, newPassword.value, repeatPassword.value, name, career_id, email);
+            })).catch(error => console.error(error));
     });
 };
 
-async function validateNewPassword(notification_id, newPassword, repeatPassword, name, career_id, email) {
+const validateNewPassword = async (notification_id, newPassword, repeatPassword, name, career_id, email) => {
     try {
         const response = await fetch(`/api/users/ver/email/${email}`, {
             method: 'GET',
@@ -282,14 +212,45 @@ async function validateNewPassword(notification_id, newPassword, repeatPassword,
 
         showSuccessAlert('Operación completada', updateData.message).then((result) => {
             if (result.isConfirmed) {
-                sendRecoveredPassword(notification_id, body.email, "Recuperación de contraseña", body.password);
-                // window.location.href = '/dashboard/notificaciones';
+                sendMail(notification_id, body.email, "Recuperación de contraseña", body.password);
             }
         });
     } catch (error) {
         console.error(error);
     }
 }
+
+const sendMail = async (notification_id, email, subject, password) => {
+
+    const body = {
+        subject: subject,
+        email: email,
+        password: password.password
+    };
+
+    if (!password) {
+        showErrorAlert('Error', 'Usuario no encontrado.').then(() => {
+            window.location.href = '/dashboard/notificaciones';
+        });
+        return;
+    }
+
+    fetch(`/api/sendmail/`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(body)
+    })
+        .then(response => response.json().then(data => {
+            if (!data.success) {
+                showErrorAlert('Error', data.message);
+                return;
+            }
+            showSuccessAlert('Correo enviado', data.message).then(() => {
+                markAsread(notification_id);
+            });
+        }))
+        .catch(error => console.error('Error:', error));
+};
 
 const markAsread = (id) => {
     apiRequest(`/api/notifications/editar/${id}`, 'PUT', null, headers)
@@ -299,7 +260,7 @@ const markAsread = (id) => {
             }
             return response.json().then(data => {
                 showSuccessAlert('Operación completada', data.message).then(() => {
-                    // window.location.href = '/dashboard/notificaciones';
+                    window.location.href = '/dashboard/notificaciones';
                 });
             })
         })

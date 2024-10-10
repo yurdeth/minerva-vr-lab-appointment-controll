@@ -136,14 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
         id = urlParts[urlParts.length - 1];
     }
 
-    let email = getQueryParam('email');
-    if (!email) {
-        console.error('Email not found in query parameters');
-    }
-
-    const param = id !== null ? id: email;
-
-    apiRequest(`/api/users/ver/${param}`, 'GET', null, headers)
+    apiRequest(`/api/users/ver/${id}`, 'GET', null, headers)
         .then(response => response.json())
         .then(data => {
             console.log(data);
