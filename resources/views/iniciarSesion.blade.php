@@ -3,29 +3,22 @@
 
 {{--Section para poder trabajar con layout --}}
 @section('content')
-
     <br>
-
-    <div class="container-sm"
-         style="margin-top: 70px; margin-bottom: 70px; border: 2px solid #242525; border-radius: 4px; max-width: 950px; height: 400px;">
-
+    <div class="container-sm mt-5 mb-5 border border-dark rounded" style="max-width: 950px; height: auto;">
         <div class="row">
-
-            <div class="col-6 d-flex align-items-center text-white p-5 text-center" id="contenedorImagen"
-                 style=" height: 396px;">
-                <div class="mx-auto">
-                    <img class="logoInicio m-2" src="{{ asset('IMG/LogoLentes.png') }}" alt="Logo" id="logoInicio">
-                    <h2>FACULTAD MULTIDISCIPLINARIA ORIENTAL</h2>
+            <div class="col-12 col-md-6 d-flex align-items-center text-white p-4 text-center" id="contenedorImagen">
+                <div class="mx-auto" style="max-width: 90%;">
+                    <img class="logoInicio img-fluid m-2" src="{{ asset('IMG/LogoLentes.png') }}" alt="Logo" id="logoInicio" style="max-width: 100%; height: auto;">
+                    <h2 class="fs-4">FACULTAD MULTIDISCIPLINARIA ORIENTAL</h2>
                 </div>
             </div>
 
-            <div class="col-6 bg-white p-5 text-center">
+            <div class="col-12 col-md-6 bg-white p-5 text-center">
                 <br>
                 <h2>Iniciar sesión</h2>
 
                 <form class="" method="post" action="{{ route("signin") }}">
                     @csrf
-
                     <div class="form-group position-relative p-2">
                         <input type="email" class="form-control" id="email" name="email"
                                placeholder="Correo electrónico" style="padding-left: 30px;">
@@ -49,14 +42,14 @@
                             <strong>Contactar con un administrador</strong>
                         </a>
                     </p>
+
                 </form>
 
             </div>
-
         </div>
-
-        <br>
     </div>
+
+
 
     <script type="module" src="{{ asset('js/login.js') }}"></script>
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
