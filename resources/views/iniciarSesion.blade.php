@@ -42,7 +42,6 @@
                             <strong>Contactar con un administrador</strong>
                         </a>
                     </p>
-
                 </form>
 
             </div>
