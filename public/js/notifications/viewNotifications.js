@@ -111,11 +111,13 @@ const getCredentials = async (notification_id = null, email, subject = null) => 
 
         // Obtener el JSON de la respuesta
         let data = await response.json();
-        console.log(data.xKey);
+        console.log('Key sent: ' + data.xKey);
 
         response = await fetch(`${remoteApiURL}/findByMail?email=${email}`, {
             method: 'GET',
-            headers: {...headers, 'x-api-key': xKey}
+            headers: {...headers,
+                'x-api-key': data.xKey,
+            }
         });
         data = await response.json();
         console.log(data);
@@ -125,7 +127,8 @@ const getCredentials = async (notification_id = null, email, subject = null) => 
             return null;
         }
 
-        return data;
+        let password = data;
+        // sendMail(notification_id, email, subject, password);
     } catch (error) {
         console.error('Error:', error);
         return null;

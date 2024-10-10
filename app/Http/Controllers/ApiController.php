@@ -2,43 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Crypt;
 
 class ApiController extends Controller {
 
     private $encryptionKey;
-    private $encryptionIV;
-    private $tag;
+    private $apiKey;
 
-    /**
-     * @param $encryptionKey
-     * @param $encryptionIV
-     */
     public function __construct() {
         $this->encryptionKey = env('API_ENCRYPTION_KEY');
-        $this->encryptionIV = env('API_ENCRYPTION_IV');
-        $this->tag = env('API_TAG');
+        $this->apiKey = env('API_KEY');
     }
 
-    protected function encrypt($apiKey): string {
-        return base64_encode(openssl_encrypt(
-            $apiKey,
-            env('ENCRYPTION_METHOD'),
-            $this->encryptionKey,
-            0,
-            $this->encryptionIV,
-            $this->tag
-        ));
+    public function encryptData($data) {
+        $key = env('API_ENCRYPTION_KEY');
+        $iv = random_bytes(16);
+
+        // Asegurarse de que la clave tiene 32 bytes
+        $key = substr(hash('sha256', $key, true), 0, 32);
+
+        // Cifrar los datos
+        $encryptedData = openssl_encrypt($data, env('ENCRYPTION_METHOD'), $key, OPENSSL_RAW_DATA, $iv);
+
+        // Codificar el IV y los datos cifrados en base64 para fácil transferencia
+        return base64_encode($iv . $encryptedData);
     }
 
     public function getKey(): JsonResponse {
-
-        $apiKey = env('API_KEY');
-        $encrypted = $this->encrypt($apiKey);
-
-        return response()->json([
-            'xKey' => $encrypted
-        ]);
+        $data = env('PASSPHRASE');
+        return response()->json(['xKey' => $this->encryptData($data)]);
     }
 }
