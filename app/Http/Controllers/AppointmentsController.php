@@ -155,10 +155,14 @@ class AppointmentsController extends Controller {
      */
     public function destroy(string $id) {
         $appointment = Appointments::find($id);
-        if ($appointment) {
-            $appointment->delete();
+        if (!$appointment) {
+            return response()->json([
+                'message' => 'Cita no encontrada',
+                'success' => false
+            ]);
         }
 
+        $appointment->delete();
         return redirect()->route('citas-ver');
     }
 

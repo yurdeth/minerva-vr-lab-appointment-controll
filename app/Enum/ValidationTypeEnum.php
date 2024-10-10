@@ -7,4 +7,5 @@ enum ValidationTypeEnum: string {
     case UPDATE_USER = "update";
     case CAREER = "career";
     case DEPARTMENT = "department";
+    case NOTIFICATION = "notification";
 }

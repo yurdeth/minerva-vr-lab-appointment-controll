@@ -3,7 +3,9 @@
 use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CareersController;
+use App\Http\Controllers\ContactFormController;
 use App\Http\Controllers\DepartmentsController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\ResourceTypeController;
 use App\Http\Controllers\RoomController;
@@ -42,7 +44,8 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     // **************************************** Usuarios ******************************************************
     Route::get('/users', [UsersController::class, "index"])->name('usuarios.index');
     Route::get("/users/ver/{id}", [UsersController::class, "show"])->name("users.show");
-    Route::put("/users/editar/{id}", [UsersController::class, "update"])->name("users.update");
+    Route::get("/users/ver/email/{email}", [UsersController::class, "showByEmail"])->name("users.showByEmail");
+    Route::put("/users/editar/{id}", [UsersController::class, "update"])->name("users.updateById");
     Route::delete("/users/eliminar/{id}", [UsersController::class, "destroy"])->name("users.destroy");
 
     // **************************************** Inventarios ******************************************************
@@ -72,4 +75,18 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     Route::get('/departments/ver/{id}', [DepartmentsController::class, 'show'])->name("departments.show");
     Route::put('/departments/editar/{id}', [DepartmentsController::class, 'update'])->name("departments.update");
     Route::delete('/departments/eliminar/{id}', [DepartmentsController::class, 'destroy'])->name("departments.destroy");
+
+    // **************************************** Notificaciones ******************************************************
+    Route::get('/notifications', [NotificationsController::class, 'index'])->name("notifications.index");
+    Route::get('/notifications/ver/{id}', [NotificationsController::class, 'show'])->name("notifications.show");
+    Route::get('/count-notifications', [NotificationsController::class, 'countNotifications'])->name("notifications.count");
+    Route::put('/notifications/editar/{id}', [NotificationsController::class, 'update'])->name("notifications.update");
+    Route::delete('/notifications/eliminar/{id}', [NotificationsController::class, 'destroy'])->name("notifications.destroy");
+
+    // **************************************** Notificaciones ******************************************************
+    Route::post('/sendmail', [ContactFormController::class, 'sendEmail'])->name('enviarCorreo');
+
+    Route::get('/mail-form', function () {
+        return view('email.contact');
+    })->name('contact');
 });

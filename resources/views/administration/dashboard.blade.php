@@ -53,6 +53,13 @@
                     <span class="Opciones">Inventario</span>
                 </a>
             </li>
+            <li>
+                <a href="{{route("notificaciones")}}" onclick="cambiarMensaje('notificaciones')">
+                    <span><i class="fa-solid fa-bell"></i></span>
+                    <span class="Opciones">Notificaciones</span>
+                    <span id="notification-count"></span>
+                </a>
+            </li>
         </ul>
     </div>
     <!-- Fin del Menu Vertical -->
@@ -69,7 +76,7 @@
                     </a>
                 </li>
                 <li>
-{{--                    <button><a class="nav-link" href="{{ route("logout") }}">Cerrar Sesión</a></button>--}}
+                    {{--                    <button><a class="nav-link" href="{{ route("logout") }}">Cerrar Sesión</a></button>--}}
                     <a class="nav-link" href="{{ route("logout") }}">
                         <span><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
                         <span class="title">Salir</span>
@@ -78,7 +85,7 @@
                 <li>
                     <button type="button" class="btn" id="Tema">
                         <img class="lentes" src="{{ asset('IMG/Minerva.png') }}" alt="Logo">
-                     </button>
+                    </button>
                 </li>
             </ul>
         </div>
@@ -132,6 +139,8 @@
             case 'inventario':
                 mensaje = 'Inventario de Equipo';
                 break;
+            case 'notificaciones':
+                mensaje = 'Notificaciones';
             default:
                 mensaje = 'Bienvenido'; // Mensaje por defecto si la opción no coincide con ningúna
         }
@@ -150,6 +159,7 @@
         }
     });
 </script>
+<script type="module" src="{{ asset('js/notifications/countAllNotifications.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/1.1.6/choices.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{asset("js/themes/dashboardThemes.js")}}"></script>

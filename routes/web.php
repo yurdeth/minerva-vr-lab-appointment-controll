@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContactFormController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\StatusesController;
 use App\Http\Middleware\NoBrowserCache;
 use App\Models\User;
@@ -39,6 +41,15 @@ Route::get('/actualizar-informacion', function () {
     }
     return view("updateInformation");
 })->name('actualizar-informacion');
+
+Route::get('/contactar-administrador', function () {
+    if (Auth::check()) {
+        return redirect()->route('HomeVR');
+    }
+    return view("contactAdmin");
+})->name('contactar-administrador');
+
+Route::post('/enviar-solicitud', [NotificationsController::class, 'store'])->name('enviar-solicitud');
 
 Route::get('/iniciar-sesion', function () {
     if (Auth::check()) {
@@ -147,6 +158,22 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
     Route::get('/dashboard/departamentos/ver/{id}', function () {
         return view('careers.editDepartment');
     })->name('departamentos-ver');
+
+    Route::get('/dashboard/notificaciones', function (){
+        return view('notifications.notifications');
+    })->name('notificaciones');
+
+    Route::get('/dashboard/notificaciones/ver/{id}', function (){
+        return view('notifications.viewNotification');
+    })->name('notificaciones-ver');
+
+    Route::get('/dashboard/notificaciones/claves-de-acceso', function (){
+        return view('notifications.accessPasswordRequesting');
+    })->name('solicitud-clave-default');
+
+    Route::get('/dashboard/notificaciones/recuperacion-de-clave', function (){
+        return view('notifications.recoveringPasswordRequesting');
+    })->name('solicitud-recuperar-clave');
 });
 
 // ***************************************Iniciar credenciales admin*********************************************
