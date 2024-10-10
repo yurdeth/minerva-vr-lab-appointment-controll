@@ -66,7 +66,7 @@ class NotificationsController extends Controller {
         }
 
         $notification = Notifications::create([
-            'from' => $request->from,
+            'from' => strtoupper($request->from),
             'description' => $request->description,
             'type_id' => $request->type_id,
             'reviewed' => false

@@ -45,20 +45,12 @@
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
     <div class="button-container">
-        <a class="custom-btn btn-access-key" href="{{ route('solicitud-clave-default') }}"
-           style="text-decoration: none;">
-            <i class="fa-solid fa-key"></i> Solicitud de clave de acceso
-        </a>
-
-        <a class="custom-btn btn-access-key" href="{{ route('solicitud-recuperar-clave') }}"
-           style="text-decoration: none;">
-            <i class="fa-solid fa-unlock-alt"></i> Solicitudes de recuperación de contraseña
-        </a>
-
-        <a class="custom-btn btn-access-key" href="{{ route('solicitud-recuperar-clave') }}"
-           style="text-decoration: none;">
-            <i class="fa-solid fa-random"></i> Otras solicitudes
-        </a>
+        <form action="" id="searchForm" style="margin-left: auto;">
+            <div class="input-group">
+                <input type="text" id="searchInput" class="form-control" placeholder="Buscar...">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+        </form>
     </div>
 
     <div class="card-body">
@@ -91,6 +83,40 @@
         </div>
 
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchForm = document.getElementById('searchForm');
+            const searchInput = document.getElementById('searchInput');
+            const notificationsTable = document.getElementById('notificationsTable');
+
+            searchForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+            });
+
+            searchInput.addEventListener('input', function () {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+
+                // Filter table rows based on search term
+                Array.from(notificationsTable.getElementsByTagName('tr')).forEach(function (row, index) {
+                    if (index === 0) return; // Skip header row
+
+                    const cells = row.getElementsByTagName('td');
+                    let rowMatchesSearch = false;
+
+                    Array.from(cells).forEach(function (cell) {
+                        const cellText = cell.textContent.toLowerCase();
+
+                        if (cellText.includes(searchTerm)) {
+                            rowMatchesSearch = true;
+                        }
+                    });
+
+                    row.style.display = rowMatchesSearch ? '' : 'none';
+                });
+            });
+        });
+    </script>
 
     <script src="{{ asset('js/notifications/showAllNotifications.js') }}" type="module"></script>
 
