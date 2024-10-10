@@ -94,7 +94,6 @@ class NotificationsController extends Controller {
                 'notification_type.id as type_id')
             ->from('notifications')
             ->join('notification_type', 'notifications.type_id', '=', 'notification_type.id')
-            ->where('notifications.reviewed', false)
             ->where('notifications.id', $id)
             ->get();
 

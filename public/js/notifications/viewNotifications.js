@@ -120,7 +120,6 @@ const getCredentials = async (notification_id = null, email, subject = null) => 
             }
         });
         data = await response.json();
-        console.log(data);
 
         if (!data.success) {
             showErrorAlert('Error', data.message);
@@ -128,7 +127,7 @@ const getCredentials = async (notification_id = null, email, subject = null) => 
         }
 
         let password = data;
-        // sendMail(notification_id, email, subject, password);
+        sendMail(notification_id, email, subject, password);
     } catch (error) {
         console.error('Error:', error);
         return null;
@@ -215,7 +214,7 @@ const validateNewPassword = async (notification_id, newPassword, repeatPassword,
 
         showSuccessAlert('Operación completada', updateData.message).then((result) => {
             if (result.isConfirmed) {
-                sendMail(notification_id, body.email, "Recuperación de contraseña", body.password);
+                sendMail(notification_id, body.email, "Recuperación de contraseña", newPassword);
             }
         });
     } catch (error) {
@@ -225,10 +224,12 @@ const validateNewPassword = async (notification_id, newPassword, repeatPassword,
 
 const sendMail = async (notification_id, email, subject, password) => {
 
+    alert(password);
+
     const body = {
         subject: subject,
         email: email,
-        password: password.password
+        password: password
     };
 
     if (!password) {
