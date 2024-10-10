@@ -54,7 +54,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const from = row.insertCell(1);
                 const type = row.insertCell(2);
                 const description = row.insertCell(3);
-                const actions = row.insertCell(4);
+                const reviewed = row.insertCell(4);
+                const actions = row.insertCell(5);
 
                 index.innerHTML = i + 1;
                 from.innerHTML = item.from;
@@ -63,6 +64,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     description.innerHTML = '-';
                 } else {
                     description.innerHTML = item.description;
+                }
+
+                if (item.reviewed){
+                    reviewed.innerHTML = "Revisada";
+                } else{
+                    reviewed.innerHTML = "Pendiente";
                 }
 
                 actions.innerHTML = `

@@ -21,7 +21,7 @@ class NotificationsController extends Controller {
                 'notification_type.type as type')
             ->from('notifications')
             ->join('notification_type', 'notifications.type_id', '=', 'notification_type.id')
-            ->where('notifications.reviewed', false)
+            ->orderBy('notifications.reviewed', 'asc')
             ->orderBy('notifications.id')
             ->get();
 

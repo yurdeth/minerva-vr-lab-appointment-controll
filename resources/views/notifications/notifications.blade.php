@@ -71,6 +71,7 @@
                     <th scope="col">Correo del solicitante</th>
                     <th scope="col">Tipo de solicitud</th>
                     <th scope="col">Descripción</th>
+                    <th scope="col">Estado</th>
                     <th scope="col">Acciones</th>
                 </tr>
                 </thead>

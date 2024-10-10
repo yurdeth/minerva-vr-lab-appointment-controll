@@ -3,7 +3,6 @@ import {showAlert, showErrorAlert, showSuccessAlert} from '../utils/alert.js';
 import {envVars} from '../envVars.js';
 
 const remoteApiURL = envVars().REMOTE_API_URL;
-const secret = envVars().API_COMMON_SECRET;
 
 const headers = {
     'Content-Type': 'application/json',
@@ -99,11 +98,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
 const getCredentials = async (email) => {
     try {
-        const response = await fetch(`${remoteApiURL}/findByMail?email=${email}`, {
+
+        let response = await fetch('/api/get-key', {
             method: 'GET',
-            headers: {...headers, 'x-api-key': secret}
+            headers: headers
         });
-        const data = await response.json();
+
+        // Comprobar si la respuesta es exitosa
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        // Obtener el JSON de la respuesta
+        let data = await response.json();
+
+        // Extraer el xKey
+        const xKey = data.xKey;
+        console.log('xKey:', xKey);
+
+        response = await fetch(`${remoteApiURL}/findByMail?email=${email}`, {
+            method: 'GET',
+            headers: {...headers, 'x-api-key': xKey}
+        });
+        data = await response.json();
         console.log(data);
 
         if (!data.success) {
