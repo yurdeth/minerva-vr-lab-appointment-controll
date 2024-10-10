@@ -223,8 +223,6 @@ const validateNewPassword = async (notification_id, newPassword, repeatPassword,
 
 const sendMail = async (notification_id, email, subject, password) => {
 
-    alert(password);
-
     const body = {
         subject: subject,
         email: email,
