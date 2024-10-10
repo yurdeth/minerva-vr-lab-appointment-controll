@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CareersController;
@@ -85,6 +86,7 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
 
     // **************************************** Notificaciones ******************************************************
     Route::post('/sendmail', [ContactFormController::class, 'sendEmail'])->name('enviarCorreo');
+    Route::get('/get-key', [ApiController::class, 'getKey'])->name('get-key');
 
     Route::get('/mail-form', function () {
         return view('email.contact');

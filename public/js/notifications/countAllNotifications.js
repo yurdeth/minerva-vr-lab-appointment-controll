@@ -15,6 +15,11 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 // Actualiza el HTML con el número de notificaciones
+                if (data.count === 0){
+                    document.getElementById('notification-count').innerText = "";
+                    return;
+                }
+
                 document.getElementById('notification-count').innerText = data.count;
             })
             .catch(error => {

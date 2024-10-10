@@ -17,9 +17,9 @@ class EmailUniqueIgnoreCase implements ValidationRule {
     }
 
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-        $email = strtolower($value);
+        $email = strtoupper($value);
 
-        if (DB::table($this->table)->whereRaw("LOWER({$this->column}) = ?", [$email])->exists()) {
+        if (DB::table($this->table)->whereRaw("UPPER({$this->column}) = ?", [$email])->exists()) {
             $fail("The email has already been taken.");
         }
     }
