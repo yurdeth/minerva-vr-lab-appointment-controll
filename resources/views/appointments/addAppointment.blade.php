@@ -34,9 +34,52 @@
                     </div>
                     <div class="form-group position-relative p-2 text-center" id="loadAvailableSchedules"></div>
 
-                    <button type="submit" class="btn text-white m-2 form-control" id="submitButton" style="background-color: #660D04;">
-                        Agendar
-                    </button>
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="modal-calendario">
+                                <!-- Modal para el calendario -->
+                                <div class="modal fade" id="calendarModal" aria-hidden="true" aria-labelledby="calendarModalLabel" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="calendarModalLabel">Calendario</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="calendar">
+                                                    <h1>Hola Mundo</h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Modal para la fecha seleccionada -->
+                                <div class="modal fade" id="dateModal" aria-hidden="true" aria-labelledby="dateModalLabel" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="dateModalLabel">Fecha seleccionada</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p id="selectedDate"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Botón para abrir el modal del calendario -->
+                                <button class="btn btn-primary m-2" id="btnOpenCalendar" style="width: 100%" data-bs-toggle="modal" data-bs-target="#calendarModal">Mostrar calendario</button>
+
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <button type="submit" class="btn text-white m-2 form-control" id="submitButton" style="background-color: #660D04;">
+                                Agendar
+                            </button>
+                        </div>
+                    </div>
                 </form>
 
             </div>
@@ -50,4 +93,6 @@
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
     <script type="module" src="{{ asset('js/appointments/addAppointment.js') }}"></script>
     <script src="{{ asset('js/appointments/showAvailableShedules.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js" integrity="sha256-ZztCtsADLKbUFK/X6nOYnJr0eelmV2X3dhLDB/JK6fM=" crossorigin="anonymous"></script>
+    <script src="{{ asset("js/calendar/calendar.js") }}"></script>
 @endsection

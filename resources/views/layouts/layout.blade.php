@@ -15,10 +15,10 @@
           integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
-    @vite(['resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('CSS/home.css')}}">
     <link rel="stylesheet" href="{{ asset('CSS/floating-span.css')}}">
     <link rel="icon" href="{{ asset('IMG/LogoUES.png') }}">
+    @vite(['resources/js/app.js'])
 </head>
 <body>
     <div class="mb-4" id="app">
