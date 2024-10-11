@@ -128,7 +128,11 @@ const loadInfo = () => {
 
     if (!user_id && !user_name && !user_email && !career_id && !career_name && !department_name
         && !department_id) {
-        showErrorAlert('Error', 'No se encontraron datos');
+        showErrorAlert('Error', 'No se encontraron datos').then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/login';
+            }
+        });
     }
 
     const name = document.getElementById('name');

@@ -265,9 +265,12 @@ const markAsread = (id) => {
                 throw new Error('Error al actualizar la notificación');
             }
             return response.json().then(data => {
-                showSuccessAlert('Operación completada', data.message).then(() => {
-                    window.location.href = '/dashboard/notificaciones';
-                });
+                if(!data.success){
+                    showErrorAlert('Error', data.message);
+                    return;
+                }
+
+                window.location.href = '/dashboard/notificaciones';
             })
         })
         .catch(error => console.error('Error:', error));
