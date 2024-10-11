@@ -175,9 +175,15 @@ const loadInfo = () => {
 }
 
 const changeStatus = async () => {
-    let response = await fetch(`${PATH}`, {
-        method: 'GET', headers: headers
+    let response = await fetch(`/get-key`, {
+        method: 'GET',
+        headers: {
+            ...headers,
+            'randKey': document.getElementById('rand').value
+        }
     });
+
+    console.log(response);
 
     // Comprobar si la respuesta es exitosa
     if (!response.ok) {

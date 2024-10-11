@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\ExportController;
+use Illuminate\Support\Facades\Session;
 
 // ********************************Rutas para rutas no definidas*************************************
 Route::fallback(function () {
@@ -40,7 +41,11 @@ Route::get('/actualizar-informacion', function () {
     if (Auth::check()) {
         return redirect()->route('HomeVR');
     }
-    return view("updateInformation");
+
+    $randKey = bin2hex(random_bytes(128));
+    Session::put('randKey', $randKey);
+
+    return view("updateInformation", ['randKey' => $randKey]);
 })->name('actualizar-informacion');
 
 Route::get('/contactar-administrador', function () {
@@ -56,7 +61,11 @@ Route::get('/iniciar-sesion', function () {
     if (Auth::check()) {
         return redirect()->route('HomeVR');
     }
-    return view("iniciarSesion");
+
+    $randKey = bin2hex(random_bytes(128));
+    Session::put('randKey', $randKey);
+
+    return view("iniciarSesion", ['randKey' => $randKey]);
 })->name('iniciarSesion');
 
 Route::post('/signin', [AuthController::class, 'login'])->name("signin");
@@ -64,7 +73,7 @@ Route::post('/signup', [AuthController::class, 'register'])->name("signup");
 
 Route::get('/get-key', [ApiController::class, 'getKey'])
     ->name('get-key')
-    ->middleware(CheckKeyAccess::class); // <- Este middleware limita el acceso a la ruta, pues el usuario solo puede verla dos veces
+    ->middleware(CheckKeyAccess::class);
 
 // ***************************************Rutas para usuarios*********************************************
 Route::middleware(['auth', NoBrowserCache::class])->group(function () {

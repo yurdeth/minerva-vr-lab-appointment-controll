@@ -69,9 +69,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 const checkUser = async (body) => {
     try {
-        let response = await fetch(`${PATH}`, {
+        let response = await fetch(`/get-key`, {
             method: 'GET',
-            headers: headers
+            headers: {
+                ...headers,
+                'randKey': document.getElementById('rand').value
+            }
         });
 
         // Comprobar si la respuesta es exitosa
