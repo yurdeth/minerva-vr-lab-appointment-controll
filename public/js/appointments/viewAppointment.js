@@ -114,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
         apiRequest(`/api/appointments/ver/${id}`, 'GET', null, headers)
             .then(response => response.json())
             .then(data => {
+
                 if (!data || data.message && data.message.includes('Route [citas] not defined')) {
                     showErrorAlert('Oops...', 'No se encontraron datos de la cita.')
                         .then(() => {
@@ -128,12 +129,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         const name = document.getElementById('name');
                         const date = document.getElementById('date');
-                        const time = document.getElementById('time');
+                        const startTime = document.getElementById('start-time');
+                        const endTime = document.getElementById('end-time');
                         const number_of_assistants = document.getElementById('number_of_assistants');
 
                         if (name) name.value = item.name;
                         date.value = item.date;
-                        time.value = item.time;
+                        startTime.value = item.start_time;
+                        endTime.value = item.end_time;
                         number_of_assistants.value = item.number_of_assistants;
 
                         const actionsButtons = document.getElementById('actionsButtons');

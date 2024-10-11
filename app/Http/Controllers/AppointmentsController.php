@@ -34,7 +34,8 @@ class AppointmentsController extends Controller {
     public function store(Request $request) {
         $validate = Validator::make($request->all(), [
             "date" => "required|date|after:today",
-            "time" => ["required", new AppointmentConflict(null, $request->date, $request->time)],
+            "start_time" => "required",
+            "end_time" => "required",
             "number_of_assistants" => "required",
         ]);
 
@@ -48,7 +49,8 @@ class AppointmentsController extends Controller {
 
         $appointment = Appointments::create([
             'date' => $request->date,
-            'time' => $request->time,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
             'number_of_assistants' => $request->number_of_assistants,
             'user_id' => Auth::id(),
         ]);

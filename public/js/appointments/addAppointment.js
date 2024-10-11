@@ -1,6 +1,9 @@
 import {showSuccessAlert, showErrorAlert} from '../utils/alert.js'
 import {apiRequest} from "../utils/api.js";
 
+const min_limit = 1;
+const max_limit = 150;
+
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelector("form").addEventListener("submit", function (event) {
         event.preventDefault();
@@ -18,13 +21,13 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        if (number_of_assistants < 1) {
-            showErrorAlert('Oops...', 'El número de asistentes no puede ser menor a 1.');
+        if (number_of_assistants < min_limit) {
+            showErrorAlert('Oops...', `El número de asistentes no puede ser menor a ${min_limit}.`);
             return;
         }
 
-        if (number_of_assistants > 20) {
-            showErrorAlert('Oops...', 'El número de asistentes no puede ser mayor a 20.');
+        if (number_of_assistants > max_limit) {
+            showErrorAlert('Oops...', `El número de asistentes no puede ser mayor a ${max_limit}.`);
             return;
         }
 
@@ -39,10 +42,11 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Validar que el periodo de horas sea entre las 8:00 y las 16:00
-        let selectedTime = formData.get('time');
-        if (selectedTime < '08:00' || selectedTime > '15:30') {
-            showErrorAlert('Oops...', 'Solo puedes agendar citas entre las 8:00 AM y las 3:30 PM');
+        let startTime = document.getElementById('start-time');
+        let endTime = document.getElementById('end-time');
+
+        if (startTime.value < '08:00' || endTime.value > '17:00') {
+            showErrorAlert('Oops...', 'Solo puedes agendar citas entre las 8:00 AM y las 5:00 PM');
             return;
         }
 
@@ -55,12 +59,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const body = {
             date: date.value,
-            time: selectedTime,
+            start_time: startTime.value,
+            end_time: endTime.value,
             number_of_assistants: number_of_assistants.value
         };
 
         apiRequest('/api/appointments', 'POST', body, headers)
             .then(response => {
+
                 response.json().then(data => {
                     if (data.error) {
                         console.error(data.error);

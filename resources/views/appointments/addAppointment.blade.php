@@ -18,7 +18,8 @@
                     <div class="form-group position-relative p-2">
                         <p class="text-start">Numero de Asistentes</p>
                         <input type="number" class="form-control" id="number_of_assistants" name="number_of_assistants"
-                               placeholder="n° de personas (Máx. 20)" style="padding-left: 15px;" min="1" max="20" required>
+                               placeholder="n° de personas (Máx. 150)" style="padding-left: 15px;" min="1" max="150"
+                               required>
                     </div>
 
                     <div class="form-group position-relative p-2">
@@ -27,23 +28,34 @@
                                style="padding-left: 30px;" required onchange="showAvailableShedules()">
                     </div>
 
-                    <div class="form-group position-relative p-2">
-                        <p class="text-start">Hora</p>
-                        <input type="time" class="form-control" id="time"
-                               name="time" placeholder="" style="padding-left: 30px;" required>
+                    <div class="row">
+                        <div class="col-md-6 form-group position-relative ps-3">
+                            <p class="text-start">Hora de inicio</p>
+                            <input type="time" class="form-control" id="start-time"
+                                   name="start-time" placeholder="" style="padding-left: 30px;" required>
+                        </div>
+
+                        <div class="col-md-6 form-group position-relative pe-3">
+                            <p class="text-start">Hora de finalización</p>
+                            <input type="time" class="form-control" id="end-time"
+                                   name="end-time" placeholder="" style="padding-left: 30px;" required>
+                        </div>
                     </div>
+
                     <div class="form-group position-relative p-2 text-center" id="loadAvailableSchedules"></div>
 
                     <div class="row">
-                        <div class="col-5">
+                        <div class="col-6">
                             <div class="modal-calendario">
                                 <!-- Modal para el calendario -->
-                                <div class="modal fade" id="calendarModal" aria-hidden="true" aria-labelledby="calendarModalLabel" tabindex="-1">
+                                <div class="modal fade" id="calendarModal" aria-hidden="true"
+                                     aria-labelledby="calendarModalLabel" tabindex="-1">
                                     <div class="modal-dialog modal-dialog-centered modal-lg">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="calendarModalLabel">Calendario</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div id="calendar">
@@ -55,12 +67,14 @@
                                 </div>
 
                                 <!-- Modal para la fecha seleccionada -->
-                                <div class="modal fade" id="dateModal" aria-hidden="true" aria-labelledby="dateModalLabel" tabindex="-1">
+                                <div class="modal fade" id="dateModal" aria-hidden="true"
+                                     aria-labelledby="dateModalLabel" tabindex="-1">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="dateModalLabel">Fecha seleccionada</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <p id="selectedDate"></p>
@@ -70,12 +84,15 @@
                                 </div>
 
                                 <!-- Botón para abrir el modal del calendario -->
-                                <button class="btn btn-primary m-2" id="btnOpenCalendar" style="width: 100%" data-bs-toggle="modal" data-bs-target="#calendarModal">Mostrar calendario</button>
+                                <button class="btn btn-primary m-2" id="btnOpenCalendar" style="width: 100%"
+                                        data-bs-toggle="modal" data-bs-target="#calendarModal">Mostrar calendario
+                                </button>
 
                             </div>
                         </div>
                         <div class="col-6">
-                            <button type="submit" class="btn text-white m-2 form-control" id="submitButton" style="background-color: #660D04;">
+                            <button type="submit" class="btn text-white m-2 form-control" id="submitButton"
+                                    style="background-color: #660D04;">
                                 Agendar
                             </button>
                         </div>
@@ -93,6 +110,7 @@
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
     <script type="module" src="{{ asset('js/appointments/addAppointment.js') }}"></script>
     <script src="{{ asset('js/appointments/showAvailableShedules.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js" integrity="sha256-ZztCtsADLKbUFK/X6nOYnJr0eelmV2X3dhLDB/JK6fM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"
+            integrity="sha256-ZztCtsADLKbUFK/X6nOYnJr0eelmV2X3dhLDB/JK6fM=" crossorigin="anonymous"></script>
     <script src="{{ asset("js/calendar/calendar.js") }}"></script>
 @endsection

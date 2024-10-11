@@ -57,10 +57,10 @@ if (!isset($dashboard)) {
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Encargado</th>
-                        <th scope="col">Departamento</th>
                         <th scope="col">Carrera</th>
                         <th scope="col">Fecha</th>
-                        <th scope="col">Hora</th>
+                        <th scope="col">Hora de inicio</th>
+                        <th scope="col">Hora de finalización</th>
                         <th scope="col">Participantes</th>
                         <th scope="col">Acciones</th>
                     </tr>

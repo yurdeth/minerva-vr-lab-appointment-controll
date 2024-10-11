@@ -46,9 +46,18 @@
                         <input type="date" class="form-control" id="date" name="date" style="padding-left: 30px;">
                     </div>
 
-                    <div class="form-group position-relative p-2">
-                        <p class="text-start">Hora</p>
-                        <input type="time" class="form-control" id="time" name="time" style="padding-left: 30px;">
+                    <div class="row">
+                        <div class="col-md-6 form-group position-relative ps-3">
+                            <p class="text-start">Hora de inicio</p>
+                            <input type="time" class="form-control" id="start-time"
+                                   name="start-time" placeholder="" style="padding-left: 30px;" required>
+                        </div>
+
+                        <div class="col-md-6 form-group position-relative pe-3">
+                            <p class="text-start">Hora de finalización</p>
+                            <input type="time" class="form-control" id="end-time"
+                                   name="end-time" placeholder="" style="padding-left: 30px;" required>
+                        </div>
                     </div>
 
                     <div class="form-group position-relative p-2 text-center" id="loadAvailableSchedules"></div>
