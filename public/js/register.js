@@ -2,14 +2,13 @@ import {apiRequest} from './utils/api.js'
 import {showErrorAlert, showSuccessAlert} from './utils/alert.js'
 
 const remoteApiURL = process.env.REMOTE_API_URL;
-const secret = process.env.API_COMMON_SECRET;
+const PATH = process.env.KEY_PATH;
 
 const headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
     'Authorization': `Bearer ${localStorage.getItem('token')}`,
     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-    'x-api-key': secret
 };
 
 const name = document.getElementById('name');
@@ -37,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
         apiRequest('/signup', 'POST', body, headers)
             .then(function (response) {
                 response.json().then(data => {
-                    if(!data.success){
+                    if (!data.success) {
                         if (data.error) {
                             if (data.error.career) {
                                 if (data.error.career[0].includes("required")) {
@@ -67,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 showErrorAlert('Error', 'Error al procesar el correo electrónico');
                             }
 
-                            if(data.error.name) {
+                            if (data.error.name) {
                                 if (data.error.name[0].includes("required")) {
                                     showErrorAlert('Error', 'Por favor, ingrese su nombre');
                                     return;
@@ -76,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 showErrorAlert('Error', 'Error al procesar el nombre');
                             }
 
-                            if(data.error.password) {
+                            if (data.error.password) {
                                 if (data.error.password[0].includes("required")) {
                                     showErrorAlert('Error', 'Por favor, ingrese una contraseña');
                                     return;
@@ -89,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                                 showErrorAlert('Error', 'Error al procesar la contraseña');
                             }
-                        } else{
+                        } else {
                             showErrorAlert('Error', data.message);
                         }
                         return;
@@ -97,10 +96,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     showSuccessAlert('Éxito', "Usuario registrado correctamente")
                         .then(() => {
-                            changeStatus();
-                            localStorage.setItem('token', data.token);
-                            localStorage.removeItem('user_id');
-                            window.location.href = data.redirect_to;
+                            changeStatus().then(r => {
+                                localStorage.setItem('token', data.token);
+                                window.location.href = data.redirect_to;
+                            });
                         });
                 });
             })
@@ -119,68 +118,90 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 const loadInfo = () => {
-    const id = localStorage.getItem('user_id');
+    const user_id = localStorage.getItem('user_id');
+    const user_name = localStorage.getItem('name');
+    const user_email = localStorage.getItem('email');
+    const career_id = localStorage.getItem('career_id');
+    const career_name = localStorage.getItem('career_name');
+    const department_name = localStorage.getItem('department_name');
+    const department_id = localStorage.getItem('department_id');
 
-    apiRequest(`${remoteApiURL}/users/${id}`, 'GET', null, headers)
-        .then(response => response.json().then(data => {
-            console.log(data);
-
-            if (!data || !data.success) {
-                showErrorAlert('Oops...', 'No se encontraron datos del usuario.')
-                    .then(() => {
-                        window.location.href = data.redirectTo;
-                    });
-                return;
+    if (!user_id && !user_name && !user_email && !career_id && !career_name && !department_name
+        && !department_id) {
+        showErrorAlert('Error', 'No se encontraron datos').then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/login';
             }
+        });
+    }
 
-            let user = data.data;
+    const name = document.getElementById('name');
+    const email = document.getElementById('email');
+    const department = document.getElementById('department');
+    const career = document.getElementById('career');
 
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    name.value = user_name;
+    email.value = user_email;
+    department.value = department_name;
+    career.innerHTML = '';
 
-            const name = document.getElementById('name');
-            const email = document.getElementById('email');
-            const department_name = document.getElementById('department');
-            const career = document.getElementById('career');
+    let option = document.createElement('option');
+    option.value = '';
+    option.text = 'Seleccione una carrera';
+    career.appendChild(option);
 
-            name.value = user.name;
-            email.value = user.email;
-            department_name.value = user.department_id;
-            career.innerHTML = '';
-
-            let option = document.createElement('option');
-            option.value = '';
-            option.text = 'Seleccione una carrera';
-            career.appendChild(option);
-
-            apiRequest(`/api/careers/${user.department_id}`, 'GET', null, headers)
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(d => {
-                        let option = document.createElement('option');
-                        option.value = d.id;
-                        option.text = d.career_name;
-                        career.appendChild(option);
-                    });
-                    career.value = user.career_id;
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-
-        }))
-        .catch(error => {
-            console.log(error);
+    apiRequest(`/api/careers/${department_id}`, 'GET', null, headers)
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(d => {
+                let option = document.createElement('option');
+                option.value = d.id;
+                option.text = d.career_name;
+                career.appendChild(option);
+            });
+            career.value = career_id;
+        })
+        .catch((error) => {
+            console.error('Error:', error);
         });
 
+    // localStorage.removeItem('user_id');
+    localStorage.removeItem('career_id');
+    localStorage.removeItem('career_name');
+    localStorage.removeItem('department_name');
+    localStorage.removeItem('department_id');
+    localStorage.removeItem('email');
+    localStorage.removeItem('name');
 }
 
-const changeStatus = () => {
-    const id = localStorage.getItem('user_id');
+const changeStatus = async () => {
+    let response = await fetch(`/get-key`, {
+        method: 'GET',
+        headers: {
+            ...headers,
+            'randKey': document.getElementById('rand').value
+        }
+    });
 
-    apiRequest(`${remoteApiURL}/users/${id}`, 'PUT', null, headers)
+    console.log(response);
+
+    // Comprobar si la respuesta es exitosa
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    // Obtener el JSON de la respuesta
+    let data = await response.json();
+
+    const id = localStorage.getItem('user_id');
+    console.log(data);
+
+    apiRequest(`${remoteApiURL}/users/${id}`, 'PUT', null, {
+        ...headers, 'x-api-key': data.xKey,
+    })
         .then(response => response.json().then(data => {
 
-            if(!data.success){
+            if (!data.success) {
                 showErrorAlert('Error', data.message);
             }
         }))
@@ -188,4 +209,6 @@ const changeStatus = () => {
             console.log(error);
         });
 
+
+    localStorage.removeItem('user_id');
 }

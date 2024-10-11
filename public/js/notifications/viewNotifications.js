@@ -60,13 +60,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             actionsButtons.innerHTML = `
                 <div class="d-flex justify-content-center gap-3 mt-3">
-                    <form id="editForm-${notification.id}">
+                    <form id="editForm-${notification.id}" class="d-inline">
                         <input type="hidden" name="_token" value="${csrfToken}">
                         <input type="hidden" name="_method" value="PUT">
                         <input type="hidden" name="_id" id="id-${notification.id}" value="${notification.id}">
                         <button type="button" id="btnUpdate-${notification.id}" class="btn btn-primary">${buttonMessage}</button>
                     </form>
-                    <form id="deleteForm-${notification.id}" method="post">
+                    <form id="deleteForm-${notification.id}" method="post" class="d-inline">
                         <input type="hidden" name="_token" value="${csrfToken}">
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="_id" id="id-${notification.id}" value="${notification.id}">
@@ -139,27 +139,32 @@ const handleEditProfile = async (id, email, subject) => {
 
     const newPassword = document.createElement('input');
     newPassword.type = 'password';
-    newPassword.classList.add('form-control');
+    newPassword.classList.add('form-control', 'mb-3');
     newPassword.placeholder = 'Ingresa la nueva contraseña';
     passwordForms.appendChild(newPassword);
 
     const repeatPassword = document.createElement('input');
     repeatPassword.type = 'password';
-    repeatPassword.classList.add('form-control');
+    repeatPassword.classList.add('form-control', 'mb-3');
     repeatPassword.placeholder = 'Repita la nueva contraseña';
     passwordForms.appendChild(repeatPassword);
 
+    const buttonContainer = document.createElement('div');
+    buttonContainer.classList.add('d-flex', 'justify-content-between', 'gap-2');
+
     const recoverPasswordButton = document.createElement('button');
     recoverPasswordButton.type = 'submit';
-    recoverPasswordButton.classList.add('btn', 'btn-success');
+    recoverPasswordButton.classList.add('btn', 'btn-success', 'w-50');
     recoverPasswordButton.textContent = "Actualizar";
-    passwordForms.appendChild(recoverPasswordButton);
+    buttonContainer.appendChild(recoverPasswordButton);
 
     const cancelButton = document.createElement('button');
     cancelButton.type = 'button';
-    cancelButton.classList.add('btn', 'btn-danger');
+    cancelButton.classList.add('btn', 'btn-danger', 'w-50');
     cancelButton.textContent = "Cancelar";
-    passwordForms.appendChild(cancelButton);
+    buttonContainer.appendChild(cancelButton);
+
+    passwordForms.appendChild(buttonContainer);
 
     recoverPasswordButton.addEventListener('click', function () {
         apiRequest(`/api/users/ver/email/${email}`, 'GET', null, headers)
@@ -260,9 +265,12 @@ const markAsread = (id) => {
                 throw new Error('Error al actualizar la notificación');
             }
             return response.json().then(data => {
-                showSuccessAlert('Operación completada', data.message).then(() => {
-                    window.location.href = '/dashboard/notificaciones';
-                });
+                if(!data.success){
+                    showErrorAlert('Error', data.message);
+                    return;
+                }
+
+                window.location.href = '/dashboard/notificaciones';
             })
         })
         .catch(error => console.error('Error:', error));

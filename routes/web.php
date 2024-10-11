@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ContactFormController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\StatusesController;
+use App\Http\Middleware\CheckKeyAccess;
 use App\Http\Middleware\NoBrowserCache;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\ExportController;
+use Illuminate\Support\Facades\Session;
 
 // ********************************Rutas para rutas no definidas*************************************
 Route::fallback(function () {
@@ -39,7 +41,11 @@ Route::get('/actualizar-informacion', function () {
     if (Auth::check()) {
         return redirect()->route('HomeVR');
     }
-    return view("updateInformation");
+
+    $randKey = bin2hex(random_bytes(128));
+    Session::put('randKey', $randKey);
+
+    return view("updateInformation", ['randKey' => $randKey]);
 })->name('actualizar-informacion');
 
 Route::get('/contactar-administrador', function () {
@@ -55,11 +61,19 @@ Route::get('/iniciar-sesion', function () {
     if (Auth::check()) {
         return redirect()->route('HomeVR');
     }
-    return view("iniciarSesion");
+
+    $randKey = bin2hex(random_bytes(128));
+    Session::put('randKey', $randKey);
+
+    return view("iniciarSesion", ['randKey' => $randKey]);
 })->name('iniciarSesion');
 
 Route::post('/signin', [AuthController::class, 'login'])->name("signin");
 Route::post('/signup', [AuthController::class, 'register'])->name("signup");
+
+Route::get('/get-key', [ApiController::class, 'getKey'])
+    ->name('get-key')
+    ->middleware(CheckKeyAccess::class);
 
 // ***************************************Rutas para usuarios*********************************************
 Route::middleware(['auth', NoBrowserCache::class])->group(function () {
@@ -115,7 +129,7 @@ Route::middleware(['auth', NoBrowserCache::class])->group(function () {
         return view('appointments.editAppointments');
     })->name('citas-editar');
 
-    Route::get('/export',[ExportController::class, 'export'])->name('export');
+    Route::get('/export', [ExportController::class, 'export'])->name('export');
     Route::get('/citas/pdf', [AppointmentsController::class, 'pdf'])->name("pdf");
 });
 
@@ -159,19 +173,19 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
         return view('careers.editDepartment');
     })->name('departamentos-ver');
 
-    Route::get('/dashboard/notificaciones', function (){
+    Route::get('/dashboard/notificaciones', function () {
         return view('notifications.notifications');
     })->name('notificaciones');
 
-    Route::get('/dashboard/notificaciones/ver/{id}', function (){
+    Route::get('/dashboard/notificaciones/ver/{id}', function () {
         return view('notifications.viewNotification');
     })->name('notificaciones-ver');
 
-    Route::get('/dashboard/notificaciones/claves-de-acceso', function (){
+    Route::get('/dashboard/notificaciones/claves-de-acceso', function () {
         return view('notifications.accessPasswordRequesting');
     })->name('solicitud-clave-default');
 
-    Route::get('/dashboard/notificaciones/recuperacion-de-clave', function (){
+    Route::get('/dashboard/notificaciones/recuperacion-de-clave', function () {
         return view('notifications.recoveringPasswordRequesting');
     })->name('solicitud-recuperar-clave');
 });

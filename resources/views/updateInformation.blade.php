@@ -52,6 +52,7 @@
                     <div class="card-body">
 
                         <form id="updateForm" method="POST">
+                            <input type="hidden" value="{{ $randKey }}" id="rand">
                             @csrf
                             @method("POST")
 

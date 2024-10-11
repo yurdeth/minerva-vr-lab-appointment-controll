@@ -16,6 +16,7 @@
             <div class="col-12 col-md-6 bg-white p-5 text-center">
                 <br>
                 <h2>Iniciar sesión</h2>
+                <input type="hidden" value="{{ $randKey }}" id="rand">
 
                 <form class="" method="post" action="{{ route("signin") }}">
                     @csrf
