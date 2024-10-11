@@ -3,14 +3,13 @@ import {apiRequest} from "./utils/api.js";
 
 const remoteApiURL = process.env.REMOTE_API_URL;
 const adminEmail = process.env.ADMIN_EMAIL;
-const secret = process.env.API_COMMON_SECRET;
+const PATH = process.env.KEY_PATH;
 
 const headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
     'Authorization': `Bearer ${localStorage.getItem('token')}`,
     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-    'x-api-key': secret
 };
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -20,6 +19,16 @@ document.addEventListener('DOMContentLoaded', function () {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
+        if (!email) {
+            showErrorAlert('Error', 'Ingresa tu correo electronico');
+            return;
+        }
+
+        if (!password) {
+            showErrorAlert('Error', 'Ingresa tu contraseña');
+            return;
+        }
+
         const body = {
             email: email,
             password: password
@@ -27,37 +36,65 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (email === adminEmail) {
             login(body);
-        }else{
-            fetch(`${remoteApiURL}/verifyUser?email=${email}&password=${password}`, {
-                method: 'GET',
-                headers: headers
-            })
-                .then(response => {
-                    response.json().then(data => {
+        } else {
+            checkUser(body).then(r => {
 
-                        if (data.enabled){
-                            login(body);
-                            return;
-                        }
+                if(!r.success && !r.enabled){
+                    showErrorAlert('Error', r.message);
+                    return;
+                }
 
-                        if (!data.success) {
-                            showErrorAlert('Error', data.message);
-                            return;
-                        }
-
-                        showSuccessAlert('Éxito', 'Usuario activado').then(() => {
-                            localStorage.setItem('user_id', data.user.id);
+                if(!r.enabled){
+                    showSuccessAlert('Usuario habilitado', 'Usuario habilitado correctamente').then((result) => {
+                        if(result.isConfirmed){
+                            localStorage.setItem('user_id', r.user.id);
+                            localStorage.setItem('career_id', r.user.career_id);
+                            localStorage.setItem('career_name', r.user.career_name);
+                            localStorage.setItem('department_name', r.user.department_name);
+                            localStorage.setItem('department_id', r.user.department_id);
+                            localStorage.setItem('email', r.user.email);
+                            localStorage.setItem('name', r.user.name);
                             window.location.href = '/actualizar-informacion';
-                        });
+                        }
                     });
-                })
-                .catch(error => {
-                    console.error('Error: ', error);
-                });
+                    return;
+                }
+
+                login(body);
+            });
         }
 
     });
 });
+
+const checkUser = async (body) => {
+    try {
+        let response = await fetch(`${PATH}`, {
+            method: 'GET',
+            headers: headers
+        });
+
+        // Comprobar si la respuesta es exitosa
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        // Obtener el JSON de la respuesta
+        let data = await response.json();
+
+        response = await fetch(`${remoteApiURL}/verifyUser?email=${body.email}&password=${body.password}`, {
+            method: 'GET',
+            headers: {
+                ...headers,
+                'x-api-key': data.xKey,
+            }
+        });
+        return await response.json();
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
+    }
+};
 
 const login = (body) => {
     apiRequest('/signin', 'POST', body, headers)

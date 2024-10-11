@@ -46,9 +46,12 @@ class AuthController extends Controller {
         }
 
         // Crear el usuario
+        $emailParts = explode('@', $request->email);
+        $email = strtoupper($emailParts[0]) . '@' . $emailParts[1];
+
         $user = User::create([
             "name" => $request->name,
-            "email" => strtoupper($request->email),
+            "email" => $email,
             "roles_id" => '2',
             "password" => Hash::make($request->password),
             "career_id" => $request->career,
@@ -76,18 +79,18 @@ class AuthController extends Controller {
         // Campos esperados en la petición
         $credentials = $request->only('email', 'password');
 
-        if(!$request->email && !$request->password){
+        if (!$request->email && !$request->password) {
             return redirect()->route("iniciarSesion");
         }
 
-        if (!$request->email){
+        if (!$request->email) {
             return response()->json([
                 "message" => "Por favor, ingrese su correo",
                 "success" => false,
             ]);
         }
 
-        if (!$request->password){
+        if (!$request->password) {
             return response()->json([
                 "message" => "Por favor, ingrese su contraseña",
                 "success" => false,

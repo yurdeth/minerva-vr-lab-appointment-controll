@@ -58,22 +58,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     break;
             }
 
-            // actionsButtons.innerHTML = `
-            //     <div class="d-flex justify-content-center gap-3 mt-3">
-            //         <form id="editForm-${notification.id}">
-            //             <input type="hidden" name="_token" value="${csrfToken}">
-            //             <input type="hidden" name="_method" value="PUT">
-            //             <input type="hidden" name="_id" id="id-${notification.id}" value="${notification.id}">
-            //             <button type="button" id="btnUpdate-${notification.id}" class="btn btn-primary">${buttonMessage}</button>
-            //         </form>
-            //         <form id="deleteForm-${notification.id}" method="post">
-            //             <input type="hidden" name="_token" value="${csrfToken}">
-            //             <input type="hidden" name="_method" value="DELETE">
-            //             <input type="hidden" name="_id" id="id-${notification.id}" value="${notification.id}">
-            //             <button type="button" id="btnDestroy-${notification.id}" class="btn btn-danger">Cancelar</button>
-            //         </form>
-            //     </div>
-            // `;
             actionsButtons.innerHTML = `
                 <div class="d-flex justify-content-center gap-3 mt-3">
                     <form id="editForm-${notification.id}" class="d-inline">
@@ -150,44 +134,18 @@ const getCredentials = async (notification_id = null, email, subject = null) => 
 };
 
 const handleEditProfile = async (id, email, subject) => {
-    // const passwordForms = document.getElementById('passwordForms');
-    // passwordForms.innerHTML = "";
-
-    // const newPassword = document.createElement('input');
-    // newPassword.type = 'password';
-    // newPassword.classList.add('form-control');
-    // newPassword.placeholder = 'Ingresa la nueva contraseña';
-    // passwordForms.appendChild(newPassword);
-
-    // const repeatPassword = document.createElement('input');
-    // repeatPassword.type = 'password';
-    // repeatPassword.classList.add('form-control');
-    // repeatPassword.placeholder = 'Repita la nueva contraseña';
-    // passwordForms.appendChild(repeatPassword);
-
-    // const recoverPasswordButton = document.createElement('button');
-    // recoverPasswordButton.type = 'submit';
-    // recoverPasswordButton.classList.add('btn', 'btn-success');
-    // recoverPasswordButton.textContent = "Actualizar";
-    // passwordForms.appendChild(recoverPasswordButton);
-
-    // const cancelButton = document.createElement('button');
-    // cancelButton.type = 'button';
-    // cancelButton.classList.add('btn', 'btn-danger');
-    // cancelButton.textContent = "Cancelar";
-    // passwordForms.appendChild(cancelButton);
     const passwordForms = document.getElementById('passwordForms');
     passwordForms.innerHTML = "";
 
     const newPassword = document.createElement('input');
     newPassword.type = 'password';
-    newPassword.classList.add('form-control', 'mb-3'); 
+    newPassword.classList.add('form-control', 'mb-3');
     newPassword.placeholder = 'Ingresa la nueva contraseña';
     passwordForms.appendChild(newPassword);
 
     const repeatPassword = document.createElement('input');
     repeatPassword.type = 'password';
-    repeatPassword.classList.add('form-control', 'mb-3'); 
+    repeatPassword.classList.add('form-control', 'mb-3');
     repeatPassword.placeholder = 'Repita la nueva contraseña';
     passwordForms.appendChild(repeatPassword);
 

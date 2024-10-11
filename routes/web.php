@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ContactFormController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\StatusesController;
 use App\Http\Middleware\NoBrowserCache;
@@ -60,6 +60,7 @@ Route::get('/iniciar-sesion', function () {
 
 Route::post('/signin', [AuthController::class, 'login'])->name("signin");
 Route::post('/signup', [AuthController::class, 'register'])->name("signup");
+Route::get('/get-key', [ApiController::class, 'getKey'])->name('get-key');
 
 // ***************************************Rutas para usuarios*********************************************
 Route::middleware(['auth', NoBrowserCache::class])->group(function () {
