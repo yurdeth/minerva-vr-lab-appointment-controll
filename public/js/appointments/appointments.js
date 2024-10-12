@@ -82,6 +82,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             timeParts = item.end_time.split(':');
             hours = timeParts[0];
+            minutes = timeParts[1];
+            ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
             let formatedEndTime = hours + ':' + minutes + ' ' + ampm;
 
             code.innerHTML = item.id;

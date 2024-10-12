@@ -71,9 +71,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (data.error) {
                         console.error(data.error);
 
-                        if (data.error.time && data.error.time[0].includes("cita registrada")) {
+                        if (data.error.time) {
                             showErrorAlert('Oops...',
-                                'Ya existe una cita registrada en esta fecha y hora, o en el rango de una hora (cada sesión dura una hora)');
+                                data.error.time[0]);
                             return;
                         }
 
@@ -83,15 +83,20 @@ document.addEventListener('DOMContentLoaded', function () {
                             return;
                         }
 
-                        if (data.error.end_time && data.error.end_time[0].includes("rango de horario")) {
+                        if (data.error.number_of_assistants) {
                             showErrorAlert('Oops...',
-                                'Ya existe una cita registrada en este rango de horario');
+                                data.error.number_of_assistants[0]);
+                            return;
+                        }
+
+                        if (data.error.end_time) {
+                            showErrorAlert('Oops...',
+                                data.error.end_time[0]);
                             return;
                         }
                     }
 
                     showSuccessAlert('¡Listo!', 'Tu cita ha sido registrada exitosamente.').then(() => {
-                        stop();
                         window.location.href = data.redirect_to;
                     }).catch(error => console.error(error));
                 })

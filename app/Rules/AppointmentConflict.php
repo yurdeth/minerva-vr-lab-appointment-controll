@@ -25,9 +25,6 @@ class AppointmentConflict implements ValidationRule {
     }
 
     private function passes($attribute, $value): bool {
-        \Illuminate\Log\log('Hora de inicio: ' . $this->startTime);
-        \Illuminate\Log\log('Hora de fin: ' . $this->endTime);
-
         if ($this->startTime < '08:00:00' || $this->endTime > '17:00:00' || $this->startTime >= $this->endTime) {
             return false;
         }
