@@ -190,6 +190,11 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
     })->name('solicitud-recuperar-clave');
 });
 
+// ***************************************Rutas del footer*********************************************
+Route::get('/quienes-somos', function () {
+    return view('information.whoWeAre');
+})->name('quienes_somos');
+
 // ***************************************Iniciar credenciales admin*********************************************
 // <- Ya no es necesario. Se hace desde las migraciones: database/migrations/0001_01_01_000000_create_users_table.php
 // <- ejecuta: php artisan migrate:refresh; php artisan passport:client --personal

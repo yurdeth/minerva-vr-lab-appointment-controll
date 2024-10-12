@@ -148,6 +148,11 @@ hr.mb-4 {
     color: white;
     list-style: none;
 }
+
+.opcionesFo > li > a{
+    text-decoration: none;
+    color: white;
+}
 .fa-brands {
     color: white;
 }
@@ -239,17 +244,4 @@ section {
 .Temas button:hover {
     background-color: #911f12;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 

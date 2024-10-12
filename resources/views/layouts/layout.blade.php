@@ -118,9 +118,18 @@
     </div>
     <br><br>
 
+    @include('layouts.loader')
+
     <!--Fin del Navbar de la pagina-->
     {{-- Contenido de la pagina --}}
     @yield('content')
+
+    <!--Para el loader-->
+    <script>
+        window.onload = function() {
+            document.getElementById('loader').style.display = 'none';
+        };
+    </script>
 
     <!-- Footer de la página-->
     <footer class="pt-5 pb-4" id="FooterCambio">
@@ -131,7 +140,8 @@
                     <h5 class="mb-4 font-weigth-bold text-center">Información</h5>
                     <hr class="mb-4">
                     <ul class="opcionesFo">
-                        <li>Quiénes somos</li>
+                        <li>
+                            <a href="{{ route('quienes_somos') }}">Quiénes somos</a></li>
                         <li>Servicios</li>
                         <li>Contacto</li>
                     </ul>
