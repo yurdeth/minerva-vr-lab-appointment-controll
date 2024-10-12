@@ -65,9 +65,9 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         apiRequest('/api/appointments', 'POST', body, headers)
-            .then(response => {
+            .then(response => response.json().then(data => {
+                console.log(data);
 
-                response.json().then(data => {
                     if (data.error) {
                         console.error(data.error);
 
@@ -82,13 +82,20 @@ document.addEventListener('DOMContentLoaded', function () {
                                 'La cita debe ser una fecha posterior a hoy');
                             return;
                         }
+
+                        if (data.error.end_time && data.error.end_time[0].includes("rango de horario")) {
+                            showErrorAlert('Oops...',
+                                'Ya existe una cita registrada en este rango de horario');
+                            return;
+                        }
                     }
 
                     showSuccessAlert('¡Listo!', 'Tu cita ha sido registrada exitosamente.').then(() => {
+                        stop();
                         window.location.href = data.redirect_to;
                     }).catch(error => console.error(error));
                 })
-            })
+            )
             .catch(error => {
                 console.log('Error:', error);
             })

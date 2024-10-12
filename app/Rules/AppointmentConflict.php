@@ -6,65 +6,63 @@ use App\Models\Appointments;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use DateTime;
+use Illuminate\Support\Facades\Auth;
 
 class AppointmentConflict implements ValidationRule {
 
     protected $date;
-    protected $time;
+    protected $startTime;
+    protected $endTime;
     protected $request;
 
-    public function __construct($request, $date, $time) {
+    public function __construct($request, string $date, string $startTime, string $endTime) {
         $this->request = $request;
-
         $this->date = $date;
 
-        //Dividir time por ":"
-        if (count(explode(":", $time)) == 2) {
-            $this->time = $time . ":00";
-        } else {
-            $this->time = $time;
-        }
+        // Dividir time por ":"
+        $this->startTime = count(explode(":", $startTime)) == 2 ? $startTime . ":00" : $startTime;
+        $this->endTime = count(explode(":", $endTime)) == 2 ? $endTime . ":00" : $endTime;
     }
 
-    public function passes($attribute, $value): bool {
-        if($this->request){
-            $userAppointmentsExists = Appointments::where('user_id', $this->request->user_id)->exists();
-            if ($userAppointmentsExists) {
-                return false;
-            }
-            return true;
-        }
+    private function passes($attribute, $value): bool {
+        \Illuminate\Log\log('Hora de inicio: ' . $this->startTime);
+        \Illuminate\Log\log('Hora de fin: ' . $this->endTime);
 
-        $exactMatchExists = Appointments::where('date', $this->date)
-            ->where('time', $this->time)
-            ->exists();
-
-        if ($exactMatchExists) {
+        if ($this->startTime < '08:00:00' || $this->endTime > '17:00:00' || $this->startTime >= $this->endTime) {
             return false;
         }
 
-        $startTime = new DateTime("{$this->date} {$this->time}");
-        $startTime->modify('-59 minutes');
-        $endTime = new DateTime("{$this->date} {$this->time}");
-        $endTime->modify('+59 minutes');
+        $appointments = Appointments::select('start_time', 'end_time')
+            ->from('appointments')
+            ->where('date', $this->date)
+            ->where('user_id', Auth::id())
+            ->get();
 
-        $timeRangeConflictExists = Appointments::where('date', $this->date)
-            ->where(function ($query) use ($startTime, $endTime) {
-                $query->whereBetween('time', [$startTime->format('H:i:s'), $endTime->format('H:i:s')]);
-            })
-            ->exists();
+        foreach ($appointments as $appointment) {
+            $start = new DateTime($appointment->start_time);
+            $end = new DateTime($appointment->end_time);
+            $end->modify('-1 minute');
+            $startRequest = new DateTime($this->startTime);
+            $endRequest = new DateTime($this->endTime);
 
-        return !$timeRangeConflictExists;
-    }
+            if ($startRequest >= $start && $startRequest <= $end) {
+                return false;
+            }
 
-    public function message() {
-        return 'Ya tienes una cita registrada en esta fecha y hora, o en el rango de una hora.';
+            if ($endRequest >= $start && $endRequest <= $end) {
+                return false;
+            }
+
+            if ($startRequest <= $start && $endRequest >= $end) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-
         if (!$this->passes($attribute, $value)) {
-            $fail($this->message());
+            $fail('Ya tienes una cita registrada en este rango de horario.');
         }
     }
 }

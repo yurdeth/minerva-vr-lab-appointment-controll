@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -66,6 +67,8 @@ return new class extends Migration {
             $table->timestamps();
         });
 
+        $this->init();
+
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
@@ -81,6 +84,31 @@ return new class extends Migration {
             $table->integer('last_activity')->index();
         });
     }
+
+    public function init() {
+        // Buscar el nombre "admin", o el id 1:
+        $rol = DB::table('users')->where('roles_id', 1)->first();
+        if ($rol) {
+            return response()->json([
+                "message" => "Base de datos ya inicializada",
+                "success" => false
+            ]);
+        }
+
+        $user = new User();
+        $user->name = "admin";
+        $user->email = "admin@admin.com";
+        $user->password = Hash::make(env("ADMIN_PASSWORD"));
+        $user->career_id = '1';
+        $user->roles_id = '1';
+        $user->save();
+
+        return response()->json([
+            "message" => "Base de datos inicializada",
+            "success" => true
+        ]);
+    }
+
 
     /**
      * Reverse the migrations.

@@ -191,7 +191,10 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
 });
 
 // ***************************************Iniciar credenciales admin*********************************************
-Route::get("init", function () {
+// <- Ya no es necesario. Se hace desde las migraciones: database/migrations/0001_01_01_000000_create_users_table.php
+// <- ejecuta: php artisan migrate:refresh; php artisan passport:client --personal
+
+/*Route::get("init", function () {
 
     // Buscar el nombre "admin", o el id 1:
     $rol = DB::table('users')->where('roles_id', 1)->first();
@@ -214,4 +217,4 @@ Route::get("init", function () {
         "message" => "Base de datos inicializada correctamente",
         "success" => true
     ]);
-});
+});*/
