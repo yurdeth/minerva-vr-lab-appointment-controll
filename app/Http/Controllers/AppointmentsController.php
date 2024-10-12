@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Psy\Util\Json;
 
 class AppointmentsController extends Controller {
     /**
@@ -203,10 +204,18 @@ class AppointmentsController extends Controller {
 
     public function getCalendarItems(): JsonResponse {
         $date = DB::select('SELECT date FROM appointments');
+        $calendarItems = [];
+
+        foreach ($date as $d) {
+            $calendarItems[] = [
+                "start" => $d->date,
+                "display" => "background",
+            ];
+        }
 
         return response()->json([
-            "start" => $date,
-            "display" => "background",
+            "data" => $calendarItems,
+            "success" => true,
         ]);
     }
 }

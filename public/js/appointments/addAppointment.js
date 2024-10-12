@@ -13,12 +13,7 @@ const max_limit = 150;
 
 document.addEventListener('DOMContentLoaded', async function () {
     await fetchDate().then(r => {
-        console.log(r);
-
-        console.log(`Display: ${r.display}`);
-        r.start.forEach(item => {
-            console.log(`Date: ${item.date}`);
-        });
+        console.log(r.data);
     });
 
     document.querySelector("form").addEventListener("submit", function (event) {
@@ -125,6 +120,11 @@ const fetchDate = async () => {
     return await apiRequest('/api/appointments/calendar-items', 'GET', null, headers)
         .then(response => response.json())
         .then(data => {
+            if(!data.success){
+                showErrorAlert('Error', 'No se pudo obtener la información de las citas.');
+                return null;
+            }
+
             return data;
         })
         .catch(error => {
