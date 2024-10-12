@@ -41,6 +41,7 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     Route::put('/appointments/editar/{id}', [AppointmentsController::class, 'update'])->name('appointments.update');
     Route::delete('/appointments/eliminar/{id}', [AppointmentsController::class, 'destroy'])->name("appointments.destroy");
     Route::get('/appointments/available', [AppointmentsController::class, 'AvailableSchedules'])->name("appointments.available");
+    Route::get('/appointments/calendar-items', [AppointmentsController::class, 'getCalendarItems'])->name("appointments.calendarItems");
 
     // **************************************** Usuarios ******************************************************
     Route::get('/users', [UsersController::class, "index"])->name('usuarios.index');

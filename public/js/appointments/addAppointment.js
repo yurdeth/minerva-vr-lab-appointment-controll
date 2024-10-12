@@ -11,7 +11,16 @@ const headers = {
 const min_limit = 1;
 const max_limit = 150;
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
+    await fetchDate().then(r => {
+        console.log(r);
+
+        console.log(`Display: ${r.display}`);
+        r.start.forEach(item => {
+            console.log(`Date: ${item.date}`);
+        });
+    });
+
     document.querySelector("form").addEventListener("submit", function (event) {
         event.preventDefault();
 
@@ -66,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         apiRequest('/api/appointments', 'POST', body, headers)
             .then(response => response.json().then(data => {
-                console.log(data);
+                    console.log(data);
 
                     if (!data.success) {
                         if (data.error) {
@@ -93,8 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     data.error.end_time[0]);
                                 return;
                             }
-                        }
-                        else{
+                        } else {
                             showErrorAlert('Oops...',
                                 'Ha ocurrido un error al intentar registrar la cita.');
                             return;
@@ -111,3 +119,16 @@ document.addEventListener('DOMContentLoaded', function () {
             })
     });
 });
+
+// Función para obtener las fechas de las citas
+const fetchDate = async () => {
+    return await apiRequest('/api/appointments/calendar-items', 'GET', null, headers)
+        .then(response => response.json())
+        .then(data => {
+            return data;
+        })
+        .catch(error => {
+            console.error(error);
+            return null;
+        });
+}

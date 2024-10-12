@@ -6,8 +6,10 @@ use App\Models\Appointments;
 use App\Rules\AppointmentConflict;
 use App\Rules\ParticipantsConflict;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -197,5 +199,14 @@ class AppointmentsController extends Controller {
         $date = $request->date;
         $schedules = (new Appointments)->GetAvailableSchedules($date);
         return response()->json($schedules);
+    }
+
+    public function getCalendarItems(): JsonResponse {
+        $date = DB::select('SELECT date FROM appointments');
+
+        return response()->json([
+            "start" => $date,
+            "display" => "background",
+        ]);
     }
 }

@@ -49,7 +49,6 @@ function showAvailableShedules() {
 
                     table.classList.add("table", "table-bordered", "text-center");
                     data.forEach(element => {
-                        console.log(element);
 
                         const dateParts = element.date.split('-');
                         const formatedDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
