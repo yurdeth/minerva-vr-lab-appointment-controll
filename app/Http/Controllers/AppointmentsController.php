@@ -45,12 +45,10 @@ class AppointmentsController extends Controller {
             "end_time" => ["required", new AppointmentConflict($request,
                 $request->date,
                 $request->start_time,
-                $request->end_time)
-            ],
+                $request->end_time,
+                'register'
+            )],
         ]);
-
-        \Illuminate\Log\log('Hora de inicio: ' . $request->start_time);
-        \Illuminate\Log\log('Hora de fin: ' . $request->end_time);
 
         if ($validate->fails()) {
             return response()->json([
@@ -131,9 +129,19 @@ class AppointmentsController extends Controller {
         }
 
         $validate = Validator::make($request->all(), [
+            "number_of_assistants" => ["required", new ParticipantsConflict(
+                $request->number_of_assistants,
+                $request->start_time,
+                $request->end_time)
+            ],
             "date" => "required|date|after:today",
-            "time" => ["required", new AppointmentConflict($request, $request->date, $request->time)],
-            "number_of_assistants" => "required",
+            "start_time" => "required",
+            "end_time" => ["required", new AppointmentConflict($request,
+                $request->date,
+                $request->start_time,
+                $request->end_time,
+                'update'
+            )],
         ]);
 
         if ($validate->fails()) {
@@ -147,7 +155,8 @@ class AppointmentsController extends Controller {
         $appointment = Appointments::find($id);
 
         $appointment->date = $request->date;
-        $appointment->time = $request->time;
+        $appointment->start_time = $request->start_time;
+        $appointment->end_time = $request->end_time;
         $appointment->number_of_assistants = $request->number_of_assistants;
 
         $appointment->save();

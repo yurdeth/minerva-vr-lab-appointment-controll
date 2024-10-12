@@ -14,10 +14,13 @@ class AppointmentConflict implements ValidationRule {
     protected $startTime;
     protected $endTime;
     protected $request;
+    protected $action;
 
-    public function __construct($request, string $date, string $startTime, string $endTime) {
+    public function __construct($request, string $date, string $startTime, string $endTime, string $action) {
         $this->request = $request;
         $this->date = $date;
+        $this->action = $action;
+
 
         // Dividir time por ":"
         $this->startTime = count(explode(":", $startTime)) == 2 ? $startTime . ":00" : $startTime;
@@ -25,6 +28,23 @@ class AppointmentConflict implements ValidationRule {
     }
 
     private function passes($attribute, $value): bool {
+        if ($this->action == 'update') {
+            // Evitar que la startTime sea mayor que la endtTime
+            if ($this->startTime >= $this->endTime) {
+                return false;
+            }
+
+            if($this->request){
+                $userAppointmentsExists = Appointments::where('user_id', $this->request->user_id)->exists();
+                if ($userAppointmentsExists) {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+
         if ($this->startTime < '08:00:00' || $this->endTime > '17:00:00' || $this->startTime >= $this->endTime) {
             return false;
         }

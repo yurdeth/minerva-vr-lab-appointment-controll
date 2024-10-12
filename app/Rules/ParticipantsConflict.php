@@ -24,23 +24,24 @@ class ParticipantsConflict implements ValidationRule {
     private function passes($attribute, $value): bool {
     $timeDifference = (strtotime($this->end_time) - strtotime($this->start_time)) / 3600;
 
+    // <- Tomando como base que lo minimo son 30 minutos de la sesión y 20 participantes (10 por sala):
     switch ($timeDifference) {
-        case 1: // 1 hour session for 20 participants (10 per room): 40 participants in 1 hour
+        case 1: // 40 participantes en 1 hora
             if ($this->participants > 40) {
                 return false;
             }
             break;
-        case 2: // 2 hour session for 40 participants (10 per room): 80 participants in 1 hour
+        case 2: // 80 participantes en 2 horas
             if ($this->participants > 80) {
                 return false;
             }
             break;
-        case 3: // 3 hour session for 60 participants (10 per room): 120 participants in 1 hour
+        case 3: // 120 participantes en 3 horas
             if ($this->participants > 120) {
                 return false;
             }
             break;
-        case 4: // 4 hour session for 80 participants (10 per room): 160 participants in 1 hour
+        case 4: // 160 participantes in 4 horas. But: limite establecido en 150. Si hay más, la cagó. Vuelva mañana, crack.
             if ($this->participants > 150) {
                 return false;
             }

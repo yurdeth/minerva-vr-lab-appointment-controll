@@ -1,6 +1,13 @@
 import {showSuccessAlert, showErrorAlert} from '../utils/alert.js'
 import {apiRequest} from "../utils/api.js";
 
+const headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+};
+
 const min_limit = 1;
 const max_limit = 150;
 
@@ -50,13 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        };
-
         const body = {
             date: date.value,
             start_time: startTime.value,
@@ -68,30 +68,35 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json().then(data => {
                 console.log(data);
 
-                    if (data.error) {
-                        console.error(data.error);
+                    if (!data.success) {
+                        if (data.error) {
+                            if (data.error.time) {
+                                showErrorAlert('Oops...',
+                                    data.error.time[0]);
+                                return;
+                            }
 
-                        if (data.error.time) {
-                            showErrorAlert('Oops...',
-                                data.error.time[0]);
-                            return;
+                            if (data.error.date && data.error.date[0].includes("after today")) {
+                                showErrorAlert('Oops...',
+                                    'La cita debe ser una fecha posterior a hoy');
+                                return;
+                            }
+
+                            if (data.error.number_of_assistants) {
+                                showErrorAlert('Oops...',
+                                    data.error.number_of_assistants[0]);
+                                return;
+                            }
+
+                            if (data.error.end_time) {
+                                showErrorAlert('Oops...',
+                                    data.error.end_time[0]);
+                                return;
+                            }
                         }
-
-                        if (data.error.date && data.error.date[0].includes("after today")) {
+                        else{
                             showErrorAlert('Oops...',
-                                'La cita debe ser una fecha posterior a hoy');
-                            return;
-                        }
-
-                        if (data.error.number_of_assistants) {
-                            showErrorAlert('Oops...',
-                                data.error.number_of_assistants[0]);
-                            return;
-                        }
-
-                        if (data.error.end_time) {
-                            showErrorAlert('Oops...',
-                                data.error.end_time[0]);
+                                'Ha ocurrido un error al intentar registrar la cita.');
                             return;
                         }
                     }

@@ -84,7 +84,7 @@
                                 </div>
 
                                 <!-- Botón para abrir el modal del calendario -->
-                                <button class="btn btn-primary m-2" id="btnOpenCalendar" style="width: 100%"
+                                <button type="button" class="btn btn-primary m-2" id="btnOpenCalendar" style="width: 100%"
                                         data-bs-toggle="modal" data-bs-target="#calendarModal">Mostrar calendario
                                 </button>
 

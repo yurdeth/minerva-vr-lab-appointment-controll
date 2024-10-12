@@ -8,13 +8,17 @@ const headers = {
     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 };
 
+const min_limit = 1;
+const max_limit = 150;
+
 /**
  * Maneja la edición de una cita.
  * @param {number} id - El ID de la cita a editar.
  */
 function handleEdit(id) {
     const date = document.getElementById("date");
-    const time = document.getElementById("time");
+    const startTime = document.getElementById("start-time");
+    const endTime = document.getElementById("end-time");
     const number_of_assistants = document.getElementById("number_of_assistants");
 
     const numAssistants = parseInt(number_of_assistants.value, 10);
@@ -23,30 +27,33 @@ function handleEdit(id) {
 
     today.setHours(0, 0, 0, 0);
 
-    if (isNaN(numAssistants) || numAssistants < 1) {
-        showWarningAlert('Oops...', 'El número de asistentes no puede ser menor a 1.');
+    if (number_of_assistants < min_limit) {
+        showErrorAlert('Oops...', `El número de asistentes no puede ser menor a ${min_limit}.`);
         return;
     }
 
-    if (numAssistants > 20) {
-        showWarningAlert('Oops...', 'El número de asistentes no puede ser mayor a 20.');
+    if (number_of_assistants > max_limit) {
+        showErrorAlert('Oops...', `El número de asistentes no puede ser mayor a ${max_limit}.`);
         return;
     }
 
-    if (selectedDate < today) {
-        showWarningAlert('Oops...', 'La fecha debe ser posterior a hoy.');
+    // Establecer la hora de hoy a las 00:00:00 para comparar solo las fechas
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate <= today) {
+        showErrorAlert('Oops...', 'La fecha debe ser posterior a hoy.');
         return;
     }
 
-    // Validar que el periodo de horas sea entre las 8:00 y las 16:00
-    if (time.value < '08:00' || time.value > '15:30') {
-        showWarningAlert('Oops...', 'Solo puedes agendar citas entre las 8:00 AM y las 3:30 PM');
+    if (startTime.value < '08:00' || endTime.value > '17:00') {
+        showErrorAlert('Oops...', 'Solo puedes agendar citas entre las 8:00 AM y las 5:00 PM');
         return;
     }
 
     const body = {
         date: date.value,
-        time: time.value,
+        start_time: startTime.value,
+        end_time: endTime.value,
         number_of_assistants: number_of_assistants.value
     };
 
@@ -57,9 +64,15 @@ function handleEdit(id) {
 
                 if(!data.success){
                     if (data.error) {
-                        if (data.error.time && data.error.time[0].includes("cita registrada")) {
-                            showWarningAlert('Oops...', 'Ya existe una cita registrada en esta fecha y hora, o en el rango de una hora.');
-                        } else {
+                        if (data.error.time) {
+                            showWarningAlert('Oops...', data.error.time[0]);
+                        }
+
+                        if (data.error.number_of_assistants) {
+                            showWarningAlert('Oops...', data.error.number_of_assistants[0]);
+                        }
+
+                        else {
                             showErrorAlert('Error', 'No se pudo actualizar la cita.');
                         }
                     }
