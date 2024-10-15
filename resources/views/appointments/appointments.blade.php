@@ -13,37 +13,41 @@ if (!isset($dashboard)) {
 
     <!-- Contenedor principal -->
     <div class="container-xl">
-
-        <!-- Contenedor de opciones -->
-        <div class="opcionesCitas">
-            <div class="col-auto">
-                <a href="{{ route("agendar") }}" class="btn-success" title="Agendar cita">
-                    <i class="fa fa-address-book"></i>
-                </a>
-            </div>
-            <div class="col-auto">
-                <a href="{{ route("export") }}" class="btn-info" title="Generar reporte en Excel">
-                    <i class="fa fa-file-excel"></i>
-                </a>
-            </div>
-            <div class="col-auto">
-                <a href="{{ route("pdf") }}" class="btn-danger" title="Generar reporte en PDF">
-                    <i class="fa fa-file-pdf"></i>
-                </a>
-            </div>
-
-            <!-- Parte de la busqueda -->
-            <div class="busquedaCitas" style="margin-left: 20%;">
-                <form action="" id="searchForm">
-                    <div class="input-group">
-                        <input type="text" id="searchInput" class="form-control" placeholder=" Buscar...">
-                        <div style="width: 100px;">
-                            <button type="submit" class="btn-info">Buscar</button>
+        <div class="container-sm">
+            <!-- Contenedor de opciones -->
+             <div class="opcionesCitas">
+                <div class="container-sm">
+                    <div class="row">
+                        <div class="col-auto">
+                            <a href="{{ route("agendar") }}" class="btn-success" title="Agendar cita">
+                                <i class="fa fa-address-book"></i>
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            <a href="{{ route("export") }}" class="btn-info" title="Generar reporte en Excel">
+                                <i class="fa fa-file-excel"></i>
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            <a href="{{ route("pdf") }}" class="btn-danger" title="Generar reporte en PDF">
+                                <i class="fa fa-file-pdf"></i>
+                             </a>
                         </div>
                     </div>
-                </form>
-            </div>
+                    <!-- Parte de la busqueda -->
+                </div>
+                <div>
+                    <form action="action=" id="searchForm">
+                        <div class="input-group">
+                            <input type="text" id="searchInput" class="form-control" placeholder=" Buscar...">
+                            <button type="submit" class="btn-info">Buscar</button>
+                        </div>
+                    </form>
+                </div>
+             </div>
         </div>
+
+
 
         <div class="card-header bg-white">
             <h2 class="titleCitas">Todas tus Citas</h2>

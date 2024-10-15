@@ -171,7 +171,9 @@
                         @auth
                             <li><a class="text-white text-decoration-none" href="{{ route('profile', ['id' => Auth::user()->id]) }}">Mi cuenta</a></li>
                         @endauth
-                        <li>Ubicación</li>
+                        <li>
+                            <a href="{{ route('location') }}">Ubicación</a>
+                        </li>
                         @auth
                             <li><a class="text-white text-decoration-none" href="{{ route('citas-ver') }}">Mis citas</a></li>
                         @endauth

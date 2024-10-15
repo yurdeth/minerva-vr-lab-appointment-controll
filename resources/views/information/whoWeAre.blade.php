@@ -37,7 +37,7 @@
          <hr>
          <br>
         <div class="row" style="align-items: center;">
-        <div class="col-md-6 col-12" style="padding-left: 10px;">
+                <div class="col-md-6 col-12" style="padding-left: 10px;">
                     <img class="img-fluid" src="{{asset('IMG/minervaInfo.jpg')}}" alt="Quienes Somos" style="border-radius:6px; width: 450px;">
                 </div>
                 <div class="col-md-6 col-12" style="padding-right: 10px; padding-bottom: 15px;">
