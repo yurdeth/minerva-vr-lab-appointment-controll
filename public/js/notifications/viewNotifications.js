@@ -139,21 +139,24 @@ const handleEditProfile = async (id, email, subject) => {
 
     const newPassword = document.createElement('input');
     newPassword.type = 'password';
+    newPassword.style.marginTop = '8px';
     newPassword.classList.add('form-control', 'mb-3');
     newPassword.placeholder = 'Ingresa la nueva contraseña';
     passwordForms.appendChild(newPassword);
 
     const repeatPassword = document.createElement('input');
     repeatPassword.type = 'password';
+    repeatPassword.style.marginTop = '10px';
     repeatPassword.classList.add('form-control', 'mb-3');
     repeatPassword.placeholder = 'Repita la nueva contraseña';
     passwordForms.appendChild(repeatPassword);
 
     const buttonContainer = document.createElement('div');
-    buttonContainer.classList.add('d-flex', 'justify-content-between', 'gap-2');
+    buttonContainer.classList.add('d-flex', 'justify-content-between');
 
     const recoverPasswordButton = document.createElement('button');
     recoverPasswordButton.type = 'submit';
+    recoverPasswordButton.style.marginRight = '10px';
     recoverPasswordButton.classList.add('btn', 'btn-success', 'w-50');
     recoverPasswordButton.textContent = "Actualizar";
     buttonContainer.appendChild(recoverPasswordButton);
