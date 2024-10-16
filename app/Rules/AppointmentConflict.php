@@ -29,92 +29,35 @@ class AppointmentConflict implements ValidationRule {
 
     private function passes($attribute, $value): bool {
         if ($this->action == 'update') {
-            // Evitar que la startTime sea mayor que la endTime
-            if ($this->startTime >= $this->endTime) {
-                return false;
-            }
-
-            $existingAppointment = Appointments::select('number_of_assistants', 'start_time', 'end_time', 'user_id')
+            //Verificar si la cita ya existe en el mismo horario de la fecha
+            $appointment = Appointments::select('date', 'start_time', 'end_time', 'user_id')
                 ->from('appointments')
                 ->where('date', $this->date)
-                ->where('user_id', Auth::id())
-                ->where(function ($query) {
-                    $query->whereBetween('start_time', [$this->startTime, $this->endTime])
-                        ->orWhereBetween('end_time', [$this->startTime, $this->endTime])
-                        ->orWhere(function ($query) {
-                            $query->where('start_time', '<=', $this->startTime)
-                                ->where('end_time', '>=', $this->endTime);
-                        });
-                })
-                ->first();
+                ->first(); // Use first() to get a single record
 
-            if ($existingAppointment) {
-                if ($existingAppointment->user_id == Auth::id()) {
-                    // Permitir la actualización si solo se está cambiando el número de asistentes
-                    if ($this->request->number_of_assistants != $existingAppointment->number_of_assistants) {
-                        return true;
-                    }
-
-                    // Permitir la actualización si se está cambiando la hora de inicio o fin
-                    if ($this->request->start_time != $existingAppointment->start_time || $this->request->end_time != $existingAppointment->end_time) {
-                        // Comprobar si la nueva hora de inicio o fin no está en conflicto con otra cita
-                        return !Appointments::select('start_time', 'end_time')
-                            ->from('appointments')
-                            ->where('date', $this->date)
-                            ->where('user_id', Auth::id())
-                            ->where(function ($query) {
-                                $query->whereBetween('start_time', [$this->startTime, $this->endTime])
-                                    ->orWhereBetween('end_time', [$this->startTime, $this->endTime])
-                                    ->orWhere(function ($query) {
-                                        $query->where('start_time', '<=', $this->startTime)
-                                            ->where('end_time', '>=', $this->endTime);
-                                    });
-                            })
-                            ->exists();
-                    }
-
-                    // Permitir la actualización si nada cambia
-                    if ($this->request->start_time == $existingAppointment->start_time && $this->request->end_time == $existingAppointment->end_time && $this->request->number_of_assistants == $existingAppointment->number_of_assistants) {
-                        return true;
-                    }
-
-                    // Permitir la actualización si el nuevo end_time es menor que el end_time existente
-                    if ($this->request->end_time < $existingAppointment->end_time) {
-                        // Comprobar primero que no esté dentro de otro rango de tiempo
-                        return !Appointments::select('start_time', 'end_time')
-                            ->from('appointments')
-                            ->where('date', $this->date)
-                            ->where('user_id', Auth::id())
-                            ->where(function ($query) {
-                                $query->whereBetween('start_time', [$this->startTime, $this->endTime])
-                                    ->orWhereBetween('end_time', [$this->startTime, $this->endTime])
-                                    ->orWhere(function ($query) {
-                                        $query->where('start_time', '<=', $this->startTime)
-                                            ->where('end_time', '>=', $this->endTime);
-                                    });
-                            })
-                            ->exists();
-                    }
-                } else {
-                    // No permitir la actualización si es un usuario diferente
-                    return false;
+            if ($appointment && $appointment->date == $this->date) {
+                if ($appointment->start_time == $this->startTime && $appointment->end_time == $this->endTime) {
+                    return false; // Exact match
                 }
-            }
 
-            // Verificar que no se pueda ingresar una actualización si existe dentro de un rango previamente establecido
-            return !Appointments::select('start_time', 'end_time')
-                ->from('appointments')
-                ->where('date', $this->date)
-                ->where('user_id', Auth::id())
-                ->where(function ($query) {
-                    $query->whereBetween('start_time', [$this->startTime, $this->endTime])
-                        ->orWhereBetween('end_time', [$this->startTime, $this->endTime])
-                        ->orWhere(function ($query) {
-                            $query->where('start_time', '<=', $this->startTime)
-                                ->where('end_time', '>=', $this->endTime);
-                        });
-                })
-                ->exists();
+                if ($this->startTime > $appointment->start_time && $this->endTime > $appointment->end_time) {
+                    return true; // New appointment ends after the existing one
+                }
+
+                if ($appointment->start_time > $this->startTime && $appointment->end_time == $this->endTime) {
+                    return false; // Existing appointment starts after the new one and ends at the same time
+                }
+
+                if ($appointment->start_time == $this->startTime && $appointment->end_time < $this->endTime) {
+                    return false; // Existing appointment ends before the new one
+                }
+
+                if ($appointment->start_time > $this->startTime && $appointment->end_time < $this->endTime) {
+                    return false; // Existing appointment is completely within the new one
+                }
+
+                return true; // No conflicts
+            }
         }
 
         if ($this->startTime < '08:00:00' || $this->endTime > '17:00:00' || $this->startTime >= $this->endTime) {
