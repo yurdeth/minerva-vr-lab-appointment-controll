@@ -27,11 +27,20 @@
                            style="top: 50%; transform: translateY(-50%); left: 10px; padding-left: 5px;"></i>
                     </div>
 
+{{--                    <div class="form-group position-relative p-2">--}}
+{{--                        <input type="password" class="form-control" id="password" name="password"--}}
+{{--                               placeholder="Contraseña" style="padding-left: 30px;">--}}
+{{--                        <i class="fas fa-key position-absolute"--}}
+{{--                           style="top: 50%; transform: translateY(-50%); left: 10px; padding-left: 5px;"></i>--}}
+{{--                    </div>--}}
+
                     <div class="form-group position-relative p-2">
+                        <span class="fas fa-key position-absolute" style="left: 15px; top: 50%; transform: translateY(-50%);"></span>
                         <input type="password" class="form-control" id="password" name="password"
-                               placeholder="Contraseña" style="padding-left: 30px;">
-                        <i class="fas fa-key position-absolute"
-                           style="top: 50%; transform: translateY(-50%); left: 10px; padding-left: 5px;"></i>
+                               placeholder="Contraseña" style="padding-left: 30px; padding-right: 35px">
+                        <!-- Ícono de ojo, inicialmente oculto -->
+                        <span toggle="#password" class="fa fa-fw fa-eye toggle-password"
+                              style="position: absolute; margin-left:10px; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; display: none;"></span>
                     </div>
 
                     <button type="submit" class="btn text-white m-2 form-control" id="submitButton">
@@ -49,7 +58,29 @@
         </div>
     </div>
 
+    <script>
+        document.querySelector('#password').addEventListener('focus', function () {
+            // Mostrar el ícono del ojo cuando el campo de contraseña recibe foco
+            document.querySelector('.toggle-password').style.display = 'block';
+        });
 
+        document.querySelector('#password').addEventListener('blur', function () {
+            // Ocultar el ícono del ojo si el campo está vacío cuando se pierde el foco
+            if (this.value === "") {
+                document.querySelector('.toggle-password').style.display = 'none';
+            }
+        });
+
+        document.querySelector('.toggle-password').addEventListener('click', function () {
+            const passwordField = document.querySelector('#password');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+
+            // Cambiar el ícono entre "mostrar" y "ocultar" contraseña
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
 
     <script type="module" src="{{ asset('js/login.js') }}"></script>
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
