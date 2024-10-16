@@ -199,6 +199,9 @@ Route::get('/ubicacion', function () {
     return view('information.location');
 })->name('location');
 
+Route::get('/servicios', function() {
+   return view('information.servicios');
+})->name('servicios');
 // ***************************************Iniciar credenciales admin*********************************************
 // <- Ya no es necesario. Se hace desde las migraciones: database/migrations/0001_01_01_000000_create_users_table.php
 // <- ejecuta: php artisan migrate:refresh; php artisan passport:client --personal

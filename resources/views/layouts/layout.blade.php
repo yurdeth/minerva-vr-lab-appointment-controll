@@ -142,7 +142,7 @@
                     <ul class="opcionesFo">
                         <li>
                             <a href="{{ route('quienes_somos') }}">Quiénes somos</a></li>
-                        <li>Servicios</li>
+                        <li><a href="{{ route('servicios') }}">Servicios</a></li>
                         <li>Contacto</li>
                     </ul>
                 </div>
