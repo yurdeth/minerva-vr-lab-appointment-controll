@@ -43,7 +43,8 @@
 
                     <div class="form-group position-relative p-2">
                         <p class="text-start">Fecha</p>
-                        <input type="date" class="form-control" id="date" name="date" style="padding-left: 30px;">
+                        <input type="date" class="form-control" id="date" name="date"
+                               style="padding-left: 30px;" required onchange="showAvailableShedules()">
                     </div>
 
                     <div class="row">

@@ -16,7 +16,7 @@ function removeAllChildNodes(parent) {
 }
 
 function showAvailableShedules() {
-    const dateInput = document.querySelector('input[name="date"]').value;
+    const dateInput = document.getElementById('date').value;
     removeAllChildNodes(loadAvailableSchedulesDiv);
 
     if (!dateInput) {
@@ -74,18 +74,19 @@ function showAvailableShedules() {
 
                         // Formatear la hora en formato de 12 horas
                         let timeParts = element.start_time.split(':');
-                        let hours = timeParts[0];
+                        let hours = parseInt(timeParts[0], 10);
                         let minutes = timeParts[1];
                         let ampm = hours >= 12 ? 'PM' : 'AM';
                         hours = hours % 12;
-                        hours = hours ? hours : 12;
+                        hours = hours = hours ? hours : 12; // Si hours es 0, cambiar a 12
                         let formatedStartTime = hours + ':' + minutes + ' ' + ampm;
 
                         timeParts = element.end_time.split(':');
-                        hours = timeParts[0];
+                        hours = parseInt(timeParts[0], 10);
                         minutes = timeParts[1];
                         ampm = hours >= 12 ? 'PM' : 'AM';
                         hours = hours % 12;
+                        hours = hours ? hours : 12; // Si hours es 0, cambiar a 12
                         let formatedEndTime = hours + ':' + minutes + ' ' + ampm;
 
                         let row = table.insertRow();

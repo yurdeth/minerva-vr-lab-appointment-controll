@@ -45,7 +45,7 @@ function handleEdit(id) {
         return;
     }
 
-    if (startTime.value < '08:00' || endTime.value > '17:00') {
+    if (startTime.value.slice(0, 5) < '08:00' || endTime.value.slice(0, 5) > '17:00') {
         showErrorAlert('Oops...', 'Solo puedes agendar citas entre las 8:00 AM y las 5:00 PM');
         return;
     }
@@ -60,28 +60,41 @@ function handleEdit(id) {
     apiRequest(`/api/appointments/editar/${id}`, 'PUT', body, headers)
         .then(response => {
             response.json().then(data => {
-                console.log(data);
-
-                if(!data.success){
+                if (!data.success) {
                     if (data.error) {
                         if (data.error.time) {
-                            showWarningAlert('Oops...', data.error.time[0]);
+                            showErrorAlert('Oops...',
+                                data.error.time[0]);
+                            return;
+                        }
+
+                        if (data.error.date && data.error.date[0].includes("after today")) {
+                            showErrorAlert('Oops...',
+                                'La cita debe ser una fecha posterior a hoy');
+                            return;
                         }
 
                         if (data.error.number_of_assistants) {
-                            showWarningAlert('Oops...', data.error.number_of_assistants[0]);
+                            showErrorAlert('Oops...',
+                                data.error.number_of_assistants[0]);
+                            return;
                         }
 
-                        else {
-                            showErrorAlert('Error', 'No se pudo actualizar la cita.');
+                        if (data.error.end_time) {
+                            showErrorAlert('Oops...',
+                                data.error.end_time[0]);
+                            return;
                         }
+                    } else {
+                        showErrorAlert('Oops...',
+                            'Ha ocurrido un error al intentar registrar la cita.');
+                        return;
                     }
-                    return;
                 }
 
                 showSuccessAlert('Éxito', '¡Cita actualizada exitosamente!')
                     .then(() => {
-                        window.location.href = '/citas';
+                        window.location.href = data.redirect_to;
                     });
             });
         })
