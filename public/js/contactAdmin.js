@@ -1,5 +1,7 @@
 import {showErrorAlert, showSuccessAlert, showWarningAlert} from './utils/alert.js';
 
+const remoteApiURL = process.env.REMOTE_API_URL;
+
 const headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
@@ -44,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
         window.location.href = '/inicio';
     });
 
-    submitButton.addEventListener('click', function (event) {
+    submitButton.addEventListener('click', async function (event) {
         event.preventDefault();
 
         const from = document.getElementById("email").value;
@@ -56,6 +58,17 @@ document.addEventListener('DOMContentLoaded', function (event) {
             description: thereIsTextArea ? document.getElementById("description").value : null
         };
 
+        const emailExists = await verifyEmail(body.from);
+
+        if (!emailExists.success) {
+            showErrorAlert('Error', 'El correo ingresado no es válido.').then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/inicio';
+                }
+            })
+            return;
+        }
+
         fetch('/enviar-solicitud', {
             method: 'POST',
             headers: headers,
@@ -65,12 +78,12 @@ document.addEventListener('DOMContentLoaded', function (event) {
             .then(data => {
                 console.log(data);
                 if (!data.success) {
-                    if (data.original){
+                    if (data.original) {
                         showErrorAlert('Error', data.original.message);
                         return;
                     }
                     if (data.error.from) {
-                        if (data.error.from.includes('correos universitarios')){
+                        if (data.error.from.includes('correos universitarios')) {
                             showErrorAlert('Error', "Por favor, ingresa tu correo universitario");
                             return;
                         }
@@ -98,3 +111,37 @@ document.addEventListener('DOMContentLoaded', function (event) {
             });
     });
 });
+
+const verifyEmail = async (email) => {
+    try {
+        let response = await fetch(`/get-key`, {
+            method: 'GET',
+            headers: {
+                ...headers,
+                'randKey': document.getElementById('rand').value
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        // Obtener el JSON de la respuesta
+        let data = await response.json();
+
+        response = fetch(`${remoteApiURL}/verifyEmail?email=` + email, {
+            method: 'GET',
+            headers: {
+                ...headers,
+                'x-api-key': data.xKey
+            }
+        });
+
+        return response.then(r => r.json().then(data => {
+            return data;
+        }));
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
+    }
+};

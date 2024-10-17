@@ -52,7 +52,11 @@ Route::get('/contactar-administrador', function () {
     if (Auth::check()) {
         return redirect()->route('HomeVR');
     }
-    return view("contactAdmin");
+
+    $randKey = bin2hex(random_bytes(128));
+    Session::put('randKey', $randKey);
+
+    return view("contactAdmin", ['randKey' => $randKey]);
 })->name('contactar-administrador');
 
 Route::post('/enviar-solicitud', [NotificationsController::class, 'store'])->name('enviar-solicitud');

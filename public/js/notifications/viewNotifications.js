@@ -120,6 +120,7 @@ const getCredentials = async (notification_id = null, email, subject = null) => 
             }
         });
         data = await response.json();
+        console.log(data);
 
         if (!data.success) {
             showErrorAlert('Error', data.message);

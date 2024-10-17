@@ -16,6 +16,7 @@
             <div class="col-12 col-md-6 bg-white p-5 text-center border border-dark" style="border-radius: 3px;">
                 <br>
                 <h2>Contactar al Administrador</h2>
+                <input type="hidden" value="{{ $randKey }}" id="rand">
 
                 <form class="" method="post" action="{{ route("enviar-solicitud") }}">
                     @csrf

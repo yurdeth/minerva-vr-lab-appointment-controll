@@ -3,20 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 
 class ApiController extends Controller {
 
     private $encryptionKey;
-    private $apiKey;
 
     public function __construct() {
         $this->encryptionKey = env('API_ENCRYPTION_KEY');
-        $this->apiKey = env('API_KEY');
     }
 
     public function encryptData($data) {
-        $key = env('API_ENCRYPTION_KEY');
+        $key = $this->encryptionKey;
         $iv = random_bytes(16);
 
         // Asegurarse de que la clave tiene 32 bytes
@@ -31,6 +29,11 @@ class ApiController extends Controller {
 
     public function getKey(): JsonResponse {
         $data = env('PASSPHRASE');
-        return response()->json(['xKey' => $this->encryptData($data)]);
+
+        $xKey = $this->encryptData($data);
+        Log::info('Encrypted xKey: ' . $xKey);
+        return response()->json([
+            'xKey' => $xKey
+        ]);
     }
 }
