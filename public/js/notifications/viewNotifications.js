@@ -111,23 +111,24 @@ const getCredentials = async (notification_id = null, email, subject = null) => 
 
         // Obtener el JSON de la respuesta
         let data = await response.json();
-        console.log('Key sent: ' + data.xKey);
 
         response = await fetch(`${remoteApiURL}/findByMail?email=${email}`, {
             method: 'GET',
-            headers: {...headers,
+            headers: {
+                ...headers,
                 'x-api-key': data.xKey,
             }
         });
         data = await response.json();
-        console.log(data);
 
         if (!data.success) {
             showErrorAlert('Error', data.message);
             return null;
         }
 
-        sendMail(notification_id, email, subject, data.password);
+        const password = await fetchData(data.password);
+
+        sendMail(notification_id, email, subject, password);
     } catch (error) {
         console.error('Error:', error);
         return null;
@@ -173,8 +174,6 @@ const handleEditProfile = async (id, email, subject) => {
     recoverPasswordButton.addEventListener('click', function () {
         apiRequest(`/api/users/ver/email/${email}`, 'GET', null, headers)
             .then(response => response.json().then(data => {
-                console.log(data.user);
-
                 if (!data.success) {
                     showErrorAlert('Error', 'Ocurrió un error al procesar la petición').then(() => {
                         window.location.href = '/dashboard/notificaciones'
@@ -197,8 +196,6 @@ const validateNewPassword = async (notification_id, newPassword, repeatPassword,
         });
         const data = await response.json();
         const id = data.user.id;
-
-        console.log(id);
 
         const body = {
             id: id,
@@ -269,7 +266,7 @@ const markAsread = (id) => {
                 throw new Error('Error al actualizar la notificación');
             }
             return response.json().then(data => {
-                if(!data.success){
+                if (!data.success) {
                     showErrorAlert('Error', data.message);
                     return;
                 }
@@ -279,3 +276,29 @@ const markAsread = (id) => {
         })
         .catch(error => console.error('Error:', error));
 }
+
+const fetchData = async (value) => {
+    const body = {
+        value: value
+    };
+
+    try {
+        const response = await fetch(`/api/get-decrypted/`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: headers
+        });
+
+        const data = await response.json();
+
+        if (!data.success) {
+            showErrorAlert('Error', data.message);
+            return null;
+        }
+
+        return data.password;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+};

@@ -88,6 +88,7 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     // **************************************** Notificaciones ******************************************************
     Route::post('/sendmail', [ContactFormController::class, 'sendEmail'])->name('enviarCorreo');
     Route::get('/get-key', [ApiController::class, 'getKey'])->name('get-key');
+    Route::post('/get-decrypted', [ApiController::class, 'decryptPassword'])->name('get-decrypted');
 
     Route::get('/mail-form', function () {
         return view('email.contact');
