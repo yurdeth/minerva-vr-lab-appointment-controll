@@ -17,9 +17,6 @@ class ReservationController extends Controller {
         $gruposNecesarios = ceil($request->number_of_assistants / $capacidadPorGrupo);
         Log::info("Grupos necesarios: $gruposNecesarios");
 
-        // Si hay más salas disponibles, optimizamos las sesiones dividiéndolas entre las salas
-        $sesionesSimultaneas = 2; // sesiones por sala
-
         // El tiempo total será el número de rondas multiplicado por el tiempo por grupo
         $tiempoTotal = $gruposNecesarios * $tiempoPorGrupo;
         Log::info("Tiempo total: $tiempoTotal");
@@ -30,18 +27,33 @@ class ReservationController extends Controller {
 
         if (empty($horaInicio)) {
             return response()->json([
-                "message" => "No end time found for the given date",
+                "message" => "No se proveyó una fecha válida",
                 "success" => false,
             ]);
+        }
+
+        // hora fin = (hora inicio + 1 hora) + ceil($request->number_of_assistants / 10 participantes por sala) * 25 minutos)
+        // (hora inicio + 1 hora) + ceil($request->number_of_assistants / 10 participantes por sala) * 25 minutos) = hora fin
+        // ceil($request->number_of_assistants / 10 participantes por sala) * 25 minutos) = hora fin - (hora inicio + 1 hora)
+        // ceil($request->number_of_assistants / 10 participantes por sala) = (hora fin - (hora inicio + 1 hora)) / 25 minutos
+        // Obtener la cantidad de participantes:
+        // participantes = 10 * (hora fin - (hora inicio + 1 hora)) / 25 minutos
+        // No tengo idea de cómo hice esta mierda pero funciona (creo) xd
+
+        $horaFin = date('H:i:s', strtotime($horaInicio->end_time) + 3600 + ($tiempoTotal * 60));
+        $cantidadParticipantes = $request->number_of_assistants;
+        if (strtotime($horaFin) > strtotime('17:00:00')) {
+            $horaFin = '17:00:00';
+            // No me pregunten nada de esta mierda xd
+            $cantidadParticipantes = 10 * (strtotime($horaFin) - (strtotime($horaInicio->end_time) + 3600)) / 1500;
         }
 
         // Retornar la hora de inicio más el tiempo total para que sea la hora de fin
         return response()->json([
             // Sumar una hora a $horaInicio para que sea la hora de inicio
             "start_time" => date('H:i:s', strtotime($horaInicio->end_time) + 3600),
-            "end_time" => date('H:i:s', strtotime($horaInicio->end_time) + 3600 + ($tiempoTotal * 60)),
-            "tiempoTotal" => $tiempoTotal,
-            "sesionesSimultaneas" => $sesionesSimultaneas,
+            "end_time" => $horaFin,
+            "number_of_assistants" => $cantidadParticipantes,
             "success" => true,
         ]);
     }

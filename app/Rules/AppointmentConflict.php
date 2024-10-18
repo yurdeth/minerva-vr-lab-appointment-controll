@@ -79,12 +79,15 @@ class AppointmentConflict implements ValidationRule {
             ->get();
 
         foreach ($appointments as $appointment) {
+            // From database:
             $start = new DateTime($appointment->start_time);
             $end = new DateTime($appointment->end_time);
-            $end->modify('-1 minute');
+
+            // From request:
             $startRequest = new DateTime($this->startTime);
             $endRequest = new DateTime($this->endTime);
 
+            // Calcular la diferencia en minutos
             $interval = $startRequest->diff($endRequest);
             $minutes = ($interval->h * 60) + $interval->i;
 
@@ -100,26 +103,33 @@ class AppointmentConflict implements ValidationRule {
             }
 
             // Tiempo de espera de una hora entre citas (debe haber un margen de 1 hora entre end_time y el siguiente start_time)
-            if ($startRequest->format('H:i:s') < $end->format('H:i:s')) {
+            $oneHourAfterEnd = (clone $end)->modify('+1 hour');
+            if ($startRequest < $oneHourAfterEnd) {
                 $this->message = "Error: debe haber un margen de 1 hora entre citas";
                 return false;
             }
 
-            if ($startRequest >= $start && $startRequest <= $end) {
+            /* Inicio de la nueva cita dentro de una cita existente:
+            $startRequest >= $start && $startRequest <= $end
+            Esto verifica si el start_time de la nueva cita está entre el start_time y
+            el end_time de una cita existente.
+
+            Fin de la nueva cita dentro de una cita existente:
+            $endRequest >= $start && $endRequest <= $end
+            Esto verifica si el end_time de la nueva cita está entre el start_time y
+            el end_time de una cita existente.
+
+            Nueva cita abarca completamente una cita existente:
+            $startRequest <= $start && $endRequest >= $end
+            Esto verifica si la nueva cita comienza antes o al mismo tiempo que una cita existente y
+            termina después o al mismo tiempo que la cita existente.*/
+
+            if ($startRequest >= $start && $startRequest <= $end ||
+                $endRequest >= $start && $endRequest <= $end ||
+                $startRequest <= $start && $endRequest >= $end) {
                 $this->message = "Error: ya existe una cita en ese horario";
                 return false;
             }
-
-            if ($endRequest >= $start && $endRequest <= $end) {
-                $this->message = "Error: ya existe una cita en ese horario";
-                return false;
-            }
-
-            if ($startRequest <= $start && $endRequest >= $end) {
-                $this->message = "Error: ya existe una cita en ese horario";
-                return false;
-            }
-
         }
 
         return true;

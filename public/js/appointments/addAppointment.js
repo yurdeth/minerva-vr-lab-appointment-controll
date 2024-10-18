@@ -17,69 +17,73 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     const sendReservationRequest = () => {
-        let number_of_assistants = document.getElementById('number_of_assistants').value;
-        let date = document.getElementById('date').value;
+        const number_of_assistants = document.getElementById('number_of_assistants');
+        const date = document.getElementById('date').value;
+
+        if (number_of_assistants.value > max_limit) {
+            showErrorAlert('Oops...', `El número de asistentes no puede ser mayor a ${max_limit}.`);
+            number_of_assistants.value = max_limit;
+        }
 
         if (date !== '') {
             const body = {
-                number_of_assistants: number_of_assistants,
+                number_of_assistants: number_of_assistants.value,
                 date: date,
             };
 
-            console.log(body);
-
             apiRequest(`/api/reservation/`, 'POST', body, headers)
                 .then(response => response.json())
-                .then(data => {
-                    let startTime = document.getElementById('start-time');
-                    let endTime = document.getElementById('end-time');
-
-                    if (!data.success) {
-                        console.error(data);
-
-                        let date = document.getElementById('date');
-                        // Asignar a day día mañana:
-                        let tomorrow = new Date();
-                        tomorrow.setDate(tomorrow.getDate() + 1);
-                        date.value = tomorrow.toISOString().split('T')[0];
-
-                        startTime.value = '';
-                        endTime.value = '';
-                    } else {
-                        startTime.value = data.start_time;
-                        endTime.value = data.end_time;
-                    }
-                    console.log(data);
-                })
+                .then(data => handleApiResponse(data, number_of_assistants))
                 .catch(error => console.error(error));
+        }
+    };
+
+    const handleApiResponse = (data, number_of_assistants) => {
+        const startTime = document.getElementById('start-time');
+        const endTime = document.getElementById('end-time');
+
+        if (!data.success) {
+            const date = document.getElementById('date');
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            date.value = tomorrow.toISOString().split('T')[0];
+
+            startTime.value = '';
+            endTime.value = '';
+        } else {
+            startTime.value = data.start_time;
+            endTime.value = data.end_time;
+            number_of_assistants.value = data.number_of_assistants;
+        }
+    };
+
+    const handleStartTimeChange = () => {
+        const startTimeInput = document.getElementById('start-time');
+        let startTime = startTimeInput.value;
+        const endTime = document.getElementById('end-time');
+
+        if (startTime !== '') {
+            if (startTime >= '17:00') {
+                startTime = '16:30';
+                endTime.value = '17:00';
+                startTimeInput.value = startTime;
+                showErrorAlert('Oops...', 'El horario de atención es de 8:00 AM a 5:00 PM');
+                return;
+            }
+            if (endTime.value >= '17:00') {
+                endTime.value = '17:00';
+                return;
+            }
+            const startHour = parseInt(startTime.split(':')[0]);
+            const endHour = startHour + 1;
+
+            endTime.value = `${endHour < 10 ? '0' : ''}${endHour}:00`;
         }
     };
 
     document.getElementById('date').addEventListener('input', sendReservationRequest);
     document.getElementById('number_of_assistants').addEventListener('change', sendReservationRequest);
-
-    document.getElementById('start-time').addEventListener('change', function () {
-        let startTimeInput = document.getElementById('start-time');
-        let startTime = startTimeInput.value;
-        let endTime = document.getElementById('end-time');
-
-        if (startTime !== '') {
-            if (startTime >= '17:00') {
-                startTime = '17:00';
-                startTimeInput.value = startTime;
-                showErrorAlert('Oops...', 'El horario de atención es de 8:00 AM a 5:00 PM');
-                return;
-            }
-            let startHour = parseInt(startTime.split(':')[0]);
-            let endHour = startHour + 1;
-
-            if (endHour < 10) {
-                endHour = `0${endHour}`;
-            }
-
-            endTime.value = `${endHour}:00`;
-        }
-    });
+    document.getElementById('start-time').addEventListener('change', handleStartTimeChange);
 
     document.querySelector("form").addEventListener("submit", function (event) {
         event.preventDefault();
