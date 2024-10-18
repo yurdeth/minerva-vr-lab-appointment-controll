@@ -66,7 +66,7 @@
                     <div class="form-group position-relative p-2">
                         <p class="text-start">Número de Asistentes</p>
                         <input type="number" class="form-control" id="number_of_assistants" name="number_of_assistants"
-                               style="padding-left: 15px;" min="1" max="20">
+                               style="padding-left: 15px;" min="1" max="72">
                     </div>
 
                     @if(Auth::user()->roles_id == 1)

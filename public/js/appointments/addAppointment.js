@@ -9,7 +9,7 @@ const headers = {
 };
 
 const min_limit = 1;
-const max_limit = 150;
+const max_limit = 72;
 
 document.addEventListener('DOMContentLoaded', async function () {
     await fetchDate().then(r => {

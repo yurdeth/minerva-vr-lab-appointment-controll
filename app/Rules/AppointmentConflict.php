@@ -7,6 +7,7 @@ use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use DateTime;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AppointmentConflict implements ValidationRule {
 
@@ -15,6 +16,7 @@ class AppointmentConflict implements ValidationRule {
     protected $endTime;
     protected $request;
     protected $action;
+    protected $message;
 
     public function __construct($request, string $date, string $startTime, string $endTime, string $action) {
         $this->request = $request;
@@ -58,9 +60,15 @@ class AppointmentConflict implements ValidationRule {
 
                 return true; // No conflicts
             }
+
+            return true; // No conflicts
         }
 
+        Log::info($this->startTime);
+        Log::info($this->endTime);
+
         if ($this->startTime < '08:00:00' || $this->endTime > '17:00:00' || $this->startTime >= $this->endTime) {
+            $this->message = "Error: el horario de atención es de 8:00 AM a 5:00 PM";
             return false;
         }
 
@@ -77,54 +85,51 @@ class AppointmentConflict implements ValidationRule {
             $startRequest = new DateTime($this->startTime);
             $endRequest = new DateTime($this->endTime);
 
+            $interval = $startRequest->diff($endRequest);
+            $minutes = ($interval->h * 60) + $interval->i;
+
+            // Maximo 72 personas
+            if ($this->request->numbre_of_assistants > 72) {
+                $this->message = "Error: el límite de participantes por cita es de 72 personas";
+                return false;
+            }
+
+            if ($minutes < 25) {
+                $this->message = "El tiempo mínimo para una cita es de 25 minutos";
+                return false;
+            }
+
+            // Tiempo de espera de una hora entre citas
+            $startRequest->modify('-1 hour');
+            $endRequest->modify('+1 hour');
+            if ($startRequest <= $start && $endRequest >= $end) {
+                $this->message = "Error: debe haber una hora de espera entre citas";
+                return false;
+            }
+
             if ($startRequest >= $start && $startRequest <= $end) {
+                $this->message = "Error: ya existe una cita en ese horario";
                 return false;
             }
 
             if ($endRequest >= $start && $endRequest <= $end) {
+                $this->message = "Error: ya existe una cita en ese horario";
                 return false;
             }
 
             if ($startRequest <= $start && $endRequest >= $end) {
+                $this->message = "Error: ya existe una cita en ese horario";
                 return false;
             }
+
         }
 
-        if ($this->startTime < '08:00:00' || $this->endTime > '17:00:00' || $this->startTime >= $this->endTime) {
-            return false;
-        }
-
-        $appointments = Appointments::select('start_time', 'end_time')
-            ->from('appointments')
-            ->where('date', $this->date)
-            ->where('user_id', Auth::id())
-            ->get();
-
-        foreach ($appointments as $appointment) {
-            $start = new DateTime($appointment->start_time);
-            $end = new DateTime($appointment->end_time);
-            $end->modify('-1 minute');
-            $startRequest = new DateTime($this->startTime);
-            $endRequest = new DateTime($this->endTime);
-
-            if ($startRequest >= $start && $startRequest <= $end) {
-                return false;
-            }
-
-            if ($endRequest >= $start && $endRequest <= $end) {
-                return false;
-            }
-
-            if ($startRequest <= $start && $endRequest >= $end) {
-                return false;
-            }
-        }
         return true;
     }
 
     public function validate(string $attribute, mixed $value, Closure $fail): void {
         if (!$this->passes($attribute, $value)) {
-            $fail('Ya tienes una cita registrada en este rango de horario.');
+            $fail($this->message);
         }
     }
 }
