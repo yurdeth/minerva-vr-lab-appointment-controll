@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AppointmentsController;
+use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ReservationController;
@@ -114,6 +115,8 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
 
     /*Código con la funcionalidad que no de error al abrir el informe de inventario*/
     Route::post('/insertar-inventario', [StatusesController::class, 'store'])->name("insertar-inventario");
+
+    Route::get('/inventario/pdf', [ResourcesController::class, 'generatePDF'])->name('pdf.resources');
 });
 
 // ***************************************Rutas para citas*********************************************

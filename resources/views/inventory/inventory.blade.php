@@ -19,6 +19,11 @@
                 <span class="tooltip-text">Registrar Inventario</span>
             </a>
         </div>
+        <div class="col-auto">
+            <a href="{{ route("pdf.resources") }}" class="btn-danger" title="Generar reporte en PDF">
+                <i class="fa fa-file-pdf"></i>
+             </a>
+        </div>
 
         <div>
             <form action="" id="searchForm" style="margin-top: 24px;">
