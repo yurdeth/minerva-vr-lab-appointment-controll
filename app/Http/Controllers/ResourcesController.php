@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ResourcesController extends Controller {
     /**
@@ -195,5 +196,19 @@ class ResourcesController extends Controller {
             'success' => true,
             'status' => 200
         ]);
+    }
+
+    //method to generate pdf
+    public function generatePDF(){
+        $resources = Resources::with(['room', 'status', 'resourceType'])->get();
+
+        if ($resources->isEmpty()) {
+            return response()->json(['message' => 'No resources found']);
+        }
+
+        // Se encarga de cargar la vista con los datos en el pdf
+        $pdf = Pdf::loadView('inventory.inventoryPDF', ['resources' => $resources]);
+
+        return $pdf->stream();
     }
 }
