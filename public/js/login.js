@@ -92,6 +92,7 @@ const checkUser = async (body) => {
 
         return await response.json();
     } catch (error) {
+        showErrorAlert('Error', 'No ha podido establecerse una conexión con el servidor');
         console.error('Error:', error);
         return null;
     }
