@@ -55,8 +55,31 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     };
 
-    document.getElementById('date').addEventListener('change', sendReservationRequest);
+    document.getElementById('date').addEventListener('input', sendReservationRequest);
     document.getElementById('number_of_assistants').addEventListener('change', sendReservationRequest);
+
+    document.getElementById('start-time').addEventListener('change', function () {
+        let startTimeInput = document.getElementById('start-time');
+        let startTime = startTimeInput.value;
+        let endTime = document.getElementById('end-time');
+
+        if (startTime !== '') {
+            if (startTime >= '17:00') {
+                startTime = '17:00';
+                startTimeInput.value = startTime;
+                showErrorAlert('Oops...', 'El horario de atención es de 8:00 AM a 5:00 PM');
+                return;
+            }
+            let startHour = parseInt(startTime.split(':')[0]);
+            let endHour = startHour + 1;
+
+            if (endHour < 10) {
+                endHour = `0${endHour}`;
+            }
+
+            endTime.value = `${endHour}:00`;
+        }
+    });
 
     document.querySelector("form").addEventListener("submit", function (event) {
         event.preventDefault();
