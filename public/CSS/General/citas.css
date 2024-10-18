@@ -195,6 +195,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(139, 196, 227, 0.419), 0 6px 20px rgba(134, 190, 220, 0.419);
 }
 
 

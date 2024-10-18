@@ -10,6 +10,7 @@ if (!isset($dashboard)) {
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('CSS/General/citas.css')}}">
+<section>
 
     <!-- Contenedor principal -->
     <div class="container-xl">
@@ -49,7 +50,7 @@ if (!isset($dashboard)) {
 
 
 
-        <div class="card-header bg-white">
+        <div class="card-header mb-3">
             <h2 class="titleCitas">Todas tus Citas</h2>
         </div>
 
@@ -126,5 +127,6 @@ if (!isset($dashboard)) {
     <script type="module" src="{{ asset('js/appointments/appointments.js') }}"></script>
 
     <br><br>
-
+</section>
+<br><br>
 @endsection

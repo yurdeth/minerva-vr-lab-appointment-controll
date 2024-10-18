@@ -150,9 +150,9 @@
                 <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
                     <h5 class="mb-4 font-weigth-bold text-center">Horarios de Atención</h5>
                     <br>
-                    <p class="text-light" style="text-align: center;">Lunes-Viernes: <br>8.00 a.m. - 4.00 p.m.</p>
+                    <p class="text-light" style="text-align: center;">Lunes-Viernes: <br>8.00 a.m. - 5.00 p.m.</p>
                     <br>
-                    <h5 class="font-weigth-bold text-center text-light">Minerva VR Lab</h5>
+                    <h5 class="font-weigth-bold text-center text-light">Minerva RV Lab</h5>
                     <div style="text-align: center;  font-size: 30px;">
                         <a style="text-decoration:none;" href="https://www.facebook.com/people/Minerva-RV-LAB-FMO/61564360994481/">
                         <i class="fa-brands fa-facebook"></i>
@@ -184,7 +184,7 @@
 
                 <div class="text-center mb-2">
                     <p class="font-weigth-bold text-white"><i class="fa-regular fa-copyright"></i> UNIVERSIDAD DE EL SALVADOR FACULTAD MULTIDISCIPLINARIA
-                    ORIENTAL <br> Minerva VR Lab </p>
+                    ORIENTAL <br> Minerva RV Lab </p>
                 </div>
 
             </div>
