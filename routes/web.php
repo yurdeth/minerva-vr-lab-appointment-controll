@@ -4,6 +4,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\StatusesController;
 use App\Http\Middleware\CheckKeyAccess;
 use App\Http\Middleware\NoBrowserCache;

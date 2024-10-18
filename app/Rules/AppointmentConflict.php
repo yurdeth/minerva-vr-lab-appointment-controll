@@ -99,11 +99,9 @@ class AppointmentConflict implements ValidationRule {
                 return false;
             }
 
-            // Tiempo de espera de una hora entre citas
-            $startRequest->modify('-1 hour');
-            $endRequest->modify('+1 hour');
-            if ($startRequest <= $start && $endRequest >= $end) {
-                $this->message = "Error: debe haber una hora de espera entre citas";
+            // Tiempo de espera de una hora entre citas (debe haber un margen de 1 hora entre end_time y el siguiente start_time)
+            if ($startRequest->format('H:i:s') < $end->format('H:i:s')) {
+                $this->message = "Error: debe haber un margen de 1 hora entre citas";
                 return false;
             }
 

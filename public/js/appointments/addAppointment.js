@@ -16,6 +16,48 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.log(r.data);
     });
 
+    const sendReservationRequest = () => {
+        let number_of_assistants = document.getElementById('number_of_assistants').value;
+        let date = document.getElementById('date').value;
+
+        if (date !== '') {
+            const body = {
+                number_of_assistants: number_of_assistants,
+                date: date,
+            };
+
+            console.log(body);
+
+            apiRequest(`/api/reservation/`, 'POST', body, headers)
+                .then(response => response.json())
+                .then(data => {
+                    let startTime = document.getElementById('start-time');
+                    let endTime = document.getElementById('end-time');
+
+                    if (!data.success) {
+                        console.error(data);
+
+                        let date = document.getElementById('date');
+                        // Asignar a day día mañana:
+                        let tomorrow = new Date();
+                        tomorrow.setDate(tomorrow.getDate() + 1);
+                        date.value = tomorrow.toISOString().split('T')[0];
+
+                        startTime.value = '';
+                        endTime.value = '';
+                    } else {
+                        startTime.value = data.start_time;
+                        endTime.value = data.end_time;
+                    }
+                    console.log(data);
+                })
+                .catch(error => console.error(error));
+        }
+    };
+
+    document.getElementById('date').addEventListener('change', sendReservationRequest);
+    document.getElementById('number_of_assistants').addEventListener('change', sendReservationRequest);
+
     document.querySelector("form").addEventListener("submit", function (event) {
         event.preventDefault();
 
@@ -118,7 +160,7 @@ const fetchDate = async () => {
     return await apiRequest('/api/appointments/calendar-items', 'GET', null, headers)
         .then(response => response.json())
         .then(data => {
-            if(!data.success){
+            if (!data.success) {
                 showErrorAlert('Error', 'No se pudo obtener la información de las citas.');
                 return null;
             }
