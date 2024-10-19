@@ -143,7 +143,7 @@
                         <li>
                             <a href="{{ route('quienes_somos') }}">Quiénes somos</a></li>
                         <li><a href="{{ route('servicios') }}">Servicios</a></li>
-                        <li>Contacto</li>
+                        <li><a href="{{ route('contactos') }}">Contacto</a></li>
                     </ul>
                 </div>
 
