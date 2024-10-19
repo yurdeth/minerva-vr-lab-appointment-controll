@@ -7,6 +7,7 @@ use App\Http\Controllers\CareersController;
 use App\Http\Controllers\ContactFormController;
 use App\Http\Controllers\DepartmentsController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\ResourceTypeController;
 use App\Http\Controllers\RoomController;
@@ -41,6 +42,8 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     Route::put('/appointments/editar/{id}', [AppointmentsController::class, 'update'])->name('appointments.update');
     Route::delete('/appointments/eliminar/{id}', [AppointmentsController::class, 'destroy'])->name("appointments.destroy");
     Route::get('/appointments/available', [AppointmentsController::class, 'AvailableSchedules'])->name("appointments.available");
+    Route::get('/appointments/calendar-items', [AppointmentsController::class, 'getCalendarItems'])->name("appointments.calendarItems");
+    Route::post('/reservation/', [ReservationController::class, 'calculateTime'])->name('reservation.reservation');
 
     // **************************************** Usuarios ******************************************************
     Route::get('/users', [UsersController::class, "index"])->name('usuarios.index');
@@ -87,6 +90,7 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     // **************************************** Notificaciones ******************************************************
     Route::post('/sendmail', [ContactFormController::class, 'sendEmail'])->name('enviarCorreo');
     Route::get('/get-key', [ApiController::class, 'getKey'])->name('get-key');
+    Route::post('/get-decrypted', [ApiController::class, 'decryptPassword'])->name('get-decrypted');
 
     Route::get('/mail-form', function () {
         return view('email.contact');

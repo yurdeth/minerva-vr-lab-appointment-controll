@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +14,8 @@ class Appointments extends Model {
     protected $table = "appointments";
     protected $fillable = [
         "date",
-        "time",
+        "start_time",
+        "end_time",
         "number_of_assistants",
         "user_id"
     ];
@@ -39,7 +41,8 @@ class Appointments extends Model {
                     'careers.career_name',
                     'appointments.user_id',
                     'appointments.date',
-                    'appointments.time'
+                    'appointments.start_time',
+                    'appointments.end_time'
                 )
                 ->get();
         } else {
@@ -60,7 +63,8 @@ class Appointments extends Model {
                     'users.career_id',
                     'careers.career_name',
                     'appointments.date',
-                    'appointments.time'
+                    'appointments.start_time',
+                    'appointments.end_time'
                 ])
                 ->get();
         }
@@ -95,7 +99,8 @@ class Appointments extends Model {
                     'users.career_id',
                     'careers.career_name',
                     'appointments.date',
-                    'appointments.time'
+                    'appointments.start_time',
+                    'appointments.end_time'
                 )
                 ->get();
         } else {
@@ -107,11 +112,11 @@ class Appointments extends Model {
     /**
      * @throws \Exception
      */
-    public function GetAvailableSchedules($date): \Illuminate\Support\Collection {
+    public function GetAvailableSchedules($date): Collection {
         try {
             return DB::table('appointments')
                 ->where('date', $date)
-                ->select('id', 'time', 'date')
+                ->select('id', 'start_time', 'end_time', 'date')
                 ->get();
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());

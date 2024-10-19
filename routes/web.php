@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AppointmentsController;
+use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\StatusesController;
 use App\Http\Middleware\CheckKeyAccess;
 use App\Http\Middleware\NoBrowserCache;
@@ -52,7 +54,11 @@ Route::get('/contactar-administrador', function () {
     if (Auth::check()) {
         return redirect()->route('HomeVR');
     }
-    return view("contactAdmin");
+
+    $randKey = bin2hex(random_bytes(128));
+    Session::put('randKey', $randKey);
+
+    return view("contactAdmin", ['randKey' => $randKey]);
 })->name('contactar-administrador');
 
 Route::post('/enviar-solicitud', [NotificationsController::class, 'store'])->name('enviar-solicitud');
@@ -109,6 +115,8 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
 
     /*Código con la funcionalidad que no de error al abrir el informe de inventario*/
     Route::post('/insertar-inventario', [StatusesController::class, 'store'])->name("insertar-inventario");
+
+    Route::get('/inventario/pdf', [ResourcesController::class, 'generatePDF'])->name('pdf.resources');
 });
 
 // ***************************************Rutas para citas*********************************************
@@ -190,8 +198,23 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
     })->name('solicitud-recuperar-clave');
 });
 
+// ***************************************Rutas del footer*********************************************
+Route::get('/quienes-somos', function () {
+    return view('information.whoWeAre');
+})->name('quienes_somos');
+
+Route::get('/ubicacion', function () {
+    return view('information.location');
+})->name('location');
+
+Route::get('/servicios', function() {
+   return view('information.servicios');
+})->name('servicios');
 // ***************************************Iniciar credenciales admin*********************************************
-Route::get("init", function () {
+// <- Ya no es necesario. Se hace desde las migraciones: database/migrations/0001_01_01_000000_create_users_table.php
+// <- ejecuta: php artisan migrate:refresh; php artisan passport:client --personal
+
+/*Route::get("init", function () {
 
     // Buscar el nombre "admin", o el id 1:
     $rol = DB::table('users')->where('roles_id', 1)->first();
@@ -214,4 +237,4 @@ Route::get("init", function () {
         "message" => "Base de datos inicializada correctamente",
         "success" => true
     ]);
-});
+});*/

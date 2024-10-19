@@ -1,7 +1,90 @@
 import {showSuccessAlert, showErrorAlert} from '../utils/alert.js'
 import {apiRequest} from "../utils/api.js";
 
-document.addEventListener('DOMContentLoaded', function () {
+const headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+};
+
+const min_limit = 1;
+const max_limit = 72;
+
+document.addEventListener('DOMContentLoaded', async function () {
+    await fetchDate().then(r => {
+        console.log(r.data);
+    });
+
+    const sendReservationRequest = () => {
+        const number_of_assistants = document.getElementById('number_of_assistants');
+        const date = document.getElementById('date').value;
+
+        if (number_of_assistants.value > max_limit) {
+            showErrorAlert('Oops...', `El número de asistentes no puede ser mayor a ${max_limit}.`);
+            number_of_assistants.value = max_limit;
+        }
+
+        if (date !== '') {
+            const body = {
+                number_of_assistants: number_of_assistants.value,
+                date: date,
+            };
+
+            apiRequest(`/api/reservation/`, 'POST', body, headers)
+                .then(response => response.json())
+                .then(data => handleApiResponse(data, number_of_assistants))
+                .catch(error => console.error(error));
+        }
+    };
+
+    const handleApiResponse = (data, number_of_assistants) => {
+        const startTime = document.getElementById('start-time');
+        const endTime = document.getElementById('end-time');
+
+        if (!data.success) {
+            const date = document.getElementById('date');
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            date.value = tomorrow.toISOString().split('T')[0];
+
+            startTime.value = '';
+            endTime.value = '';
+        } else {
+            startTime.value = data.start_time;
+            endTime.value = data.end_time;
+            number_of_assistants.value = data.number_of_assistants;
+        }
+    };
+
+    const handleStartTimeChange = () => {
+        const startTimeInput = document.getElementById('start-time');
+        let startTime = startTimeInput.value;
+        const endTime = document.getElementById('end-time');
+
+        if (startTime !== '') {
+            if (startTime >= '17:00') {
+                startTime = '16:30';
+                endTime.value = '17:00';
+                startTimeInput.value = startTime;
+                showErrorAlert('Oops...', 'El horario de atención es de 8:00 AM a 5:00 PM');
+                return;
+            }
+            if (endTime.value >= '17:00') {
+                endTime.value = '17:00';
+                return;
+            }
+            const startHour = parseInt(startTime.split(':')[0]);
+            const endHour = startHour + 1;
+
+            endTime.value = `${endHour < 10 ? '0' : ''}${endHour}:00`;
+        }
+    };
+
+    document.getElementById('date').addEventListener('input', sendReservationRequest);
+    document.getElementById('number_of_assistants').addEventListener('change', sendReservationRequest);
+    document.getElementById('start-time').addEventListener('change', handleStartTimeChange);
+
     document.querySelector("form").addEventListener("submit", function (event) {
         event.preventDefault();
 
@@ -18,13 +101,13 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        if (number_of_assistants < 1) {
-            showErrorAlert('Oops...', 'El número de asistentes no puede ser menor a 1.');
+        if (number_of_assistants < min_limit) {
+            showErrorAlert('Oops...', `El número de asistentes no puede ser menor a ${min_limit}.`);
             return;
         }
 
-        if (number_of_assistants > 20) {
-            showErrorAlert('Oops...', 'El número de asistentes no puede ser mayor a 20.');
+        if (number_of_assistants > max_limit) {
+            showErrorAlert('Oops...', `El número de asistentes no puede ser mayor a ${max_limit}.`);
             return;
         }
 
@@ -39,41 +122,51 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Validar que el periodo de horas sea entre las 8:00 y las 16:00
-        let selectedTime = formData.get('time');
-        if (selectedTime < '08:00' || selectedTime > '15:30') {
-            showErrorAlert('Oops...', 'Solo puedes agendar citas entre las 8:00 AM y las 3:30 PM');
+        let startTime = document.getElementById('start-time');
+        let endTime = document.getElementById('end-time');
+
+        if (startTime.value < '08:00' || endTime.value > '17:00') {
+            showErrorAlert('Oops...', 'Solo puedes agendar citas entre las 8:00 AM y las 5:00 PM');
             return;
         }
 
-        const headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        };
-
         const body = {
             date: date.value,
-            time: selectedTime,
+            start_time: startTime.value,
+            end_time: endTime.value,
             number_of_assistants: number_of_assistants.value
         };
 
         apiRequest('/api/appointments', 'POST', body, headers)
-            .then(response => {
-                response.json().then(data => {
-                    if (data.error) {
-                        console.error(data.error);
+            .then(response => response.json().then(data => {
+                    if (!data.success) {
+                        if (data.error) {
+                            if (data.error.time) {
+                                showErrorAlert('Oops...',
+                                    data.error.time[0]);
+                                return;
+                            }
 
-                        if (data.error.time && data.error.time[0].includes("cita registrada")) {
-                            showErrorAlert('Oops...',
-                                'Ya existe una cita registrada en esta fecha y hora, o en el rango de una hora (cada sesión dura una hora)');
-                            return;
-                        }
+                            if (data.error.date && data.error.date[0].includes("after today")) {
+                                showErrorAlert('Oops...',
+                                    'La cita debe ser una fecha posterior a hoy');
+                                return;
+                            }
 
-                        if (data.error.date && data.error.date[0].includes("after today")) {
+                            if (data.error.number_of_assistants) {
+                                showErrorAlert('Oops...',
+                                    data.error.number_of_assistants[0]);
+                                return;
+                            }
+
+                            if (data.error.end_time) {
+                                showErrorAlert('Oops...',
+                                    data.error.end_time[0]);
+                                return;
+                            }
+                        } else {
                             showErrorAlert('Oops...',
-                                'La cita debe ser una fecha posterior a hoy');
+                                'Ha ocurrido un error al intentar registrar la cita.');
                             return;
                         }
                     }
@@ -82,9 +175,27 @@ document.addEventListener('DOMContentLoaded', function () {
                         window.location.href = data.redirect_to;
                     }).catch(error => console.error(error));
                 })
-            })
+            )
             .catch(error => {
                 console.log('Error:', error);
             })
     });
 });
+
+// Función para obtener las fechas de las citas
+const fetchDate = async () => {
+    return await apiRequest('/api/appointments/calendar-items', 'GET', null, headers)
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                showErrorAlert('Error', 'No se pudo obtener la información de las citas.');
+                return null;
+            }
+
+            return data;
+        })
+        .catch(error => {
+            console.error(error);
+            return null;
+        });
+}

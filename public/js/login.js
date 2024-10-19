@@ -3,7 +3,6 @@ import {apiRequest} from "./utils/api.js";
 
 const remoteApiURL = process.env.REMOTE_API_URL;
 const adminEmail = process.env.ADMIN_EMAIL;
-const PATH = process.env.KEY_PATH;
 
 const headers = {
     'Content-Type': 'application/json',
@@ -77,12 +76,10 @@ const checkUser = async (body) => {
             }
         });
 
-        // Comprobar si la respuesta es exitosa
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
 
-        // Obtener el JSON de la respuesta
         let data = await response.json();
 
         response = await fetch(`${remoteApiURL}/verifyUser?email=${body.email}&password=${body.password}`, {
@@ -92,8 +89,10 @@ const checkUser = async (body) => {
                 'x-api-key': data.xKey,
             }
         });
+
         return await response.json();
     } catch (error) {
+        showErrorAlert('Error', 'No ha podido establecerse una conexión con el servidor');
         console.error('Error:', error);
         return null;
     }

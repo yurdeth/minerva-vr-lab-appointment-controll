@@ -3,20 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ApiController extends Controller {
 
     private $encryptionKey;
-    private $apiKey;
 
     public function __construct() {
         $this->encryptionKey = env('API_ENCRYPTION_KEY');
-        $this->apiKey = env('API_KEY');
     }
 
     public function encryptData($data) {
-        $key = env('API_ENCRYPTION_KEY');
+        $key = $this->encryptionKey;
         $iv = random_bytes(16);
 
         // Asegurarse de que la clave tiene 32 bytes
@@ -29,8 +28,48 @@ class ApiController extends Controller {
         return base64_encode($iv . $encryptedData);
     }
 
+    public function decryptPassword(Request $request): JsonResponse {
+        $decodedData = base64_decode($request->value);
+        if ($decodedData === false) {
+            return response()->json([
+                'error' => 'Invalid input data',
+                'success' => false
+            ], 400);
+        }
+
+        $iv = substr($decodedData, 0, 16);
+        $encryptedData = substr($decodedData, 16);
+
+        $key = substr(hash('sha256', env('API_ENCRYPTION_KEY'), true), 0, 32);
+
+        $decrypted = openssl_decrypt($encryptedData, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+        if ($decrypted === false) {
+            return response()->json([
+                'error' => 'Decryption failed',
+                'success' => false
+            ], 500);
+        }
+
+        if(!$decrypted) {
+            return response()->json([
+                'error' => 'Invalid input data',
+                'success' => false
+            ]);
+        }
+
+        return response()->json([
+            'password' => $decrypted,
+            'success' => true
+        ]);
+    }
+
     public function getKey(): JsonResponse {
         $data = env('PASSPHRASE');
-        return response()->json(['xKey' => $this->encryptData($data)]);
+
+        $xKey = $this->encryptData($data);
+        Log::info('Encrypted xKey: ' . $xKey);
+        return response()->json([
+            'xKey' => $xKey
+        ]);
     }
 }

@@ -10,42 +10,47 @@ if (!isset($dashboard)) {
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('CSS/General/citas.css')}}">
+<section>
 
     <!-- Contenedor principal -->
     <div class="container-xl">
-
-        <!-- Contenedor de opciones -->
-        <div class="opcionesCitas">
-            <div class="col-auto">
-                <a href="{{ route("agendar") }}" class="btn-success" title="Agendar cita">
-                    <i class="fa fa-address-book"></i>
-                </a>
-            </div>
-            <div class="col-auto">
-                <a href="{{ route("export") }}" class="btn-info" title="Generar reporte en Excel">
-                    <i class="fa fa-file-excel"></i>
-                </a>
-            </div>
-            <div class="col-auto">
-                <a href="{{ route("pdf") }}" class="btn-danger" title="Generar reporte en PDF">
-                    <i class="fa fa-file-pdf"></i>
-                </a>
-            </div>
-
-            <!-- Parte de la busqueda -->
-            <div class="busquedaCitas" style="margin-left: 20%;">
-                <form action="" id="searchForm">
-                    <div class="input-group">
-                        <input type="text" id="searchInput" class="form-control" placeholder=" Buscar...">
-                        <div style="width: 100px;">
-                            <button type="submit" class="btn-info">Buscar</button>
+        <div class="container-sm">
+            <!-- Contenedor de opciones -->
+             <div class="opcionesCitas">
+                <div class="container-sm">
+                    <div class="row">
+                        <div class="col-auto">
+                            <a href="{{ route("agendar") }}" class="btn-success" title="Agendar cita">
+                                <i class="fa fa-address-book"></i>
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            <a href="{{ route("export") }}" class="btn-info" title="Generar reporte en Excel">
+                                <i class="fa fa-file-excel"></i>
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            <a href="{{ route("pdf") }}" class="btn-danger" title="Generar reporte en PDF">
+                                <i class="fa fa-file-pdf"></i>
+                             </a>
                         </div>
                     </div>
-                </form>
-            </div>
+                    <!-- Parte de la busqueda -->
+                </div>
+                <div>
+                    <form action="action=" id="searchForm">
+                        <div class="input-group">
+                            <input type="text" id="searchInput" class="form-control" placeholder=" Buscar...">
+                            <button type="submit" class="btn-info">Buscar</button>
+                        </div>
+                    </form>
+                </div>
+             </div>
         </div>
 
-        <div class="card-header bg-white">
+
+
+        <div class="card-header mb-3">
             <h2 class="titleCitas">Todas tus Citas</h2>
         </div>
 
@@ -57,10 +62,10 @@ if (!isset($dashboard)) {
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Encargado</th>
-                        <th scope="col">Departamento</th>
                         <th scope="col">Carrera</th>
                         <th scope="col">Fecha</th>
-                        <th scope="col">Hora</th>
+                        <th scope="col">Hora de inicio</th>
+                        <th scope="col">Hora de finalización</th>
                         <th scope="col">Participantes</th>
                         <th scope="col">Acciones</th>
                     </tr>
@@ -122,5 +127,6 @@ if (!isset($dashboard)) {
     <script type="module" src="{{ asset('js/appointments/appointments.js') }}"></script>
 
     <br><br>
-
+</section>
+<br><br>
 @endsection

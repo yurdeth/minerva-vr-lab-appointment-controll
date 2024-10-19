@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointments;
 use App\Rules\AppointmentConflict;
+use App\Rules\ParticipantsConflict;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Psy\Util\Json;
 
 class AppointmentsController extends Controller {
     /**
@@ -21,10 +25,11 @@ class AppointmentsController extends Controller {
             "success" => true,
         ]);
     }
+
     //method to generate pdf
-    public function pdf(){
+    public function pdf() {
         $appointments = (new Appointments)->GetAppointments();
-        $pdf = Pdf::loadView('appointments.citasPdf',compact('appointments'));
+        $pdf = Pdf::loadView('appointments.citasPdf', compact('appointments'));
         return $pdf->stream();
     }
 
@@ -33,9 +38,19 @@ class AppointmentsController extends Controller {
      */
     public function store(Request $request) {
         $validate = Validator::make($request->all(), [
+            "number_of_assistants" => ["required", new ParticipantsConflict(
+                $request->number_of_assistants,
+                $request->start_time,
+                $request->end_time)
+            ],
             "date" => "required|date|after:today",
-            "time" => ["required", new AppointmentConflict(null, $request->date, $request->time)],
-            "number_of_assistants" => "required",
+            "start_time" => "required",
+            "end_time" => ["required", new AppointmentConflict($request,
+                $request->date,
+                $request->start_time,
+                $request->end_time,
+                'register'
+            )],
         ]);
 
         if ($validate->fails()) {
@@ -48,7 +63,8 @@ class AppointmentsController extends Controller {
 
         $appointment = Appointments::create([
             'date' => $request->date,
-            'time' => $request->time,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
             'number_of_assistants' => $request->number_of_assistants,
             'user_id' => Auth::id(),
         ]);
@@ -62,9 +78,9 @@ class AppointmentsController extends Controller {
 
         $appointment->save();
 
-        if(Auth::id() == 1){
+        if (Auth::id() == 1) {
             $redirectTo = '/dashboard/citas';
-        } else{
+        } else {
             $redirectTo = '/citas';
         }
 
@@ -99,7 +115,7 @@ class AppointmentsController extends Controller {
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id) {
-        if(!$id){
+        if (!$id) {
             return response()->json([
                 'message' => 'Error: no ID was provided',
                 'success' => false
@@ -108,7 +124,7 @@ class AppointmentsController extends Controller {
 
         $appointment = Appointments::find($id);
 
-        if(!$appointment){
+        if (!$appointment) {
             return response()->json([
                 'message' => 'Error: appointment not found',
                 'success' => false
@@ -116,9 +132,19 @@ class AppointmentsController extends Controller {
         }
 
         $validate = Validator::make($request->all(), [
+            "number_of_assistants" => ["required", new ParticipantsConflict(
+                $request->number_of_assistants,
+                $request->start_time,
+                $request->end_time)
+            ],
             "date" => "required|date|after:today",
-            "time" => ["required", new AppointmentConflict($request, $request->date, $request->time)],
-            "number_of_assistants" => "required",
+            "start_time" => "required",
+            "end_time" => ["required", new AppointmentConflict($request,
+                $request->date,
+                $request->start_time,
+                $request->end_time,
+                'update'
+            )],
         ]);
 
         if ($validate->fails()) {
@@ -132,14 +158,15 @@ class AppointmentsController extends Controller {
         $appointment = Appointments::find($id);
 
         $appointment->date = $request->date;
-        $appointment->time = $request->time;
+        $appointment->start_time = $request->start_time;
+        $appointment->end_time = $request->end_time;
         $appointment->number_of_assistants = $request->number_of_assistants;
 
         $appointment->save();
 
-        if(Auth::id() == 1){
+        if (Auth::id() == 1) {
             $redirectTo = '/dashboard/citas';
-        } else{
+        } else {
             $redirectTo = '/citas';
         }
 
@@ -169,9 +196,26 @@ class AppointmentsController extends Controller {
     /**
      * @throws Exception
      */
-    public function AvailableSchedules(Request $request){
+    public function AvailableSchedules(Request $request) {
         $date = $request->date;
         $schedules = (new Appointments)->GetAvailableSchedules($date);
         return response()->json($schedules);
+    }
+
+    public function getCalendarItems(): JsonResponse {
+        $date = DB::select('SELECT date FROM appointments');
+        $calendarItems = [];
+
+        foreach ($date as $d) {
+            $calendarItems[] = [
+                "start" => $d->date,
+                "display" => "background",
+            ];
+        }
+
+        return response()->json([
+            "data" => $calendarItems,
+            "success" => true,
+        ]);
     }
 }

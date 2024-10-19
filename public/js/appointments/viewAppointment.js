@@ -8,13 +8,17 @@ const headers = {
     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 };
 
+const min_limit = 1;
+const max_limit = 72;
+
 /**
  * Maneja la edición de una cita.
  * @param {number} id - El ID de la cita a editar.
  */
 function handleEdit(id) {
     const date = document.getElementById("date");
-    const time = document.getElementById("time");
+    const startTime = document.getElementById("start-time");
+    const endTime = document.getElementById("end-time");
     const number_of_assistants = document.getElementById("number_of_assistants");
 
     const numAssistants = parseInt(number_of_assistants.value, 10);
@@ -23,52 +27,74 @@ function handleEdit(id) {
 
     today.setHours(0, 0, 0, 0);
 
-    if (isNaN(numAssistants) || numAssistants < 1) {
-        showWarningAlert('Oops...', 'El número de asistentes no puede ser menor a 1.');
+    if (number_of_assistants < min_limit) {
+        showErrorAlert('Oops...', `El número de asistentes no puede ser menor a ${min_limit}.`);
         return;
     }
 
-    if (numAssistants > 20) {
-        showWarningAlert('Oops...', 'El número de asistentes no puede ser mayor a 20.');
+    if (number_of_assistants > max_limit) {
+        showErrorAlert('Oops...', `El número de asistentes no puede ser mayor a ${max_limit}.`);
         return;
     }
 
-    if (selectedDate < today) {
-        showWarningAlert('Oops...', 'La fecha debe ser posterior a hoy.');
+    // Establecer la hora de hoy a las 00:00:00 para comparar solo las fechas
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate <= today) {
+        showErrorAlert('Oops...', 'La fecha debe ser posterior a hoy.');
         return;
     }
 
-    // Validar que el periodo de horas sea entre las 8:00 y las 16:00
-    if (time.value < '08:00' || time.value > '15:30') {
-        showWarningAlert('Oops...', 'Solo puedes agendar citas entre las 8:00 AM y las 3:30 PM');
+    if (startTime.value.slice(0, 5) < '08:00' || endTime.value.slice(0, 5) > '17:00') {
+        showErrorAlert('Oops...', 'Solo puedes agendar citas entre las 8:00 AM y las 5:00 PM');
         return;
     }
 
     const body = {
         date: date.value,
-        time: time.value,
+        start_time: startTime.value,
+        end_time: endTime.value,
         number_of_assistants: number_of_assistants.value
     };
 
     apiRequest(`/api/appointments/editar/${id}`, 'PUT', body, headers)
         .then(response => {
             response.json().then(data => {
-                console.log(data);
-
-                if(!data.success){
+                if (!data.success) {
                     if (data.error) {
-                        if (data.error.time && data.error.time[0].includes("cita registrada")) {
-                            showWarningAlert('Oops...', 'Ya existe una cita registrada en esta fecha y hora, o en el rango de una hora.');
-                        } else {
-                            showErrorAlert('Error', 'No se pudo actualizar la cita.');
+                        if (data.error.time) {
+                            showErrorAlert('Oops...',
+                                data.error.time[0]);
+                            return;
                         }
+
+                        if (data.error.date && data.error.date[0].includes("after today")) {
+                            showErrorAlert('Oops...',
+                                'La cita debe ser una fecha posterior a hoy');
+                            return;
+                        }
+
+                        if (data.error.number_of_assistants) {
+                            showErrorAlert('Oops...',
+                                data.error.number_of_assistants[0]);
+                            return;
+                        }
+
+                        if (data.error.end_time) {
+                            showErrorAlert('Oops...',
+                                data.error.end_time[0]);
+                            return;
+                        }
+                    } else {
+                        showErrorAlert('Oops...',
+                            'Ha ocurrido un error al intentar registrar la cita.');
+                        return;
                     }
-                    return;
                 }
 
                 showSuccessAlert('Éxito', '¡Cita actualizada exitosamente!')
                     .then(() => {
-                        window.location.href = '/citas';
+                        window.location.href = data.redirect_to;
                     });
             });
         })
@@ -114,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
         apiRequest(`/api/appointments/ver/${id}`, 'GET', null, headers)
             .then(response => response.json())
             .then(data => {
+
                 if (!data || data.message && data.message.includes('Route [citas] not defined')) {
                     showErrorAlert('Oops...', 'No se encontraron datos de la cita.')
                         .then(() => {
@@ -128,12 +155,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         const name = document.getElementById('name');
                         const date = document.getElementById('date');
-                        const time = document.getElementById('time');
+                        const startTime = document.getElementById('start-time');
+                        const endTime = document.getElementById('end-time');
                         const number_of_assistants = document.getElementById('number_of_assistants');
 
                         if (name) name.value = item.name;
                         date.value = item.date;
-                        time.value = item.time;
+                        startTime.value = item.start_time;
+                        endTime.value = item.end_time;
                         number_of_assistants.value = item.number_of_assistants;
 
                         const actionsButtons = document.getElementById('actionsButtons');
