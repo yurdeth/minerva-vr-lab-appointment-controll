@@ -9,12 +9,31 @@
 </head>
 <body>
 
-    <h4 class="text-center">Minerva RV Lab FMO</h4> <br>
+<style>
+    .firma {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        padding: 10px 0;
+    }
+</style>
+    <div>
+        <img src="IMG/logoUES.png" alt="Logo UES" style=" width: 80px; float: left;">
+        <img src="IMG/Logo FMO.png" alt="Logo UES" style=" width: 80px; float: right;">
+        <h4  class="text-center" style="font-size:16px; margin-top:20px;" >  UNIVERSIDAD DE EL SALVADOR <br>
+                FACULTAD MULTIDISCIPLINARIA ORIENTAL <br>
+                MINERVA RV LAB
+        </h4>
+        <hr style="border: 1px solid  #D8D8D6">
+    </div>
+    
     <h5 class="text-center">Reporte de Inventario</h5>
 
     <div class="table-responsive" style=" width: 100%;">
         <table class="table table-bordered text-center" style="width: 100%; margin-bottom: 0; border-collapse: collapse;">
-            <thead class="table-secondary" style="background-color: #343a40; color: white;">
+            <thead style="background-color: #476679; color: white;">
                 <tr>
                     <th>Número de sala</th>
                     <th>Tipo de recurso</th>
@@ -25,15 +44,15 @@
             <tbody>
                 @foreach($resources as $resource)
                 <tr>
-                    <td style="padding: 10px; border: 1px solid #dee2e6;">{{ $resource->room->name }}</td>
-                    <td style="padding: 10px; border: 1px solid #dee2e6;">{{ $resource->resourceType->resource_name }}</td>
-                    <td style="padding: 10px; border: 1px solid #dee2e6;">
+                    <td>{{ $resource->room->name }}</td>
+                    <td>{{ $resource->resourceType->resource_name }}</td>
+                    <td>
                         @if($resource->status['status'] == 'Mal estado')
-                            <span style="color: #dc3545;">Mal estado</span>
+                            <span style="color: #973131;">Mal estado</span>
                         @elseif($resource->status['status'] == 'Buen estado')
-                            <span style="color: #28a745;">Buen estado</span>
+                            <span style="color: #0B5ED7;;">Buen estado</span>
                         @elseif($resource->status['status'] == 'En reparación')
-                            <span style="color: #0B5ED7;">En reparación</span>
+                            <span style="color: #5F8670;">En reparación</span>
                         @endif
                     </td>
                     <td style="padding: 10px; border: 1px solid #dee2e6;">{{ $resource->fixed_asset_code }}</td>
@@ -41,8 +60,11 @@
             @endforeach
             </tbody>
         </table>
+
+        <br>
+        <div class="firma">
+        <span>Firma: ______________________________</span>
+        </div>
     </div>
-
-
 </body>
 </html>

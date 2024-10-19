@@ -18,9 +18,8 @@
                 <i class="fa-solid fa-vr-cardboard"></i>
                 <span class="tooltip-text">Registrar Inventario</span>
             </a>
-        </div>
-        <div class="col-auto">
-            <a href="{{ route("pdf.resources") }}" class="btn-danger" title="Generar reporte en PDF">
+
+            <a href="{{ route("pdf.resources") }}" class="btn-danger" title="Generar reporte en PDF" style=" margin-left: 10px; padding: 10px 18px;">
                 <i class="fa fa-file-pdf"></i>
              </a>
         </div>
