@@ -25,6 +25,10 @@ class ReservationController extends Controller {
         $horaInicio = $this->getEndTimeForDay($request->date);
         Log::info('Query result: ' . json_encode($horaInicio));
 
+        if($horaInicio == null) {
+            $horaInicio = (object) ['end_time' => '08:00:00'];
+        }
+
         if (empty($horaInicio)) {
             return response()->json([
                 "message" => "No se proveyó una fecha válida",
