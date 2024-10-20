@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactFormMail;
 use App\Models\User;
 use App\Rules\EmailUniqueIgnoreCase;
 use Illuminate\Http\JsonResponse;
@@ -9,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use App\Rules\OnlyUesMail;
 
@@ -66,6 +68,7 @@ class AuthController extends Controller {
 
         Auth::login($user);
         $token = $user->createToken("token")->accessToken;
+        $this->sendWelcomeMail($request, $user);
 
         return response()->json([
             "token" => $token,
@@ -141,5 +144,16 @@ class AuthController extends Controller {
         $request->session()->regenerateToken();
 
         return redirect()->route("inicio");
+    }
+
+    private function sendWelcomeMail(Request $request, User $user){
+        $details = [
+            'subject' => 'Bienvenido a Minerva RV Lab, '. $user->name . '.',
+            'name' => 'Minerva RV Lab',
+            'email' => $user->email,
+            'message' => 'Es un gusto tenerte con nosotros'
+        ];
+
+        Mail::to($user->email)->send(new ContactFormMail($details));
     }
 }

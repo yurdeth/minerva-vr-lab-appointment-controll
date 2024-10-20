@@ -75,7 +75,6 @@ class AppointmentConflict implements ValidationRule {
         $appointments = Appointments::select('start_time', 'end_time')
             ->from('appointments')
             ->where('date', $this->date)
-            ->where('user_id', Auth::id())
             ->get();
 
         foreach ($appointments as $appointment) {

@@ -15,7 +15,7 @@ class ContactFormController extends Controller {
             'subject' => $request->subject,
             'name' => 'Minerva RV Lab',
             'email' => $request->email,
-            'message' => 'Contraseña de acceso: ' . $request->password
+            'message' => $request->message . $request->password
         ];
 
         Mail::to($request->email)->send(new ContactFormMail($details));

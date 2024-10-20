@@ -24,6 +24,10 @@ Route::fallback(function () {
 });
 
 // ***************************************Rutas públicas*********************************************
+// This is to test the graphic view
+/*Route::get('/contact-view', function (){
+    return view('email.contact');
+})->name('contact-view');*/
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -210,6 +214,10 @@ Route::get('/ubicacion', function () {
 Route::get('/servicios', function() {
    return view('information.servicios');
 })->name('servicios');
+
+Route::get('/contacto', function () {
+    return view('information.contacto');
+})->name('contactos');
 // ***************************************Iniciar credenciales admin*********************************************
 // <- Ya no es necesario. Se hace desde las migraciones: database/migrations/0001_01_01_000000_create_users_table.php
 // <- ejecuta: php artisan migrate:refresh; php artisan passport:client --personal

@@ -75,10 +75,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             `;
 
+            if(notification.type_id === 1) {
+                const editFormButton = document.getElementById(`btnUpdate-${id}`);
+                editFormButton.addEventListener('mouseover', function () {
+                    editFormButton.title = 'Generar contraseña aleatoria';
+                });
+            } else if(notification.type_id === 2) {
+                const editFormButton = document.getElementById(`btnUpdate-${id}`);
+                editFormButton.addEventListener('mouseover', function () {
+                    editFormButton.title = 'Enviar clave por correo';
+                });
+            }
+
             document.getElementById(`btnUpdate-${notification.id}`).addEventListener('click', function () {
                 switch (notification.type_id) {
                     case 1:
-                        handleEditProfile(notification.id, notification.from, "Recuperación de contraseña");
+                        handleEditProfile(notification.id, notification.from);
                         break;
                     case 2:
                         getCredentials(notification.id, notification.from, "Solicitud de contraseña por defecto");
@@ -128,64 +140,43 @@ const getCredentials = async (notification_id = null, email, subject = null) => 
 
         const password = await fetchData(data.password);
 
-        sendMail(notification_id, email, subject, password);
+        sendMail(
+            notification_id,
+            email,
+            subject,
+            "Tu clave de acceso por defecto es: ",
+            password);
     } catch (error) {
         console.error('Error:', error);
         return null;
     }
 };
 
-const handleEditProfile = async (id, email, subject) => {
-    const passwordForms = document.getElementById('passwordForms');
-    passwordForms.innerHTML = "";
+const handleEditProfile = async (id, email) => {
+    let passwordRecovered = await apiRequest(`/api/users/randomize-password`, 'GET', null, headers)
+        .then(response => response.json().then(data => {
+            if (!data.success) {
+                showErrorAlert('Error', 'Ocurrió un error al procesar la petición').then(() => {
+                    window.location.href = '/dashboard/notificaciones'
+                });
+            }
 
-    const newPassword = document.createElement('input');
-    newPassword.type = 'password';
-    newPassword.style.marginTop = '8px';
-    newPassword.classList.add('form-control', 'mb-3');
-    newPassword.placeholder = 'Ingresa la nueva contraseña';
-    passwordForms.appendChild(newPassword);
+            return data.password;
+        })).catch(error => console.error(error));
 
-    const repeatPassword = document.createElement('input');
-    repeatPassword.type = 'password';
-    repeatPassword.style.marginTop = '10px';
-    repeatPassword.classList.add('form-control', 'mb-3');
-    repeatPassword.placeholder = 'Repita la nueva contraseña';
-    passwordForms.appendChild(repeatPassword);
+    apiRequest(`/api/users/ver/email/${email}`, 'GET', null, headers)
+        .then(response => response.json().then(data => {
+            if (!data.success) {
+                showErrorAlert('Error', 'Ocurrió un error al procesar la petición').then(() => {
+                    window.location.href = '/dashboard/notificaciones'
+                });
+            }
 
-    const buttonContainer = document.createElement('div');
-    buttonContainer.classList.add('d-flex', 'justify-content-between');
+            let name = data.user.name;
+            let career_id = data.user.career_id;
 
-    const recoverPasswordButton = document.createElement('button');
-    recoverPasswordButton.type = 'submit';
-    recoverPasswordButton.style.marginRight = '10px';
-    recoverPasswordButton.classList.add('btn', 'btn-success', 'w-50');
-    recoverPasswordButton.textContent = "Actualizar";
-    buttonContainer.appendChild(recoverPasswordButton);
-
-    const cancelButton = document.createElement('button');
-    cancelButton.type = 'button';
-    cancelButton.classList.add('btn', 'btn-danger', 'w-50');
-    cancelButton.textContent = "Cancelar";
-    buttonContainer.appendChild(cancelButton);
-
-    passwordForms.appendChild(buttonContainer);
-
-    recoverPasswordButton.addEventListener('click', function () {
-        apiRequest(`/api/users/ver/email/${email}`, 'GET', null, headers)
-            .then(response => response.json().then(data => {
-                if (!data.success) {
-                    showErrorAlert('Error', 'Ocurrió un error al procesar la petición').then(() => {
-                        window.location.href = '/dashboard/notificaciones'
-                    });
-                }
-
-                let name = data.user.name;
-                let career_id = data.user.career_id;
-
-                validateNewPassword(id, newPassword.value, repeatPassword.value, name, career_id, email);
-            })).catch(error => console.error(error));
-    });
+            validateNewPassword(id, passwordRecovered, passwordRecovered, name, career_id, email);
+        })).catch(error => console.error(error));
 };
 
 const validateNewPassword = async (notification_id, newPassword, repeatPassword, name, career_id, email) => {
@@ -219,7 +210,12 @@ const validateNewPassword = async (notification_id, newPassword, repeatPassword,
 
         showSuccessAlert('Operación completada', updateData.message).then((result) => {
             if (result.isConfirmed) {
-                sendMail(notification_id, body.email, "Recuperación de contraseña", newPassword);
+                sendMail(
+                    notification_id,
+                    body.email,
+                    "Solicitud de recuperación de contraseña",
+                    "Tu contraseña recuperada es: ",
+                    newPassword);
             }
         });
     } catch (error) {
@@ -227,11 +223,12 @@ const validateNewPassword = async (notification_id, newPassword, repeatPassword,
     }
 }
 
-const sendMail = async (notification_id, email, subject, password) => {
+const sendMail = async (notification_id, email, subject, message, password) => {
 
     const body = {
         subject: subject,
         email: email,
+        message: message,
         password: password
     };
 
