@@ -51,6 +51,7 @@ Route::middleware(['auth:api', NoBrowserCache::class])->group(function () {
     Route::get("/users/ver/email/{email}", [UsersController::class, "showByEmail"])->name("users.showByEmail");
     Route::put("/users/editar/{id}", [UsersController::class, "update"])->name("users.updateById");
     Route::delete("/users/eliminar/{id}", [UsersController::class, "destroy"])->name("users.destroy");
+    Route::get('/users/randomize-password', [UsersController::class, 'generateRandomPassword'])->name("users.recover-password");
 
     // **************************************** Inventarios ******************************************************
     Route::get('/statuses', [StatusesController::class, 'index']);
