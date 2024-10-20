@@ -24,6 +24,10 @@ Route::fallback(function () {
 });
 
 // ***************************************Rutas públicas*********************************************
+// This is to test the graphic view
+/*Route::get('/contact-view', function (){
+    return view('email.contact');
+})->name('contact-view');*/
 
 Route::get('/', function () {
     if (Auth::check()) {

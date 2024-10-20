@@ -128,7 +128,12 @@ const getCredentials = async (notification_id = null, email, subject = null) => 
 
         const password = await fetchData(data.password);
 
-        sendMail(notification_id, email, subject, password);
+        sendMail(
+            notification_id,
+            email,
+            subject,
+            "Tu clave de acceso por defecto es: ",
+            password);
     } catch (error) {
         console.error('Error:', error);
         return null;
@@ -219,7 +224,12 @@ const validateNewPassword = async (notification_id, newPassword, repeatPassword,
 
         showSuccessAlert('Operación completada', updateData.message).then((result) => {
             if (result.isConfirmed) {
-                sendMail(notification_id, body.email, "Recuperación de contraseña", newPassword);
+                sendMail(
+                    notification_id,
+                    body.email,
+                    "Solicitud de recuperación de contraseña",
+                    "Tu contraseña recuperada es: ",
+                    newPassword);
             }
         });
     } catch (error) {
@@ -227,11 +237,12 @@ const validateNewPassword = async (notification_id, newPassword, repeatPassword,
     }
 }
 
-const sendMail = async (notification_id, email, subject, password) => {
+const sendMail = async (notification_id, email, subject, message, password) => {
 
     const body = {
         subject: subject,
         email: email,
+        message: message,
         password: password
     };
 
