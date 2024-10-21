@@ -82,14 +82,18 @@
                             <div class="mb-3">
                                 <label for="password" class="form-label">Contraseña: </label>
                                 <input type="password" class="form-control" id="password" name="password"
-                                       placeholder="Ingrese su nueva contraseña">
+                                       placeholder="Ingrese su nueva contraseña" style="padding-right: 35px">
+                                <span toggle="#password" class="fa fa-fw fa-eye toggle-password"
+                                      style="position: absolute; margin-left:10px; right: 21px; top: 69%; transform: translateY(-50%); cursor: pointer; display: none;"></span>
                             </div>
 
                             <div class="mb-3">
                                 <label for="password_confirmation" class="form-label">Repita su nueva
                                     contraseña: </label>
                                 <input type="password" class="form-control" id="password_confirmation"
-                                       name="password_confirmation" placeholder="Confirmar">
+                                       name="password_confirmation" placeholder="Confirmar" style="padding-right: 35px">
+                                <span toggle="#password" class="fa fa-fw fa-eye toggle-password-confirmation"
+                                      style="position: absolute; margin-left:10px; right: 21px; top: 82.5%; transform: translateY(-50%); cursor: pointer; display: none;"></span>
                             </div>
                         </form>
                         <div id="actionsButtons" class="row"></div>
@@ -102,6 +106,54 @@
         </div>
 
     </div>
+
+    <script>
+        document.querySelector('#password').addEventListener('focus', function () {
+            // Mostrar el ícono del ojo cuando el campo de contraseña recibe foco
+            document.querySelector('.toggle-password').style.display = 'block';
+        });
+
+        document.querySelector('#password').addEventListener('blur', function () {
+            // Ocultar el ícono del ojo si el campo está vacío cuando se pierde el foco
+            if (this.value === "") {
+                document.querySelector('.toggle-password').style.display = 'none';
+            }
+        });
+
+        document.querySelector('#password_confirmation').addEventListener('focus', function () {
+            // Mostrar el ícono del ojo cuando el campo de contraseña recibe foco
+            document.querySelector('.toggle-password-confirmation').style.display = 'block';
+        });
+
+        document.querySelector('#password_confirmation').addEventListener('blur', function () {
+            // Ocultar el ícono del ojo si el campo está vacío cuando se pierde el foco
+            if (this.value === "") {
+                document.querySelector('.toggle-password-confirmation').style.display = 'none';
+            }
+        });
+
+        // Para el campo de "password"
+        document.querySelector('.toggle-password').addEventListener('click', function () {
+            const passwordField = document.querySelector('#password');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+
+            // Cambiar el ícono entre "mostrar" y "ocultar" contraseña
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // Para el campo de "password_confirmation"
+        document.querySelector('.toggle-password-confirmation').addEventListener('click', function () {
+            const passwordConfirmationField = document.querySelector('#password_confirmation');
+            const typeConfirmation = passwordConfirmationField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordConfirmationField.setAttribute('type', typeConfirmation);
+
+            // Cambiar el ícono entre "mostrar" y "ocultar" contraseña
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
 
     <script type="module" src="{{asset("js/utils/alert.js")}}"></script>
     <script type="module" src="{{asset("js/utils/api.js")}}"></script>
