@@ -91,6 +91,18 @@ class DepartmentsController extends Controller {
             ], 404);
         }
 
+        $validate = Validator::make($request->all(), [
+            "department_name" => "required|string",
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'message' => 'Error en los datos',
+                'error' => $validate->errors(),
+                'success' => false,
+            ]);
+        }
+
         $department->department_name = $request->department_name;
         $department->save();
 

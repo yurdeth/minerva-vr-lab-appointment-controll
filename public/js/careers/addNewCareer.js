@@ -54,7 +54,7 @@ function submitForm() {
                     return;
                 }
 
-                showSuccessAlert('Operación completada', 'Carera registrada correctamente')
+                showSuccessAlert('Operación completada', 'Carrera registrada correctamente')
                     .then(() => {
                         window.location.href = '/dashboard/carreras';
                     });

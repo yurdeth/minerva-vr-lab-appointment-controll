@@ -49,7 +49,7 @@ class ValidateUpdateService extends ValidationService {
     private function departmentExists($departmentName): ?JsonResponse {
         $department = DB::table('departments')->where('department_name', $departmentName)->first();
         if ($department) {
-            return $this->errorResponse("El departamento ya existe");
+            return $this->errorResponse("Este departamento ya está registrado");
         }
 
         return null;
