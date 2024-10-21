@@ -1,6 +1,7 @@
 import {apiRequest} from '../utils/api.js'
 import {showAlert, showErrorAlert, showSuccessAlert} from '../utils/alert.js'
 import {envVars} from "../envVars.js";
+import {send} from "vite";
 
 const headers = {
     'Content-Type': 'application/json',
@@ -12,17 +13,47 @@ const headers = {
 const remoteApiURL = envVars().REMOTE_API_URL;
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('findUSer').addEventListener('click', async function () {
+
+    const sendMailButton = document.getElementById('sendMailButton');
+    const sendPasswordButton = document.getElementById('findUserButton');
+
+    if (sendMailButton) {
+        sendMailButton.addEventListener('click', async function () {
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            if (!email || email === '') {
+                showErrorAlert('Error', 'Por favor, introduce un correo electrónico.');
+                return;
+            }
+
+            if (!subject || subject === '') {
+                showErrorAlert('Error', 'Por favor, introduce un asunto.');
+                return;
+            }
+
+            if (!message || message === '') {
+                showErrorAlert('Error', 'Por favor, introduce un mensaje.');
+                return;
+            }
+
+            await sendMail(email, subject, message, '');
+        });
+    }
+
+    if (sendPasswordButton) {
+        sendPasswordButton.addEventListener('click', async function () {
             const email = document.getElementById('email').value;
 
-            if(!email || email === '') {
+            if (!email || email === '') {
                 showErrorAlert('Error', 'Por favor, introduce un correo electrónico.');
                 return;
             }
 
             await requestPassword(email);
-        }
-    );
+        });
+    }
 });
 
 const requestPassword = async (email) => {
