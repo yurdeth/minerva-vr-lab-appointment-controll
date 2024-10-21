@@ -1,9 +1,8 @@
 import {apiRequest} from '../utils/api.js';
-import {showAlert, showErrorAlert, showSuccessAlert} from '../utils/alert.js';
+import {showErrorAlert, showSuccessAlert} from '../utils/alert.js';
 import {envVars} from '../envVars.js';
 
 const remoteApiURL = envVars().REMOTE_API_URL;
-const xKey = envVars().API_COMMON_SECRET;
 
 const headers = {
     'Content-Type': 'application/json',
