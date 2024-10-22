@@ -103,7 +103,11 @@ const login = (body) => {
         .then(function (response) {
             response.json().then(data => {
                 if (!data.success) {
-                    showErrorAlert('Error', data.message);
+                    showErrorAlert('Error', data.message).then(result => {
+                        if (result.isConfirmed) {
+                            window.location.reload(); // <- Forzar recarga de la página para re-generar el key del middleware.
+                        }
+                    });
                     return;
                 }
 
