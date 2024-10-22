@@ -1,7 +1,6 @@
 import {apiRequest} from '../utils/api.js'
 import {showAlert, showErrorAlert, showSuccessAlert} from '../utils/alert.js'
 import {envVars} from "../envVars.js";
-import {send} from "vite";
 
 const headers = {
     'Content-Type': 'application/json',
@@ -12,33 +11,44 @@ const headers = {
 
 const remoteApiURL = envVars().REMOTE_API_URL;
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
 
+    const users = await fetchMails();
     const sendMailButton = document.getElementById('sendMailButton');
     const sendPasswordButton = document.getElementById('findUserButton');
 
     if (sendMailButton) {
-        sendMailButton.addEventListener('click', async function () {
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
+        const emailInput = document.getElementById('email'); // Referencia al input
+        const subject = document.getElementById('subject');
+        const message = document.getElementById('message');
+        const datalist = document.getElementById('emails');
 
-            if (!email || email === '') {
+        // Llenar el datalist con las opciones
+        users.forEach(user => {
+            user.forEach(email => {
+                const option = document.createElement('option');
+                option.value = email.email;
+                datalist.appendChild(option);
+            });
+        });
+
+        sendMailButton.addEventListener('click', async function () {
+            const selectedEmail = emailInput.value;
+
+            if (!selectedEmail || selectedEmail === '') {
                 showErrorAlert('Error', 'Por favor, introduce un correo electrónico.');
                 return;
             }
-
-            if (!subject || subject === '') {
+            if (!subject.value || subject.value === '') {
                 showErrorAlert('Error', 'Por favor, introduce un asunto.');
                 return;
             }
-
-            if (!message || message === '') {
+            if (!message.value || message.value === '') {
                 showErrorAlert('Error', 'Por favor, introduce un mensaje.');
                 return;
             }
 
-            await sendMail(email, subject, message, '');
+            await sendMail(selectedEmail, subject.value, message.value, '');
         });
     }
 
@@ -56,22 +66,27 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+const fetchKey = async () => {
+    let response = await fetch('/api/get-key', {
+        method: 'GET',
+        headers: headers
+    });
+
+    // Comprobar si la respuesta es exitosa
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    return await response.json();
+}
+
 const requestPassword = async (email) => {
     try {
-        let response = await fetch('/api/get-key', {
-            method: 'GET',
-            headers: headers
-        });
-
-        // Comprobar si la respuesta es exitosa
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
 
         // Obtener el JSON de la respuesta
-        let data = await response.json();
+        let data = await fetchKey();
 
-        response = await fetch(`${remoteApiURL}/findByMail?email=${email}`, {
+        let response = await fetch(`${remoteApiURL}/findByMail?email=${email}`, {
             method: 'GET',
             headers: {
                 ...headers,
@@ -133,13 +148,6 @@ const sendMail = async (email, subject, message, password) => {
         password: password
     };
 
-    if (!password) {
-        showErrorAlert('Error', 'Usuario no encontrado.').then(() => {
-            window.location.href = '/dashboard/notificaciones';
-        });
-        return;
-    }
-
     fetch(`/api/sendmail/`, {
         method: 'POST',
         headers: headers,
@@ -156,3 +164,34 @@ const sendMail = async (email, subject, message, password) => {
         }))
         .catch(error => console.error('Error:', error));
 };
+
+const fetchMails = async () => {
+    try {
+        // Obtener el JSON de la respuesta
+        let data = await fetchKey();
+
+        const response = await fetch(`${remoteApiURL}/getMails`, {
+            method: 'GET',
+            headers: {
+                ...headers,
+                'x-api-key': data.xKey,
+            }
+        });
+
+        let dataArray = [];
+
+        const responseData = await response.json();
+
+        if (!responseData.success) {
+            showErrorAlert('Error', responseData.message);
+            return null;
+        }
+
+        dataArray.push(responseData.data);
+
+        return dataArray;
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
+    }
+}

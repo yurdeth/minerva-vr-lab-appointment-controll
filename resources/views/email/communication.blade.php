@@ -7,28 +7,34 @@
 @stop
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('CSS/administracion/mensajes.css')}}">
-<link rel="stylesheet" href="{{ asset('CSS/administracion/tables.css')}}">
+    <link rel="stylesheet" href="{{ asset('CSS/administracion/mensajes.css')}}">
+    <link rel="stylesheet" href="{{ asset('CSS/administracion/tables.css')}}">
     <section>
         <h4>En este apartado, puede enviar mensajes a un usuario en particular.</h4><br>
-        <img class="mensajesIMG" src="{{ asset('IMG/Mensajes.jpg') }}"  alt="IMGMensajes"><br>
+        <img class="mensajesIMG" src="{{ asset('IMG/Mensajes.jpg') }}" alt="IMGMensajes"><br>
         <div class="mensajeContent">
             <h4>Redactar un Nuevo Correo.</h4><br>
             <div>
                 <div class="form-group">
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa el correo" required>
-                </div><br>
+                    <input list="emails" class="form-control" id="email" name="email"
+                           placeholder="Selecciona o ingresa un correo" required>
+                    <datalist id="emails"></datalist>
+                </div>
+                <br>
 
                 <div class="form-group">
-                    <input type="text" class="form-control" id="subject" name="subject" placeholder="Ingresa el asunto" required>
-                </div><br>
+                    <input type="text" class="form-control" id="subject" name="subject" placeholder="Ingresa el asunto"
+                           required>
+                </div>
+                <br>
 
                 <div class="form-group">
-                    <textarea class="form-control" id="message" name="message" rows="5" placeholder="Escribe tu mensaje aquí" required></textarea>
+                    <textarea class="form-control" id="message" name="message" rows="5"
+                              placeholder="Escribe tu mensaje aquí" required></textarea>
                 </div>
                 <div class="button-group">
-                    <button type="submit" class="btn-submit">Enviar</button>
-                    <button type="button" class="btn-cancel">Cancelar</button>
+                    <button type="submit" class="btn-submit" id="sendMailButton">Enviar</button>
+                    <button type="button" class="btn-cancel" id="cancelButton">Cancelar</button>
                 </div>
             </div>
 
@@ -56,14 +62,15 @@
                 </div>
                 <!-- tabla con los datos -->
                 <div class="table-responsive" style="height: 100%; width: 100%;">
-                    <table class="table table-bordered text-center" id="usuariosAPITable" style="width: 100%; margin-bottom: 0;">
+                    <table class="table table-bordered text-center" id="usuariosAPITable"
+                           style="width: 100%; margin-bottom: 0;">
                         <thead class="table-avatar">
-                            <tr>
+                        <tr>
                             <th scope="col">Nombre</th>
                             <th scope="col">Correo</th>
                             <th scope="col">Departamento</th>
                             <th scope="col">Carrera</th>
-                            </tr>
+                        </tr>
                         </thead>
                         <tbody id=""></tbody>
                     </table>
@@ -89,18 +96,20 @@
         var modal = document.getElementById("buscarModal");
 
         //Funcion para abrir el modal
-        openModal.addEventListener('click', (e)=> {
+        openModal.addEventListener('click', (e) => {
             e.preventDefault();
             modal.classList.add('modalShow');
 
         });
 
         //Funcion para Cerrar el modal al hacer clic en el botón de cerrar
-        closeModalSpan.onclick = function(e) {
+        closeModalSpan.onclick = function (e) {
             e.preventDefault();
             modal.classList.remove('modalShow');
         }
     </script>
+
+    <script src="{{ asset('js/mailing/sendNewMail.js') }}" type="module"></script>
 @stop
 
 @section('css')
