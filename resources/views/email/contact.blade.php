@@ -63,7 +63,7 @@
 {{--    <p><strong>De:</strong> Minerva RB Lab</p>--}}
     <p><strong>Para:</strong> {{ $details['email'] }}</p>
 {{--    <p><strong>Para:</strong> Prueba</p>--}}
-    <p> {{ $details['message'] }}</p>
+    <p> <strong>Asunto: </strong> {{ $details['message'] }}</p>
 {{--    <p><strong>Asunto:</strong> Clavito pabló un pablito</p>--}}
 
 </div>

@@ -16,7 +16,7 @@
             <h4>Redactar un Nuevo Correo.</h4><br>
             <div>
                 <div class="form-group">
-                    <input list="emails" class="form-control" id="email" name="email"
+                    <input list="emails" type="email" class="form-control" id="email" name="email"
                            placeholder="Selecciona o ingresa un correo" required>
                     <datalist id="emails"></datalist>
                 </div>
@@ -34,7 +34,7 @@
                 </div>
                 <div class="button-group">
                     <button type="submit" class="btn-submit" id="sendMailButton">Enviar</button>
-                    <button type="button" class="btn-cancel" id="cancelButton">Cancelar</button>
+                    <button type="submit" class="btn-cancel" id="cancelButton">Cancelar</button>
                 </div>
             </div>
 
@@ -50,13 +50,17 @@
                 <div class="cerrar">
                     <span class="close">X</span>
                 </div>
-                <h3>Buscar Usuario Registrados en la API</h3>
+                <h3>Buscar Usuario Registrados</h3>
                 <!-- Barra de busqueda -->
                 <div class="button-container">
                     <form action="" id="searchForm" style="margin-left: auto;">
-                        <div class="input-group">
-                            <input type="text" id="searchInput" class="form-control" placeholder="Buscar...">
-                            <button type="submit" class="btn btn-PrimaryM">Buscar</button>
+                        <div class="input-group inline-form-group">
+                            <input list="emails" class="form-control me-5" id="emailModal" name="emailModal"
+                                   placeholder="Selecciona o ingresa un correo" required style="width: 300px">
+                            <datalist id="emails"></datalist>
+                        </div>
+                        <div class="input-group inline-form-group">
+                            <button type="button" class="btn btn-PrimaryM ms-5" id="sendPasswordButton">Buscar</button>
                         </div>
                     </form>
                 </div>
@@ -70,19 +74,14 @@
                             <th scope="col">Correo</th>
                             <th scope="col">Departamento</th>
                             <th scope="col">Carrera</th>
+                            <th scope="col">Estado</th>
                         </tr>
                         </thead>
-                        <tbody id=""></tbody>
+                        <tbody id="table-body"></tbody>
                     </table>
                 </div>
                 <div id="pagination" class="pagination-container">
-                    <button id="prevPage" class="btn-arrow" disabled>
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <span id="currentPage" class="page-number">1</span>
-                    <button id="nextPage" class="btn-arrow">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
+                    <button type="submit" class="btn btn-PrimaryM" id="confirmPasswordSubmition">Confirmar envío de contraseña</button>
                 </div>
             </div>
         </div>
