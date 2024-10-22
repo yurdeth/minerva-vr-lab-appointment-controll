@@ -117,6 +117,11 @@
                     <h1 id="mensaje">Bienvenido</h1>
                     <hr>
                 @endif
+                <div id="imagen-contenedor" style="display:flex; justify-content:center; margin-top:10px;">
+                    <img id="imagen" src="{{ asset('IMG/bienvenida.png') }}"
+                        alt="Imagen de bienvenida"
+                        style="max-width: 80%; height: auto; mask-image: linear-gradient(to right, transparent, white 50%, white 70%, transparent);">
+                </div>
                 <div id="content">
                     @yield('content')
                 </div>
@@ -129,44 +134,73 @@
     // Función que se encarga de cambiar el mensaje mostrado en la página
     function cambiarMensaje(opcion) {
         let mensaje = '';
+        let ruta = '';
+        let imagen = document.getElementById('imagen');
         //Estructura switch para asignar un mensaje basado en la opción seleccionada
         switch (opcion) {
             case 'inicio':
                 mensaje = 'Bienvenido';
+                ruta = '{{ asset('IMG/bienvenida.png') }}';
                 break;
             case 'carreras':
                 mensaje = 'Bienvenido a Carreras';
+                ruta = '';
                 break;
             case 'usuarios':
                 mensaje = 'Usuarios Minerva RV Web';
+                ruta = '';
                 break;
             case 'citas':
                 mensaje = 'Registro de Citas para Capacitación';
+                ruta = '';
                 break;
             case 'inventario':
                 mensaje = 'Inventario de Equipo';
+                ruta = '';
                 break;
             case 'notificaciones':
                 mensaje = 'Notificaciones';
+                ruta = '';
                 break;
             case 'Mensaje':
                 mensaje = 'Minerva RV Chat';
+                ruta = '';
                 break;
             default:
                 mensaje = 'Bienvenido'; // Mensaje por defecto si la opción no coincide con ningúna
+                ruta = '{{ asset('IMG/bienvenida.png') }}';
         }
         document.querySelector('.datos h1').innerText = mensaje;
-        //Guardamos el mensaje en localStorage para que persista después de recargar la página
+
+        // Si hay una ruta de imagen, la mostramos, si no, ocultamos la imagen
+        if (ruta) {
+            imagen.src = ruta;
+            imagen.style.display = 'block';
+        } else {
+            imagen.style.display = 'none';
+        }
+        // Guardamos el mensaje e imagen en localStorage
         localStorage.setItem('mensaje', mensaje);
+        localStorage.setItem('rutaImagen', ruta);
     }
 
     // Evento que se ejecuta cuando el contenido del DOM ha sido completamente cargado
     document.addEventListener('DOMContentLoaded', function () {
-        // Recuperamos el mensaje guardado en localStorage
+        // Recuperamos el mensaje e imagen guardados en localStorage
         let mensajeGuardado = localStorage.getItem('mensaje');
+        let rutaImagenGuardada = localStorage.getItem('rutaImagen');
+        let imagen = document.getElementById('imagen');
         // Si hay un mensaje guardado, actualiza el contenido del elemento <h1> con ese mensaje
         if (mensajeGuardado) {
             document.querySelector('.datos h1').innerText = mensajeGuardado;
+        }
+
+        // Si hay una ruta de imagen guardada, actualiza el src de la imagen
+        if (rutaImagenGuardada && rutaImagenGuardada !== '') {
+            imagen.src = rutaImagenGuardada;
+            imagen.style.display = 'block';
+        } else {
+            imagen.style.display = 'none';
         }
     });
 </script>
