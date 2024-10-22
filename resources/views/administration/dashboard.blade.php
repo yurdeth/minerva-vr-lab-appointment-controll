@@ -60,6 +60,13 @@
                     <span id="notification-count"></span>
                 </a>
             </li>
+            <li>
+                <a href="{{route("mensajes")}}" onclick="cambiarMensaje('Mensaje')">
+                    <span><i class="fa-solid fa-paper-plane"></i></span>
+                    <span class="Opciones">Mensajes</span>
+
+                </a>
+            </li>
         </ul>
     </div>
     <!-- Fin del Menu Vertical -->
@@ -131,7 +138,7 @@
                 mensaje = 'Bienvenido a Carreras';
                 break;
             case 'usuarios':
-                mensaje = 'Usuarios Minerva VR Web';
+                mensaje = 'Usuarios Minerva RV Web';
                 break;
             case 'citas':
                 mensaje = 'Registro de Citas para Capacitación';
@@ -141,6 +148,10 @@
                 break;
             case 'notificaciones':
                 mensaje = 'Notificaciones';
+                break;
+            case 'Mensaje':
+                mensaje = 'Minerva RV Chat';
+                break;
             default:
                 mensaje = 'Bienvenido'; // Mensaje por defecto si la opción no coincide con ningúna
         }

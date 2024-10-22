@@ -200,6 +200,10 @@ Route::middleware(['auth', NoBrowserCache::class, RoleMiddleware::class . ':1'])
     Route::get('/dashboard/notificaciones/recuperacion-de-clave', function () {
         return view('notifications.recoveringPasswordRequesting');
     })->name('solicitud-recuperar-clave');
+
+    Route::get('/dashboard/mensajes', function () {
+        return view('email.communication');
+    })->name('mensajes');
 });
 
 // ***************************************Rutas del footer*********************************************
