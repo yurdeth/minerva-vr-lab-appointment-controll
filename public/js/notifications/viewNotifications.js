@@ -203,7 +203,9 @@ const validateNewPassword = async (notification_id, newPassword, repeatPassword,
         });
         const updateData = await updateResponse.json();
         if (!updateData.success) {
-            showErrorAlert('Error', updateData.message);
+            showErrorAlert('Error', updateData.message).then(() => {
+                window.location.reload();
+            })
             return;
         }
 
