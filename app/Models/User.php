@@ -22,6 +22,7 @@ class User extends Authenticatable {
         'password',
         'career_id',
         'roles_id',
+        'remote_user_id'
     ];
 
     /**

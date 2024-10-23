@@ -1,4 +1,4 @@
-import {showAlert, showSuccessAlert, showErrorAlert} from '../utils/alert.js';
+import {showAlert, showErrorAlert, showSuccessAlert} from '../utils/alert.js';
 import {apiRequest} from '../utils/api.js';
 
 const headers = {
@@ -8,12 +8,14 @@ const headers = {
     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 };
 
+const remoteApiURL = 'http://localhost:3000/api';
+
 /**
  * Muestra un mensaje de confirmación para eliminar un usuario.
  *
  * @param {number} id - El ID del usuario a eliminar.
  */
-function confirmDelete(id) {
+function confirmDelete(id, remote_user_id) {
     showAlert(
         'warning',
         '¿Estás seguro?',
@@ -27,8 +29,8 @@ function confirmDelete(id) {
                 .then(response => {
                     response.json().then(() => {
                         showSuccessAlert('Operación completada', 'El usuario se ha eliminado del sistema')
-                            .then(() => {
-                                window.location.reload();
+                            .then(async () => {
+                                await changeStatus(remote_user_id);
                             });
                     });
                 }).catch(error => console.error(error));
@@ -83,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
 
             document.getElementById(`btnDelete-${item.id}`).addEventListener('click', function () {
-                confirmDelete(item.id);
+                confirmDelete(item.id, item.remote_user_id);
             });
         });
 
@@ -134,3 +136,39 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error("Error: " + error);
         });
 });
+
+const changeStatus = async (remote_user_id) => {
+    let response = await fetch(`/api/get-key`, {
+        method: 'GET',
+        headers: {
+            ...headers,
+            'randKey': document.getElementById('rand').value
+        }
+    });
+
+    console.log(response);
+
+    // Comprobar si la respuesta es exitosa
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    // Obtener el JSON de la respuesta
+    let data = await response.json();
+
+    apiRequest(`${remoteApiURL}/disableUser/${remote_user_id}`, 'PUT', null, {
+        ...headers, 'x-api-key': data.xKey,
+    })
+        .then(response => response.json().then(data => {
+
+            if (!data.success) {
+                showErrorAlert('Error', data.message);
+            }
+
+            window.location.reload();
+
+        }))
+        .catch(error => {
+            console.log(error);
+        });
+}

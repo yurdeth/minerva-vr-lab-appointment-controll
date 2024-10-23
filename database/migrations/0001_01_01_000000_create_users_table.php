@@ -4,6 +4,7 @@ use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
@@ -58,6 +59,7 @@ return new class extends Migration {
                 ->constrained('careers')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->integer('remote_user_id');
 //            $table->timestamp('email_verified_at')->nullable();
             $table->foreignId('roles_id')
                 ->constrained('roles')
@@ -101,6 +103,7 @@ return new class extends Migration {
         $user->password = Hash::make(env("ADMIN_PASSWORD"));
         $user->career_id = '1';
         $user->roles_id = '1';
+        $user->remote_user_id = '0'; // <- No se usa en la aplicación
         $user->save();
 
         return response()->json([

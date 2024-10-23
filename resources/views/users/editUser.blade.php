@@ -49,6 +49,8 @@
                         <h2 class="text-center">Datos</h2>
                     </div>
 
+                    <input type="hidden" value="{{ $randKey }}" id="rand">
+
                     <div class="card-body">
 
                         <form id="updateForm" method="POST">

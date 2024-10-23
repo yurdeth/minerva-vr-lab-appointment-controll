@@ -19,6 +19,7 @@
                                 <h2>Todos los Usuarios</h2>
                                 <br>
                             </div>
+                            <input type="hidden" value="{{ $randKey }}" id="rand">
                             <div class="col-6 col-md-4">
                                 <form action="" id="searchForm">
                                     <div class="input-group">

@@ -37,6 +37,7 @@ class AuthController extends Controller {
             ],
             "password" => "required|string|confirmed|min:8",
             "career" => "required|exists:careers,id",
+            "remote_user_id" => "required"
         ]);
 
         if ($validate->fails()) {
@@ -57,6 +58,7 @@ class AuthController extends Controller {
             "roles_id" => '2',
             "password" => Hash::make($request->password),
             "career_id" => $request->career,
+            "remote_user_id" => $request->remote_user_id,
         ]);
 
         if (!$user) {

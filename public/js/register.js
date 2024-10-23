@@ -17,6 +17,7 @@ const department = document.getElementById('department');
 const career = document.getElementById('career');
 const password = document.getElementById('password');
 const passwordConfirmation = document.getElementById('password_confirmation');
+const user_id = localStorage.getItem('user_id');
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -30,7 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
             email: email.value,
             career: career.value,
             password: password.value,
-            password_confirmation: passwordConfirmation.value
+            password_confirmation: passwordConfirmation.value,
+            remote_user_id: user_id
         };
 
         apiRequest('/signup', 'POST', body, headers)
@@ -96,7 +98,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     showSuccessAlert('Éxito', "Usuario registrado correctamente")
                         .then(() => {
-                            changeStatus().then(r => {
+                            changeStatus().then(() => {
+                                cleanUpLocalStorage();
                                 localStorage.setItem('token', data.token);
                                 window.location.href = data.redirect_to;
                             });
@@ -164,14 +167,6 @@ const loadInfo = () => {
         .catch((error) => {
             console.error('Error:', error);
         });
-
-    // localStorage.removeItem('user_id');
-    localStorage.removeItem('career_id');
-    localStorage.removeItem('career_name');
-    localStorage.removeItem('department_name');
-    localStorage.removeItem('department_id');
-    localStorage.removeItem('email');
-    localStorage.removeItem('name');
 }
 
 const changeStatus = async () => {
@@ -196,7 +191,7 @@ const changeStatus = async () => {
     const id = localStorage.getItem('user_id');
     console.log(data);
 
-    apiRequest(`${remoteApiURL}/users/${id}`, 'PUT', null, {
+    apiRequest(`${remoteApiURL}/enableUser/${id}`, 'PUT', null, {
         ...headers, 'x-api-key': data.xKey,
     })
         .then(response => response.json().then(data => {
@@ -209,6 +204,14 @@ const changeStatus = async () => {
             console.log(error);
         });
 
+}
 
+const cleanUpLocalStorage = () => {
     localStorage.removeItem('user_id');
+    localStorage.removeItem('career_id');
+    localStorage.removeItem('career_name');
+    localStorage.removeItem('department_name');
+    localStorage.removeItem('department_id');
+    localStorage.removeItem('email');
+    localStorage.removeItem('name');
 }

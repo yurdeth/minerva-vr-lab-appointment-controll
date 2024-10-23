@@ -8,6 +8,8 @@ const headers = {
     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 };
 
+const remoteApiURL = 'http://localhost:3000/api';
+
 /**
  * Maneja la edición de un usuario.
  * @param {number} id - El ID del usuario a editar.
@@ -92,8 +94,9 @@ function handleEdit(id) {
 /**
  * Maneja la eliminación de un usuario.
  * @param {number} id - El ID del usuario a eliminar.
+ * @param remote_user_id
  */
-function handleDelete(id) {
+function handleDelete(id, remote_user_id) {
     showAlert(
         'warning',
         '¿Estás seguro?',
@@ -101,17 +104,26 @@ function handleDelete(id) {
         true,
         'Sí, eliminar',
         'Cancelar')
-        .then(result => {
+        .then(async result => {
             if (result.isConfirmed) {
-                apiRequest(`/api/users/eliminar/${id}`, 'DELETE', null, headers)
-                    .then(response => {
-                        response.json().then(() => {
-                            showSuccessAlert('Operación completada', 'Usuario eliminado correctamente')
-                                .then(() => {
-                                    window.location.href = '/dashboard/usuarios';
-                                });
-                        })
-                    }).catch(error => console.error(error));
+                await changeStatus(remote_user_id).then(() => {
+                    apiRequest(`/api/users/eliminar/${id}`, 'DELETE', null, headers)
+                        .then(response => {
+                            response.json().then(data => {
+                                if (!data.success) {
+                                    showErrorAlert('Error', data.message);
+                                    return;
+                                }
+
+                                showSuccessAlert('Operación completada', data.message)
+                                    .then((result) => {
+                                        if (result.ok) {
+                                            window.location.href = data.redirect_to;
+                                        }
+                                    });
+                            })
+                        }).catch(error => console.error(error));
+                });
             } else {
                 showErrorAlert('Cancelado', 'Operación cancelada');
             }
@@ -139,7 +151,6 @@ document.addEventListener('DOMContentLoaded', function () {
     apiRequest(`/api/users/ver/${id}`, 'GET', null, headers)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             if (!data || !data.success || data.user.length === 0) {
                 showErrorAlert('Oops...', 'No se encontraron datos del usuario.')
                     .then(() => {
@@ -149,7 +160,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             let user = data.user[0];
-            console.log(user);
 
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -208,11 +218,48 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             document.getElementById(`btnDestroy-${user.id}`).addEventListener('click', function () {
-                handleDelete(user.id);
+                handleDelete(user.id, user.remote_user_id);
             });
 
         })
         .catch(error => {
-            console.log(error);
+            console.error(error);
         });
 });
+
+
+const changeStatus = async (remote_user_id) => {
+    let response = await fetch(`/api/get-key`, {
+        method: 'GET',
+        headers: {
+            ...headers,
+            'randKey': document.getElementById('rand').value
+        }
+    });
+
+    // Comprobar si la respuesta es exitosa
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    // Obtener el JSON de la respuesta
+    let data = await response.json();
+
+    apiRequest(`${remoteApiURL}/disableUser/${remote_user_id}`, 'PUT', null, {
+        ...headers, 'x-api-key': data.xKey,
+    })
+        .then(response => response.json().then(data => {
+
+            if (!data.success) {
+                showErrorAlert('Error', data.message);
+            }
+
+            window.location.href = '/dashboard/usuarios';
+
+        }))
+        .catch(error => {
+            console.error(error);
+        });
+
+    localStorage.removeItem('user_id');
+}

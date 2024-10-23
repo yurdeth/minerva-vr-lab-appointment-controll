@@ -24,7 +24,7 @@ class UsersController extends Controller {
             ->where('users.id', '!=', 1)
             ->join('careers', 'users.career_id', '=', 'careers.id')
             ->join('departments', 'careers.department_id', '=', 'departments.id')
-            ->select('users.id', 'users.name', 'users.email', 'careers.career_name', 'departments.department_name')
+            ->select('users.id', 'users.name', 'users.email', 'careers.career_name', 'departments.department_name', 'users.remote_user_id')
             ->get();
 
 //        return view('usuarios', compact('users'));
@@ -54,7 +54,8 @@ class UsersController extends Controller {
             ->where('users.id', $id)
             ->join('careers', 'users.career_id', '=', 'careers.id')
             ->join('departments', 'careers.department_id', '=', 'departments.id')
-            ->select('users.id', 'users.name', 'users.email', 'users.career_id', 'careers.career_name', 'careers.department_id', 'departments.department_name')
+            ->select('users.id', 'users.name', 'users.email', 'users.career_id', 'careers.career_name',
+                'careers.department_id', 'departments.department_name', 'users.remote_user_id')
             ->get();
 
         if (!$user) {
@@ -182,10 +183,18 @@ class UsersController extends Controller {
         }
 
         if (Auth::user()->roles_id == 1) {
-            return redirect()->route('usuarios');
-        } else {
-            return redirect()->route('inicio');
+            return response()->json([
+                "message" => "Usuario eliminado",
+                "success" => true,
+                "redirectTo" => route('usuarios.index'),
+            ]);
         }
+
+        return response()->json([
+            "message" => "Usuario eliminado",
+            "success" => true,
+            "redirectTo" => route('iniciarSesion'),
+        ]);
     }
 
     public function generateRandomPassword(){
