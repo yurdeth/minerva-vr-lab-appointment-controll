@@ -39,7 +39,9 @@ document.addEventListener('DOMContentLoaded', function () {
             checkUser(body).then(r => {
 
                 if(!r.success && !r.enabled){
-                    showErrorAlert('Error', r.message);
+                    showErrorAlert('Error', r.message).then(() => {
+                        window.location.reload();
+                    })
                     return;
                 }
 
@@ -90,10 +92,12 @@ const checkUser = async (body) => {
             }
         });
 
-        return await response.json();
+        return response.json();
     } catch (error) {
-        showErrorAlert('Error', 'No ha podido establecerse una conexión con el servidor');
         console.error('Error:', error);
+        showErrorAlert('Error', 'No ha podido establecerse una conexión con el servidor').then(() => {
+            window.location.reload();
+        });
         return null;
     }
 };
