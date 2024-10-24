@@ -30,52 +30,126 @@ class AppointmentConflict implements ValidationRule {
     }
 
     private function passes($attribute, $value): bool {
+        Log::info("###################################################################################");
+
+        $appointments = Appointments::select('start_time', 'end_time', 'number_of_assistants')
+            ->from('appointments')
+            ->where('date', $this->date)
+            ->get();
+
+        $singleAppointment = Appointments::select('start_time', 'end_time', 'number_of_assistants')
+            ->from('appointments')
+            ->where('date', $this->date)
+            ->where('id', $this->request->id)
+            ->get();
+
         if ($this->action == 'update') {
-            //Verificar si la cita ya existe en el mismo horario de la fecha
-            $appointment = Appointments::select('date', 'start_time', 'end_time', 'user_id')
-                ->from('appointments')
-                ->where('date', $this->date)
-                ->first(); // Use first() to get a single record
+            foreach ($singleAppointment as $s) {
+                $singleStartTime = $s->start_time;
+                $singleEndTime = $s->end_time;
+                $singleAssistants = $s->number_of_assistants;
+            }
 
-            if ($appointment && $appointment->date == $this->date) {
-                if ($appointment->start_time == $this->startTime && $appointment->end_time == $this->endTime) {
-                    return false; // Exact match
+            // No modifica nada -> no se hace nada:
+            if ($this->request->start_time == $singleStartTime &&
+                $this->request->end_time == $singleEndTime &&
+                $this->request->number_of_assistants == $singleAssistants) {
+                return true;
+            }
+
+            // Ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffuck
+
+            if ($this->request->start_time != $singleStartTime) {
+                $this->startTime = (count(explode(":", $this->request->start_time)) == 2) ?
+                    $this->request->start_time . ":00" : $this->request->start_time;
+                $this->endTime = (count(explode(":", $this->request->end_time)) == 2) ?
+                    $this->request->end_time . ":00" : $this->request->end_time;
+
+                // No permitir que la hora de inicio sea mayor que la final:
+                if ($this->request->start_time > $singleEndTime) {
+                    $this->message = "Error: horario inválido";
+                    return false;
                 }
 
-                if ($this->startTime > $appointment->start_time && $this->endTime > $appointment->end_time) {
-                    return true; // New appointment ends after the existing one
+                $listaRangosHorarios = [];
+                foreach ($appointments as $appointment) {
+                    $listaRangosHorarios[] = [
+                        'start_time' => $appointment->start_time,
+                        'end_time' => $appointment->end_time,
+                    ];
                 }
 
-                if ($appointment->start_time > $this->startTime && $appointment->end_time == $this->endTime) {
-                    return false; // Existing appointment starts after the new one and ends at the same time
+                foreach ($appointments as $appointment) {
+                    // Verificar si la nueva hora de inicio coincide con alguna hora existente
+                    if ($this->startTime == $appointment->start_time || $this->startTime == $appointment->end_time) {
+                        $this->message = "Error: ya existe una cita en el horario seleccionado";
+                        return false;
+                    }
+
+                    for ($i = 0; $i < count($listaRangosHorarios); $i++) {
+                        // Verificar si el nuevo rango se superpone con las citas existentes
+                        if ($this->startTime < $listaRangosHorarios[$i]['end_time'] && $this->endTime > $listaRangosHorarios[$i]['start_time']) {
+                            // Aquí se permite el cambio solo si no se está moviendo a un tiempo que está dentro de un rango existente
+                            if ($this->startTime < $listaRangosHorarios[$i]['start_time'] && $this->endTime <= $listaRangosHorarios[$i]['start_time']) {
+                                // Este caso permite que 12 a 11 no cause conflicto
+                                continue;
+                            } else {
+                                $this->message = "Error: ya existe una cita dentro de un rango de horario seleccionado:";
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ($this->request->end_time != $singleEndTime){
+                // No permitir que la hora de inicio sea mayor que la final (Ej.: inicia a las 9 y termina a las 8):
+                if($this->request->end_time < $singleStartTime){
+                    $this->message = "Error: horario inválido";
+                    return false;
                 }
 
-                if ($appointment->start_time == $this->startTime && $appointment->end_time < $this->endTime) {
-                    return false; // Existing appointment ends before the new one
+                $listaRangosHorarios = [];
+
+                foreach ($appointments as $appointment){
+                    $listaRangosHorarios[] = [
+                        'start_time' => $appointment->start_time,
+                        'end_time' => $appointment->end_time,
+                    ];
                 }
 
-                if ($appointment->start_time > $this->startTime && $appointment->end_time < $this->endTime) {
-                    return false; // Existing appointment is completely within the new one
-                }
+                // Nigga, I hate this shit...
+                foreach ($appointments as $appointment){
+                    if($this->endTime == $appointment->end_time){
+                        $this->message = "Error: ya existe una cita en el horario seleccionado (hora de fin): " . $this->endTime;
+                        return false;
+                    }
 
-                return true; // No conflicts
+                    if($this->endTime == $appointment->start_time){
+                        $this->message = "Error: ya existe una cita en el horario seleccionado (hora de fin): " . $this->endTime;
+                        return false;
+                    }
+
+                    for ($i = 0; $i < count($listaRangosHorarios); $i++){
+                        if($this->endTime > $listaRangosHorarios[$i]['start_time'] && $this->endTime < $listaRangosHorarios[$i]['end_time'] == null){
+                            return true;
+                        }
+
+                        if($this->endTime > $listaRangosHorarios[$i]['start_time'] && $this->endTime < $listaRangosHorarios[$i]['end_time']){
+                            $this->message = "Error: ya existe una cita en el horario seleccionado (hora de inicio): " . $this->endTime;
+                            return false;
+                        }
+                    }
+                }
             }
 
             return true; // No conflicts
         }
 
-        Log::info($this->startTime);
-        Log::info($this->endTime);
-
         if ($this->startTime < '08:00:00' || $this->endTime > '17:00:00' || $this->startTime >= $this->endTime) {
             $this->message = "Error: el horario de atención es de 8:00 AM a 5:00 PM";
             return false;
         }
-
-        $appointments = Appointments::select('start_time', 'end_time')
-            ->from('appointments')
-            ->where('date', $this->date)
-            ->get();
 
         foreach ($appointments as $appointment) {
             // From database:
